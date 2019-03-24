@@ -1,0 +1,5 @@
+Abstract Factory Pattern for pages
+Observer pattern for Splash/Home screens
+Adapter Pattern for Fallback to Kitsu.io
+Template methed for Fallback similar methods
+State pattern Fallback/Offline/Normal modes
