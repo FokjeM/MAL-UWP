@@ -28,6 +28,7 @@ namespace MAL_Nightmare_viewer
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
 #endif
+        Uri yuri;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -103,6 +104,12 @@ namespace MAL_Nightmare_viewer
 
             // Ensure the current window is active
             Window.Current.Activate();
+            yuri = new APIState().getCurrentURL();
+            while (yuri == null)
+            {
+                yuri = new APIState().getCurrentURL();
+            }
+            System.Diagnostics.Debug.WriteLine(yuri.ToString());
         }
 
 #if WINDOWS_PHONE_APP

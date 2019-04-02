@@ -16,47 +16,47 @@ namespace MAL_Nightmare_viewer
 
         private bool jikanAvaillable;
         private bool kitsuAvaillable;
+        public bool done = false;
+
+        public APIState()
+        {
+            testJikan();
+            testKitsu();
+        }
 
         private async void testJikan()
         {
             HttpClient request = new HttpClient();
             Uri api = new Uri(MAL_URL);
-            if(request.DefaultRequestHeaders.UserAgent.TryParseAdd(userAgent))
-            {
-                HttpResponseMessage response = await request.GetAsync(api);
-                jikanAvaillable = response.IsSuccessStatusCode;
-            }
+            HttpResponseMessage response = await request.GetAsync(api);
+            jikanAvaillable = response.IsSuccessStatusCode;
         }
 
         private async void testKitsu()
         {
             HttpClient request = new HttpClient();
             Uri api = new Uri(KITSU_URL);
-            if (request.DefaultRequestHeaders.UserAgent.TryParseAdd(userAgent))
-            {
-                HttpResponseMessage response = await request.GetAsync(api);
-                kitsuAvaillable = response.IsSuccessStatusCode;
-            }
+            HttpResponseMessage response = await request.GetAsync(api);
+            kitsuAvaillable = response.IsSuccessStatusCode;
         }
 
         public Uri getCurrentURL()
         {
-            testJikan();
             if (jikanAvaillable)
             {
-                return MAL_URL;
+                return new Uri(MAL_URL);
             }
             else
             {
-                testKitsu();
-                if(kitsuAvaillable)
+                if (kitsuAvaillable)
                 {
-                    return kitsuAvaillable;
+                    return new Uri(KITSU_URL);
                 }
                 else
                 {
                     return null;
                 }
             }
+        }
     }
 }
