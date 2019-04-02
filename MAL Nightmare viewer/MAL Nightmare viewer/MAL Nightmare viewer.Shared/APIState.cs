@@ -7,6 +7,9 @@ namespace MAL_Nightmare_viewer
     /// Class that supplies the API currently in use.
     /// Has methods to test both the Jikan and Kitsu APIs and will set both availlable states.
     /// Regular checks should be done if either or both are offline.
+    /// 
+    /// Instantiating it can take a while as it emmediately tests the resources.
+    /// This'll take a while as this goes at IE speeds...
     /// </summary>
     class APIState
     {
@@ -35,7 +38,7 @@ namespace MAL_Nightmare_viewer
         private async void testKitsu()
         {
             HttpClient request = new HttpClient();
-            Uri api = new Uri(KITSU_URL);
+            Uri api = new Uri(KITSU_URL + "anime/01");
             HttpResponseMessage response = await request.GetAsync(api);
             kitsuAvaillable = response.IsSuccessStatusCode;
         }

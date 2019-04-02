@@ -104,12 +104,7 @@ namespace MAL_Nightmare_viewer
 
             // Ensure the current window is active
             Window.Current.Activate();
-            yuri = new APIState().getCurrentURL();
-            while (yuri == null)
-            {
-                yuri = new APIState().getCurrentURL();
-            }
-            System.Diagnostics.Debug.WriteLine(yuri.ToString());
+            APIState a = new APIState();
         }
 
 #if WINDOWS_PHONE_APP
