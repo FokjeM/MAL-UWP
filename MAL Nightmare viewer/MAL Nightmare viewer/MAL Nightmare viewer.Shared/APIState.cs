@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.Web.Http;
 
 namespace MAL_Nightmare_viewer
@@ -27,37 +28,54 @@ namespace MAL_Nightmare_viewer
             testKitsu();
         }
 
-        private async void testJikan()
+        /// <summary>
+        /// Tests the Jikan API to poll MAL.
+        /// Added the anime/1 endpoint to ensure both MAL and the API are up
+        /// </summary>
+        private async Task<bool> testJikan()
         {
             HttpClient request = new HttpClient();
-            Uri api = new Uri(MAL_URL);
+            Uri api = new Uri(MAL_URL + "anime/1");
             HttpResponseMessage response = await request.GetAsync(api);
             jikanAvaillable = response.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode;
         }
 
-        private async void testKitsu()
+        /// <summary>
+        /// Tests the Kitsu API to poll Kitsu
+        /// Added the anime/1 endpoint because the clean API URL is a 404
+        /// Kitsu does not adhere to the expectation of API/Author info.
+        /// </summary>
+        private async Task<bool> testKitsu()
         {
             HttpClient request = new HttpClient();
-            Uri api = new Uri(KITSU_URL + "anime/01");
+            Uri api = new Uri(KITSU_URL + "anime/1");
             HttpResponseMessage response = await request.GetAsync(api);
             kitsuAvaillable = response.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode;
         }
 
-        public Uri getCurrentURL()
+        /// <summary>
+        /// A method to get whatever URL is known to be availlable.
+        /// This method only tests the availlability of Kitsu if Jikan/MAL is down.
+        /// </summary>
+        /// <returns>The correct endpoint for an API call as URI</returns>
+        public async Task<string> getCurrentURL()
         {
-            if (jikanAvaillable)
+            if (await testJikan())
             {
-                return new Uri(MAL_URL);
+                return MAL_URL;
             }
             else
             {
-                if (kitsuAvaillable)
+
+                if (await testKitsu())
                 {
-                    return new Uri(KITSU_URL);
+                    return KITSU_URL;
                 }
                 else
                 {
-                    return null;
+                    return "LocalOnly";
                 }
             }
         }
