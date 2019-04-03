@@ -120,6 +120,7 @@ namespace MAL_Nightmare_viewer
             }
             value = JToken.FromObject(new long[]{ idMAL, idKitsu });
             knownIDs.Add(token, value);
+            return true;
         }
     }
 }
