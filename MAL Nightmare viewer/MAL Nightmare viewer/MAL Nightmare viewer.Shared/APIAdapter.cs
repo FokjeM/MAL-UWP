@@ -73,10 +73,53 @@ namespace MAL_Nightmare_viewer
             }
         }
 
-        public async bool addToKnownIDs(string type, string name, long idMAL, long idKitsu)
+        private long[] checkKnownIDs(string type, string name)
         {
-            //Some logic to add to the list of ID's and edit the file. Spawn a thread to get both ID's if both APIs are availlable
-            return false;
+
+        } 
+
+        /// <summary>
+        /// Add a new entry to the knownIDs for this information, to make looking it up easier.
+        /// This function checks for the existence of the token and only updates changed fields.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="idMAL"></param>
+        /// <param name="idKitsu"></param>
+        /// <returns></returns>
+        private bool addToKnownIDs(string type, string name, long idMAL, long idKitsu)
+        {
+            string token = string.Format("[{0}]{1}", type, name);
+            JToken value;
+            if (knownIDs.ContainsKey(token))
+            {
+                bool change = true;
+                long[] container = (long[])knownIDs.GetValue(token).ToObject(new long[0].GetType());
+                if(idMAL > 0L && !container[0].Equals(idMAL))
+                {
+                    container[0] = idMAL;
+                    change = true;
+                }
+                else
+                {
+                    change = false;
+                }
+                if (idKitsu > 0L && !container[1].Equals(idMAL))
+                {
+                    container[1] = idKitsu;
+                    change = true;
+                }
+                else
+                {
+                    change = false;
+                }
+                if(change)
+                {
+                    value = JToken.FromObject(container);
+                }
+            }
+            value = JToken.FromObject(new long[]{ idMAL, idKitsu });
+            knownIDs.Add(token, value);
         }
     }
 }
