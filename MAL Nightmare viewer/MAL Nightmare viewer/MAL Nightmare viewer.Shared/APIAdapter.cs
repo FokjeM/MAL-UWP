@@ -22,8 +22,16 @@ namespace MAL_Nightmare_viewer
 
         public APIAdapter()
         {
-            StorageFile idList = ApplicationData.Current.LocalFolder.CreateFileAsync("known_pages.json", CreationCollisionOption.OpenIfExists).GetResults();
-            knownIDs = JObject.Parse(FileIO.ReadTextAsync(idList).GetResults());
+            StorageFile idList = ApplicationData.Current.LocalFolder.CreateFileAsync("known_pages.json", CreationCollisionOption.OpenIfExists).AsTask().Result;
+            string jsonFileContents = FileIO.ReadTextAsync(idList).AsTask().Result;
+            if(jsonFileContents.Length > 10)
+            {
+                knownIDs = JObject.Parse(jsonFileContents);
+            } else
+            {
+                knownIDs = new JObject();
+            }
+            
         }
         
         /// <summary>
@@ -39,21 +47,24 @@ namespace MAL_Nightmare_viewer
         public async Task<JObject> requestAPI(string request)
         {
             JObject local = await checkLocalPages(request);
-            if (!local.Equals(null))
+            string src = await apiState.getCurrentURL();
+            if (local != null)
             {
                 return local;
-            }
-            string src = await apiState.getCurrentURL();
-            if (!src.Equals("LocalOnly"))
+            } else
             {
+                if(src.Equals("LocalOnly"))
+                {
+                    return null;
+                }
+                string customRequest = await getRequestFromSearch(request);
                 HttpClient req = new HttpClient();
-                Uri api = new Uri(src + request);
+                Uri api = new Uri(src + customRequest);
                 HttpResponseMessage response = await req.GetAsync(api);
                 JObject result = JObject.Parse(response.Content.ToString());
-
+                System.Diagnostics.Debug.WriteLine(result.ToString());
                 return result;
             }
-            return null;
         }
 
         /// <summary>
@@ -64,9 +75,9 @@ namespace MAL_Nightmare_viewer
         private async Task<JObject> checkLocalPages(string request)
         {
             string[] path = request.Split('/');
-            StorageFolder folder = await localPageDir.GetFolderAsync(path[0]);
             try
             {
+                StorageFolder folder = await localPageDir.GetFolderAsync(path[0]);
                 return JObject.Parse(await FileIO.ReadTextAsync(await folder.GetFileAsync(path[1] + ".json")));
             } catch
             {
@@ -114,10 +125,34 @@ namespace MAL_Nightmare_viewer
                 value = JToken.FromObject(new long[] { idMAL, idKitsu });
             }
             knownIDs.Add(token, value);
-            FileIO.WriteTextAsync(localPageDir.GetFileAsync("known_pages.json").GetResults(), knownIDs.ToString()).AsTask().Start();
+            FileIO.WriteTextAsync(localPageDir.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Start();
             return true;
         }
 
+        private async Task<string> getRequestFromSearch(string request)
+        {
+            string[] reqParts = request.Split('/');
+            string url = await apiState.getCurrentURL();
+            string searchReq = url;
+            HttpClient req = new HttpClient();
+            if(url.ToLower().Contains("jikan"))
+            {
+                searchReq += "search/" + reqParts[0] + "?q=";
+                for (int i = 1; i < reqParts.Length; i++)
+                {
+                    searchReq += reqParts[i];
+                }
+                searchReq += "&limit=1";
+            } else
+            {
 
+            }
+            Uri api = new Uri(searchReq);
+            HttpResponseMessage response = await req.GetAsync(api);
+            JObject result = JObject.Parse(response.Content.ToString());
+            string customRequest = reqParts[0] + "/" + result.GetValue("results").First.First.ToObject("".GetType());
+            System.Diagnostics.Debug.WriteLine(customRequest);
+            return customRequest;
+        }
     }
 }
