@@ -81,45 +81,39 @@ namespace MAL_Nightmare_viewer
         /// <summary>
         /// Add a new entry to the knownIDs for this information, to make looking it up easier.
         /// This function checks for the existence of the token and only updates changed fields.
+        /// Starts an asynchronous task to write to a local file.
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        /// <param name="idMAL"></param>
-        /// <param name="idKitsu"></param>
-        /// <returns></returns>
+        /// <param name="type">Type of data; aninme, manga, character, etc.</param>
+        /// <param name="name">Name of the data; Medaka Box, Akamatsu Ken, etc.</param>
+        /// <param name="idMAL">The MAL id provided by Jikan</param>
+        /// <param name="idKitsu">the Kitsu ID provided by Kitsu</param>
+        /// <returns>True if the info was added or updated, false if the info is already known.</returns>
         private bool addToKnownIDs(string type, string name, long idMAL, long idKitsu)
         {
-            string token = string.Format("[{0}]{1}", type, name);
+            string token = string.Format("{0}{1}", type, name);
             JToken value;
             if (knownIDs.ContainsKey(token))
             {
-                bool change = true;
                 long[] container = (long[])knownIDs.GetValue(token).ToObject(new long[0].GetType());
+                if(container[0].Equals(idMAL) && container[1].Equals(idKitsu))
+                {
+                    return false;
+                }
                 if(idMAL > 0L && !container[0].Equals(idMAL))
                 {
                     container[0] = idMAL;
-                    change = true;
-                }
-                else
-                {
-                    change = false;
                 }
                 if (idKitsu > 0L && !container[1].Equals(idMAL))
                 {
                     container[1] = idKitsu;
-                    change = true;
                 }
-                else
-                {
-                    change = false;
-                }
-                if(change)
-                {
-                    value = JToken.FromObject(container);
-                }
+                value = JToken.FromObject(container);
+            }else
+            {
+                value = JToken.FromObject(new long[] { idMAL, idKitsu });
             }
-            value = JToken.FromObject(new long[]{ idMAL, idKitsu });
             knownIDs.Add(token, value);
+            FileIO.WriteTextAsync(localPageDir.GetFileAsync("known_pages.json").GetResults(), knownIDs.ToString()).AsTask().Start();
             return true;
         }
     }
