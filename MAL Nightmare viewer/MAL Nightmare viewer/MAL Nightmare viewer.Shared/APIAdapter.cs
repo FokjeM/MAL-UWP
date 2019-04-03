@@ -53,6 +53,7 @@ namespace MAL_Nightmare_viewer
 
                 return result;
             }
+            return null;
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace MAL_Nightmare_viewer
 
         private long[] checkKnownIDs(string type, string name)
         {
-
+            return (long[])knownIDs.GetValue(string.Format("{0}{1}", type, name)).ToObject((new long[0]).GetType());
         } 
 
         /// <summary>
@@ -116,5 +117,7 @@ namespace MAL_Nightmare_viewer
             FileIO.WriteTextAsync(localPageDir.GetFileAsync("known_pages.json").GetResults(), knownIDs.ToString()).AsTask().Start();
             return true;
         }
+
+
     }
 }
