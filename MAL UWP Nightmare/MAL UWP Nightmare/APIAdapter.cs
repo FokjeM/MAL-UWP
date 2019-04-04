@@ -16,7 +16,7 @@ namespace MAL_Nightmare_viewer
     /// </summary>
     class APIAdapter
     {
-        APIState apiState = new APIState();
+        APIMachine apiState = new APIMachine();
         StorageFolder localPageDir = ApplicationData.Current.LocalFolder;
         JObject knownIDs;
 
@@ -37,10 +37,10 @@ namespace MAL_Nightmare_viewer
 
         /// <summary>
         /// Probes the locally saved files first, then checks APIs for info.
-        /// Sends a request to the API supplied by the APIState and returns the JSON response.
+        /// Sends a request to the API supplied by the APIMachine and returns the JSON response.
         /// This method assumes the API sends JSON.
         /// This method knows that the API endpoint that gets called can be reached from the
-        /// call to APIState.getCurrentURL().
+        /// call to APIMachine.getCurrentURL().
         /// </summary>
         /// <param name="request">The request part of the API call. This should be supplied
         /// when calling the function, like "/anime/1". It's the section after the API endpoint</param>
