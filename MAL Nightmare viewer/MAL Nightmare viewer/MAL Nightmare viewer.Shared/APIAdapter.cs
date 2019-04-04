@@ -1,6 +1,6 @@
 ﻿using System;
 using Windows.Storage;
-using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
@@ -24,16 +24,17 @@ namespace MAL_Nightmare_viewer
         {
             StorageFile idList = ApplicationData.Current.LocalFolder.CreateFileAsync("known_pages.json", CreationCollisionOption.OpenIfExists).AsTask().Result;
             string jsonFileContents = FileIO.ReadTextAsync(idList).AsTask().Result;
-            if(jsonFileContents.Length > 10)
+            if (jsonFileContents.Length > 10)
             {
                 knownIDs = JObject.Parse(jsonFileContents);
-            } else
+            }
+            else
             {
                 knownIDs = new JObject();
             }
-            
+
         }
-        
+
         /// <summary>
         /// Probes the locally saved files first, then checks APIs for info.
         /// Sends a request to the API supplied by the APIState and returns the JSON response.
@@ -51,9 +52,10 @@ namespace MAL_Nightmare_viewer
             if (local != null)
             {
                 return local;
-            } else
+            }
+            else
             {
-                if(src.Equals("LocalOnly"))
+                if (src.Equals("LocalOnly"))
                 {
                     return null;
                 }
@@ -79,7 +81,8 @@ namespace MAL_Nightmare_viewer
             {
                 StorageFolder folder = await localPageDir.GetFolderAsync(path[0]);
                 return JObject.Parse(await FileIO.ReadTextAsync(await folder.GetFileAsync(path[1] + ".json")));
-            } catch
+            }
+            catch
             {
                 return null;
             }
@@ -88,7 +91,7 @@ namespace MAL_Nightmare_viewer
         private long[] checkKnownIDs(string type, string name)
         {
             return (long[])knownIDs.GetValue(string.Format("{0}{1}", type, name)).ToObject((new long[0]).GetType());
-        } 
+        }
 
         /// <summary>
         /// Add a new entry to the knownIDs for this information, to make looking it up easier.
@@ -107,11 +110,11 @@ namespace MAL_Nightmare_viewer
             if (knownIDs.ContainsKey(token))
             {
                 long[] container = (long[])knownIDs.GetValue(token).ToObject(new long[0].GetType());
-                if(container[0].Equals(idMAL) && container[1].Equals(idKitsu))
+                if (container[0].Equals(idMAL) && container[1].Equals(idKitsu))
                 {
                     return false;
                 }
-                if(idMAL > 0L && !container[0].Equals(idMAL))
+                if (idMAL > 0L && !container[0].Equals(idMAL))
                 {
                     container[0] = idMAL;
                 }
@@ -120,7 +123,8 @@ namespace MAL_Nightmare_viewer
                     container[1] = idKitsu;
                 }
                 value = JToken.FromObject(container);
-            }else
+            }
+            else
             {
                 value = JToken.FromObject(new long[] { idMAL, idKitsu });
             }
@@ -135,7 +139,7 @@ namespace MAL_Nightmare_viewer
             string url = await apiState.getCurrentURL();
             string searchReq = url;
             HttpClient req = new HttpClient();
-            if(url.ToLower().Contains("jikan"))
+            if (url.ToLower().Contains("jikan"))
             {
                 searchReq += "search/" + reqParts[0] + "?q=";
                 for (int i = 1; i < reqParts.Length; i++)
@@ -143,7 +147,8 @@ namespace MAL_Nightmare_viewer
                     searchReq += reqParts[i];
                 }
                 searchReq += "&limit=1";
-            } else
+            }
+            else
             {
 
             }

@@ -104,8 +104,8 @@ namespace MAL_Nightmare_viewer
 
             // Ensure the current window is active
             Window.Current.Activate();
-            APIAdapter a = new APIAdapter();
-            a.requestAPI("anime/14527").AsAsyncAction().AsTask();
+          //  APIAdapter a = new APIAdapter();
+           // a.requestAPI("anime/14527").AsAsyncAction().AsTask();
         }
 
 #if WINDOWS_PHONE_APP
