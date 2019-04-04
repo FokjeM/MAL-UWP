@@ -24,8 +24,8 @@ namespace MAL_Nightmare_viewer
 
         public APIState()
         {
-            testJikan();
-            testKitsu();
+            //testJikan();
+            //testKitsu();
         }
 
         /// <summary>
