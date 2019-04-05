@@ -45,9 +45,14 @@ namespace MAL_UWP_Nightmare
         /// within the last 5 minutes of calling this function.</returns>
         public override bool testAPI()
         {
+            return testAPIwithID("5081");
+        }
+
+        public bool testAPIwithID(string id)
+        {
             if (lastChecked.AddMinutes(5).CompareTo(DateTime.UtcNow) < 0 || !availlable)
             {
-                JObject response = requestAPI("anime/5081").Result;
+                JObject response = requestAPI("anime/" + id).Result;
                 if (!response.ContainsKey("error"))
                 {
                     availlable = true;
