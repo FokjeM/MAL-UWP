@@ -14,7 +14,7 @@ namespace MAL_Nightmare_viewer
     /// </summary>
     class APIMachine
     {
-        public readonly static string MAL_URL = "https://api.jikan.moe/v3/";
+        public readonly static string MAL_URL = "";
         public readonly static string KITSU_URL = "https://kitsu.io/api/edge/";
         private readonly string userAgent = "MAL_Nightmares/0.1 (" + new Windows.Security.ExchangeActiveSyncProvisioning.EasClientDeviceInformation().OperatingSystem + "; I; en-us) UWP/8.1";
 

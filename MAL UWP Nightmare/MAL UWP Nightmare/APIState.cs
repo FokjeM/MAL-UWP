@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
 {
@@ -12,11 +13,16 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// Wether or not the API was availlable the last time it was polled.
         /// </summary>
-        private bool availlable;
+        protected bool availlable;
         /// <summary>
         /// The last time this API was checked for online/ready state.
         /// </summary>
-        private DateTime lastChecked;
+        protected DateTime lastChecked;
+
+        public APIState(string url)
+        {
+            API_URL = url;
+        }
 
         /// <summary>
         /// Test wether or not the API can be reached.
@@ -33,7 +39,7 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="request">The request to add to the API URL</param>
         /// <returns>A JSON object from the APIs response</returns>
-        public abstract JObject requestAPI(string request);
+        public abstract Task<JObject> requestAPI(string request);
 
         /// <summary>
         /// Poll an API for a search in order to find the ID, this should
@@ -41,7 +47,7 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="query">The search query in the form of "<code>type/name</code>"</param>
         /// <returns>The resulting request based on the first search result</returns>
-        public abstract string getRequestFromSearch(string query);
+        public abstract Task<string> getRequestFromSearch(string query);
 
         /// <summary>
         /// A get function for <see cref="API_URL"/>
