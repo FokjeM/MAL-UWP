@@ -30,6 +30,8 @@ namespace MAL_UWP_Nightmare
             this.InitializeComponent();
             (Window.Current.Content as Frame).Background = new ImageBrush { Stretch = Stretch.Fill, ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/StoreLogo.png")) };
             (Window.Current.Content as Frame).SizeChanged += TapHandle;
+            JikanAPIState jas = new JikanAPIState();
+            System.Diagnostics.Debug.Write(jas.requestAPI(jas.getRequestFromSearch("anime/shimoneta").Result).Result);
         }
 
         private void TapHandle(object sender, SizeChangedEventArgs e)
