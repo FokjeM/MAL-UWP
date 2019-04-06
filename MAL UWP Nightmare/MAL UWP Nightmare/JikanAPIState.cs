@@ -33,7 +33,7 @@ namespace MAL_UWP_Nightmare
             }
             searchReq += "&limit=1";
             System.Diagnostics.Debug.WriteLine(searchReq);
-            JObject result = await requestAPI(searchReq);
+            JObject result = requestAPI(searchReq).Result;
             return reqParts[0] + "/" + result.GetValue("results").First.First.ToObject("".GetType());
         }
 
@@ -44,7 +44,7 @@ namespace MAL_UWP_Nightmare
             Uri api = new Uri(getURL() + request);
             System.Diagnostics.Debug.WriteLine(api.ToString());
             HttpResponseMessage response = req.GetAsync(api).Result;
-            JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
+            JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
             if (result.ContainsKey("title"))
             {
                 result.TryGetValue("title", out JToken jt);

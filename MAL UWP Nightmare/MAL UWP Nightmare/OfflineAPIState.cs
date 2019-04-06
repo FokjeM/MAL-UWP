@@ -27,7 +27,7 @@ namespace MAL_UWP_Nightmare
             string[] path = query.Split('/');
             try
             {
-                StorageFolder folder = await localPages.GetFolderAsync(path[0]);
+                StorageFolder folder = localPages.GetFolderAsync(path[0]).AsTask().Result;
                 if(folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
                 {
                     return string.Concat(query, ".json");
@@ -45,8 +45,8 @@ namespace MAL_UWP_Nightmare
             string[] path = request.Split('/');
             try
             {
-                StorageFolder folder = await localPages.GetFolderAsync(path[0]);
-                return JObject.Parse(await FileIO.ReadTextAsync(await folder.GetFileAsync(path[1] + ".json")));
+                StorageFolder folder = localPages.GetFolderAsync(path[0]).AsTask().Result;
+                return JObject.Parse(FileIO.ReadTextAsync(folder.GetFileAsync(path[1] + ".json").AsTask().Result).AsTask().Result);
             }
             catch
             {

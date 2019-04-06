@@ -96,7 +96,7 @@ namespace MAL_UWP_Nightmare
         /// <param name="name">Name of the data; Medaka Box, Akamatsu Ken, etc.</param>
         /// <param name="idMAL">The MAL id provided by Jikan</param>
         /// <param name="idKitsu">the Kitsu ID provided by Kitsu</param>
-        /// <returns>True if the info was added or updated, false if the info is already known.</returns>
+        /// <returns>True if the info was added and updated, false if the info is already known or the file wasn't written.</returns>
         protected async Task<bool> AddToKnownIDs(string type, string name, long idMAL, long idKitsu)
         {
             string token = string.Format("{0}/{1}", type, name).ToLower();
@@ -148,7 +148,13 @@ namespace MAL_UWP_Nightmare
                 value = JToken.FromObject(string.Concat(malVal, " : ", kitVal).ToLower());
             }
             knownIDs.Add(token, value);
-            await FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString());
+            try
+            {
+                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString());
+            } catch
+            {
+                return false;
+            }
             return true;
         }
     }
