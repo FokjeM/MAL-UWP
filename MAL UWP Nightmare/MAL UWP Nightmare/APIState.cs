@@ -97,13 +97,13 @@ namespace MAL_UWP_Nightmare
         /// <param name="idMAL">The MAL id provided by Jikan</param>
         /// <param name="idKitsu">the Kitsu ID provided by Kitsu</param>
         /// <returns>True if the info was added or updated, false if the info is already known.</returns>
-        private bool addToKnownIDs(string type, string name, long idMAL, long idKitsu)
+        protected async Task<bool> AddToKnownIDs(string type, string name, long idMAL, long idKitsu)
         {
-            string token = string.Format("{0}/{1}", type, name);
+            string token = string.Format("{0}/{1}", type, name).ToLower();
             JToken value;
             if (knownIDs.ContainsKey(token))
             {
-                string[] container = ((string)knownIDs.GetValue(token).ToObject("".GetType())).Split(new string[] { " : " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] container = ((string)knownIDs.GetValue(token).ToObject("".GetType())).Split(new string[] { " : " }, StringSplitOptions.None);
                 if (container[0].Equals(idMAL.ToString()) && container[1].Equals(idKitsu.ToString()))
                 {
                     return false;
@@ -114,7 +114,7 @@ namespace MAL_UWP_Nightmare
                 }
                 else
                 {
-                    container[0] = 0L.ToString();
+                    container[0] = "0";
                 }
                 if (idKitsu > 0L && !container[1].Equals(idKitsu.ToString()))
                 {
@@ -122,17 +122,33 @@ namespace MAL_UWP_Nightmare
                 }
                 else
                 {
-                    container[1] = 0L.ToString();
+                    container[1] = "0";
                 }
                 string val = string.Concat(container[0], " : ", container[1]);
                 value = JToken.FromObject(val);
             }
             else
             {
-                value = JToken.FromObject(string.Format(idMAL.ToString(), " : ", idKitsu.ToString()));
+                string malVal;
+                string kitVal;
+                if (idMAL.Equals(0L))
+                {
+                    malVal = "0";
+                } else
+                {
+                    malVal = idMAL.ToString();
+                }
+                if (idKitsu.Equals(0L))
+                {
+                    kitVal = "0";
+                } else
+                {
+                    kitVal = idKitsu.ToString();
+                }
+                value = JToken.FromObject(string.Concat(malVal, " : ", kitVal).ToLower());
             }
             knownIDs.Add(token, value);
-            FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Start();
+            await FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString());
             return true;
         }
     }

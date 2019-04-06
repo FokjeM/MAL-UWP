@@ -25,7 +25,11 @@ namespace MAL_UWP_Nightmare
             string searchReq = "search/" + reqParts[0] + "?q=";
             for (int i = 1; i < reqParts.Length; i++)
             {
-                searchReq += reqParts[i];
+                if(i > 1)
+                {
+                    searchReq += Uri.EscapeDataString("/");
+                }
+                searchReq += Uri.EscapeDataString(reqParts[i]);
             }
             searchReq += "&limit=1";
             System.Diagnostics.Debug.WriteLine(searchReq);
@@ -41,6 +45,14 @@ namespace MAL_UWP_Nightmare
             System.Diagnostics.Debug.WriteLine(api.ToString());
             HttpResponseMessage response = req.GetAsync(api).Result;
             JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
+            if (result.ContainsKey("title"))
+            {
+                result.TryGetValue("title", out JToken jt);
+                System.Diagnostics.Debug.WriteLine(jt.ToString());
+#pragma warning disable CS4014 // Is niet relevant voor deze method.
+                AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+#pragma warning restore CS4014 // Bij de volgende call is het al klaar.
+            }
             return result;
         }
 
@@ -72,7 +84,7 @@ namespace MAL_UWP_Nightmare
             string[] q = query.Split('/');
             try
             {
-                string tempRes = knownIDs.GetValue(string.Format("{0}/{1}", q[0], q[1])).ToObject("str".GetType()).ToString().Split((new string[] { " : " }), StringSplitOptions.RemoveEmptyEntries)[0];
+                string tempRes = knownIDs.GetValue(string.Format("{0}/{1}", q[0], q[1]).ToLower()).ToObject("".GetType()).ToString().Split((new string[] { " : " }), StringSplitOptions.RemoveEmptyEntries)[0];
                 if (tempRes == null)
                 {
                     return 0L;
