@@ -187,12 +187,12 @@ namespace MAL_UWP_Nightmare
 
         public virtual void SetContent(JObject json)
         {
-            _id = long.Parse((string)json.GetValue("mal_id").ToObject("".GetType()));
+            _id = long.Parse((string)json.GetValue("id").ToObject("".GetType()));
             _url = (string)json.GetValue("url").ToObject("".GetType());
             _title = (string)json.GetValue("title").ToObject("".GetType());
             _japTitle = (string)json.GetValue("title_japanese").ToObject("".GetType());
             _engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
-            _running = (bool)json.GetValue("running").ToObject(new bool().GetType());
+            _running = (bool)json.GetValue("running").ToObject(true.GetType());
             JToken runFrom = json.GetValue("run_from");
             if (runFrom.Value<object>() == null)
             {

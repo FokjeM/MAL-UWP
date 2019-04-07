@@ -83,9 +83,9 @@ namespace MAL_UWP_Nightmare
 
         public override void SetContent(JObject json)
         {
-            if (json.First.Value<string>().ToLower().Contains("error"))
+            if (json.First.ToObject<string>().ToLower().Contains("error"))
             {
-                SetErrorContent(json.First.Value<string>());
+                SetErrorContent(json.First.ToObject<string>());
                 return;
             }
             base.SetContent(json);
@@ -95,19 +95,19 @@ namespace MAL_UWP_Nightmare
             _producers = new List<string>();
             foreach(JToken jt in prods.Children())
             {
-                _producers.Add(jt.Children()["name"].Value<string>());
+                _producers.Add(jt["name"].Value<string>());
             }
             JToken lics = json.GetValue("licensors");
             _licensors = new List<string>();
             foreach (JToken jt in lics.Children())
             {
-                _licensors.Add(jt.Children()["name"].Value<string>());
+                _licensors.Add(jt["name"].Value<string>());
             }
             JToken studs = json.GetValue("studios");
-            _studios = new List<string>((string[])json.GetValue("").ToObject(new string[] { }.GetType()));
+            _studios = new List<string>();
             foreach (JToken jt in studs.Children())
             {
-                _studios.Add(jt.Children()["name"].Value<string>());
+                _studios.Add(jt["name"].Value<string>());
             }
             _openings = new List<string>((string[])json.GetValue("opening_themes").ToObject(new string[] { }.GetType()));
             _endings = new List<string>((string[])json.GetValue("ending_themes").ToObject(new string[] { }.GetType()));

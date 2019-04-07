@@ -48,7 +48,7 @@ namespace MAL_UWP_Nightmare
             {
                 JObject ret = new JObject();
                 ret.Add("title", result.GetValue("title"));
-                ret.Add("id", result.GetValue("id"));
+                ret.Add("id", result.GetValue("mal_id"));
                 ret.Add("url", JToken.FromObject(api.ToString()));
                 ret.Add("title_japanese", result.GetValue("title_japanese"));
                 ret.Add("title_english", result.GetValue("title_english"));
@@ -62,7 +62,7 @@ namespace MAL_UWP_Nightmare
                 List<string> genres = new List<string>();
                 foreach (JToken jt in gens.Children())
                 {
-                    genres.Add(jt.Children()["name"].Value<string>());
+                    genres.Add(jt["name"].Value<string>());
                 }
                 ret.Add("genres", JToken.FromObject(genres));
                 //The API differentiates between airing and publishing for anime and mange. We don't.
@@ -87,6 +87,7 @@ namespace MAL_UWP_Nightmare
                     ret.Add("run_to", result.GetValue("published")["to"]);
                     ret.Add("authors", result.GetValue("authors"));
                 }
+                result = ret;
 #pragma warning disable CS4014 // Is niet relevant voor deze method.
             var added = AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L).Result;
 #pragma warning restore CS4014 // Bij de volgende call is het al klaar.

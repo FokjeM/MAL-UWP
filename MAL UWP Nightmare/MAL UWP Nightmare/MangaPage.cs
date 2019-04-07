@@ -37,7 +37,7 @@ namespace MAL_UWP_Nightmare
             JToken auths = json.GetValue("authors");
             foreach (JToken jt in auths.Children())
             {
-                authors.Add(jt.Children()["name"].Value<string>());
+                authors.Add(jt["name"].Value<string>());
             }
         }
     }
