@@ -89,8 +89,8 @@ namespace MAL_UWP_Nightmare
             altTitles = ConvertListToString(anime.altTitles, false);
             jpTitle = anime.japTitle;
             enTitle = anime.engTitle;
-            //Type
-            //Status
+            type = anime.type;
+            status = anime.status;
             startDate = anime.startDate.ToString("MMMM dd, yyyy");
             endDate = anime.endDate.ToString("MMMM dd, yyyy");
             running = anime.running;

@@ -42,8 +42,11 @@ namespace MAL_UWP_Nightmare
 
         private void seasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            JikanAPIState state = new JikanAPIState();
+            AnimePage a = new AnimePage();
+            a.SetContent(state.requestAPI("anime/5081").Result);
 
-            Frame.Navigate(typeof(AnimeInfoPage), null);
+            Frame.Navigate(typeof(AnimeInfoPage), a);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

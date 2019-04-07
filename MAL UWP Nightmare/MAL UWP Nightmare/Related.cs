@@ -1,6 +1,6 @@
 ﻿namespace MAL_UWP_Nightmare
 {
-    class Related
+    public class Related
     {
         public readonly long id;
         public readonly string type;

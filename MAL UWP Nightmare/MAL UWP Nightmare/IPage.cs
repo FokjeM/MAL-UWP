@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MAL_UWP_Nightmare
 {
-    interface IPage
+    public interface IPage
     {
         /// <summary>
         /// Set all of the page-specific content.

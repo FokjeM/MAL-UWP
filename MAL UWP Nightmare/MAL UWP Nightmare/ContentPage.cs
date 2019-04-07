@@ -13,7 +13,7 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// Dictionary to hold related items. Has to be set by the factory.
         /// </summary>
-        protected Dictionary<Related, string> _related;
+        private Dictionary<Related, string> _related;
         public Dictionary<Related,string> related
         {
             get
@@ -24,7 +24,7 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// List to link all of the CharacterPages. Has to be set by the factory.
         /// </summary>
-        protected Dictionary<CharacterPage, string> characters;
+        private Dictionary<CharacterPage, string> characters;
         /// <summary>
         /// A List to hold all of the alternative titles. Has to be set by the factory.
         /// </summary>
@@ -217,7 +217,7 @@ namespace MAL_UWP_Nightmare
             _altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
             _status = (string)json.GetValue("status").ToObject("".GetType());
             _type = (string)json.GetValue("type").ToObject("".GetType());
-            genres = new List<string>((string[])json.GetValue("genres").ToObject(new string[] { }.GetType()));
+            _genres = new List<string>((string[])json.GetValue("genres").ToObject(new string[] { }.GetType()));
             origin = json;
         }
         
