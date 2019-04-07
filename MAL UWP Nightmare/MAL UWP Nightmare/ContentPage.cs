@@ -138,6 +138,23 @@ namespace MAL_UWP_Nightmare
                 return _synopsis;
             }
         }
+        protected string _status;
+        public string status
+        {
+            get
+            {
+                return _status;
+            }
+        }
+        protected string _type;
+        public string type
+        {
+            get
+            {
+                return _type;
+            }
+        }
+        
         protected JObject origin;
 
         /// <summary>
@@ -198,6 +215,8 @@ namespace MAL_UWP_Nightmare
             _background = (string)json.GetValue("background").ToObject("".GetType());
             _mainImage = (string)json.GetValue("image").ToObject("".GetType());
             _altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
+            _status = (string)json.GetValue("status").ToObject("".GetType());
+            _type = (string)json.GetValue("type").ToObject("".GetType());
             genres = new List<string>((string[])json.GetValue("genres").ToObject(new string[] { }.GetType()));
             origin = json;
         }
