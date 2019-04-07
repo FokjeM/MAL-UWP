@@ -109,6 +109,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="CharacterPage.cs" />
+    <Compile Include="PageFactory.cs" />
+    <Compile Include="Related.cs" />
+    <Compile Include="SearchResult.cs" />
     <Compile Include="ContentPage.cs" />
     <Compile Include="IPage.cs" />
     <Compile Include="JikanAPIState.cs" />
