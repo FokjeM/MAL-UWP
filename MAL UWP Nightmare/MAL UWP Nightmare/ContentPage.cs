@@ -77,9 +77,25 @@ namespace MAL_UWP_Nightmare
             title = (string)json.GetValue("title").ToObject("".GetType());
             japTitle = (string)json.GetValue("title_japanese").ToObject("".GetType());
             engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
-            //Set properties about running and the dates in the extending classes
-            //For anime, this is the "airing" and "aired" property
-            //For manga, it's "publishing" and "published"
+            running = (bool)json.GetValue("running").ToObject(new bool().GetType());
+            JToken runFrom = json.GetValue("run_from");
+            if (runFrom.Value<object>() == null)
+            {
+                startDate = DateTime.MaxValue;
+            }
+            else
+            {
+                startDate = runFrom.Value<DateTime>();
+            }
+            JToken runTo = json.GetValue("run_to");
+            if (runTo.Value<object>() == null)
+            {
+                endDate = DateTime.MaxValue;
+            }
+            else
+            {
+                endDate = runTo.Value<DateTime>();
+            }
             synopsis = (string)json.GetValue("synopsis").ToObject("".GetType());
             background = (string)json.GetValue("background").ToObject("".GetType());
             mainImage = (string)json.GetValue("image").ToObject("".GetType());

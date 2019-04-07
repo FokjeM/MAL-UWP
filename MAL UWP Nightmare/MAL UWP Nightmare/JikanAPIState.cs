@@ -63,12 +63,13 @@ namespace MAL_UWP_Nightmare
                     genres.Add(jt.Children()["name"].Value<string>());
                 }
                 ret.Add("genres", JToken.FromObject(genres));
+                //The API differentiates between airing and publishing for anime and mange. We don't.
                 if (request.Contains("anime"))
                 {
                     //add anime-specific parts
-                    ret.Add("airing", result.GetValue("airing"));
-                    ret.Add("aired_from", result.GetValue("aired")["from"]);
-                    ret.Add("aired_to", result.GetValue("aired")["to"]);
+                    ret.Add("running", result.GetValue("airing"));
+                    ret.Add("run_from", result.GetValue("aired")["from"]);
+                    ret.Add("run_to", result.GetValue("aired")["to"]);
                     ret.Add("premiered", result.GetValue("premiered"));
                     ret.Add("broadcast", result.GetValue("broadcast"));
                     ret.Add("producers", result.GetValue("producers"));
@@ -79,9 +80,9 @@ namespace MAL_UWP_Nightmare
                 } else if (request.Contains("manga"))
                 {
                     //add manga-specific parts
-                    ret.Add("publishing", result.GetValue("publishing"));
-                    ret.Add("published_from", result.GetValue("published")["from"]);
-                    ret.Add("published_to", result.GetValue("published")["to"]);
+                    ret.Add("running", result.GetValue("publishing"));
+                    ret.Add("run_from", result.GetValue("published")["from"]);
+                    ret.Add("run_to", result.GetValue("published")["to"]);
                     ret.Add("authors", result.GetValue("authors"));
                 }
             }
