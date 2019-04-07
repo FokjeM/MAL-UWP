@@ -17,7 +17,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MAL_UWP_Nightmare
 {
-    public sealed partial class AnimeInfoPage : Page
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MangaInfoPage : Page
     {
         public string synopsis { get; set; }
         public string background { get; set; }
@@ -31,15 +34,8 @@ namespace MAL_UWP_Nightmare
         public object related { get; set; } //To do: Replace when API code is ready.
         public bool running { get; set; }
         public string genres { get; set; }
-        public string producers { get; set; }
-        public string licensors { get; set; }
-        public string studios { get; set; }
-        public string openings { get; set; }
-        public string endings { get; set; }
-        public string broadcast { get; set; }
-        public string premiered { get; set; }
 
-        public AnimeInfoPage()
+        public MangaInfoPage()
         {
             this.InitializeComponent();
         }
@@ -50,30 +46,16 @@ namespace MAL_UWP_Nightmare
             DataContext = this;
         }
 
-        private string ConvertListToString(List<string> list, bool sameLine)
+        private string ConvertListToString(List<string> list)
         {
             string s = "";
 
-            if (sameLine)
+            for (int i = 0; i < list.Count; i++)
             {
-                for (int i = 0; i < list.Count; i++)
+                s += list[i];
+                if (i != list.Count - 1)
                 {
-                    s += list[i];
-                    if (i != list.Count - 1)
-                    {
-                        s += ", ";
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    s += list[i];
-                    if (i != list.Count - 1)
-                    {
-                        s += "\r\n";
-                    }
+                    s += ", ";
                 }
             }
 
@@ -93,7 +75,7 @@ namespace MAL_UWP_Nightmare
             List<string> altTitlesList = new List<string>();
             altTitlesList.Add("Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power");
             altTitlesList.Add("Okaasan online");
-            altTitles = ConvertListToString(altTitlesList, false);
+            altTitles = ConvertListToString(altTitlesList);
 
             jpTitle = "通常攻撃が全体攻撃で二回攻撃のお母さんは好きですか？";
             enTitle = "Unknown";
@@ -107,33 +89,7 @@ namespace MAL_UWP_Nightmare
             genresList.Add("Adventure");
             genresList.Add("Comedy");
             genresList.Add("Fantasy");
-            genres = ConvertListToString(genresList, true);
-
-            List<string> producersList = new List<string>();
-            producersList.Add("Bandai Visual");
-            producersList.Add("Bandai Visual");
-            producers = ConvertListToString(producersList, false);
-
-            List<string> licensorsList = new List<string>();
-            licensorsList.Add("Funimation");
-            licensorsList.Add("Bandai Entertainment");
-            licensors = ConvertListToString(licensorsList, false);
-
-            List<string> studiosList = new List<string>();
-            studiosList.Add("Sunrise");
-            studios = ConvertListToString(studiosList, false);
-
-            List<string> openingsList = new List<string>();
-            openingsList.Add("\"Tank!\" by The Seatbelts (eps 1-25)");
-            openings = ConvertListToString(openingsList, false);
-
-            List<string> endingsList = new List<string>();
-            endingsList.Add("\"The Real Folk Blues\" by The Seatbelts feat. Mai Yamane (eps 1-12, 14-25)");
-            endingsList.Add("\"Space Lion\" by The Seatbelts (ep 13)");
-            endings = ConvertListToString(endingsList, false);
-
-            broadcast = "Unknown";
-            premiered = "Summer 2019";
+            genres = ConvertListToString(genresList);
         }
     }
 }

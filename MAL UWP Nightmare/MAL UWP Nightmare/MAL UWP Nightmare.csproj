@@ -116,6 +116,9 @@
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MangaInfoPage.xaml.cs">
+      <DependentUpon>MangaInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MangaPage.cs" />
     <Compile Include="OfflineAPIState.cs" />
     <Compile Include="PersonPage.cs" />
@@ -152,6 +155,10 @@
     <Page Include="HomePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MangaInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
