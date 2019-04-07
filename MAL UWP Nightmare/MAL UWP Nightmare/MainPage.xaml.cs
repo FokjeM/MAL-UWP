@@ -24,6 +24,8 @@ namespace MAL_UWP_Nightmare
         public MainPage()
         {
             this.InitializeComponent();
+            (Window.Current.Content as Frame).Background = new ImageBrush { Stretch = Stretch.Fill, ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/StoreLogo.png")) };
+            (Window.Current.Content as Frame).SizeChanged += TapHandle;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
