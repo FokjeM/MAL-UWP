@@ -28,12 +28,11 @@ namespace MAL_UWP_Nightmare
 
         public bool SavePage()
         {
-            JObject charPage = JObject.FromObject(this);
             StorageFolder folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("character", CreationCollisionOption.OpenIfExists).AsTask().Result;
             StorageFile file = folder.CreateFileAsync(name.ToString() + ".json", CreationCollisionOption.OpenIfExists).AsTask().Result;
             try
             {
-                FileIO.WriteTextAsync(file, charPage.ToString()).AsTask().Wait();
+                FileIO.WriteTextAsync(file, origin.ToString()).AsTask().Wait();
             } catch
             {
                 return false;
@@ -49,6 +48,7 @@ namespace MAL_UWP_Nightmare
                 return;
             }
             id = long.Parse((string)json.GetValue("mal_id").ToObject("".GetType()));
+            url = (string)json.GetValue("url").ToObject("".GetType());
             name = (string)json.GetValue("name").ToObject("".GetType());
             kanjiName = (string)json.GetValue("name_kanji").ToObject("".GetType());
             nicknames = new List<string>((string[])json.GetValue("nicknames").ToObject(new string[] {  }.GetType()));
@@ -57,7 +57,7 @@ namespace MAL_UWP_Nightmare
             images = new List<BitmapImage>((BitmapImage[])json.GetValue("images").ToObject(new BitmapImage[] { }.GetType()));
             anime = new List<AnimePage>((AnimePage[])json.GetValue("anime").ToObject(new AnimePage[] { }.GetType()));
             manga = new List<MangaPage>((MangaPage[])json.GetValue("manga").ToObject(new MangaPage[] { }.GetType()));
-            voiceActors = new Dictionary<PersonPage, string>(json.GetValue("voice_actors").ToObject(new Dictionary<PersonPage, string>));
+            voiceActors = (Dictionary<PersonPage, string>)json.GetValue("voice_actors").ToObject(new Dictionary<PersonPage, string>().GetType());
             origin = json;
         }
 

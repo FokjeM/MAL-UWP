@@ -7,6 +7,10 @@ using Newtonsoft.Json.Linq;
 
 namespace MAL_UWP_Nightmare
 {
+    /// <summary>
+    /// This is the KitsuAPIState class. Created as part of the application,
+    /// but not yet implemented. Don't use this!
+    /// </summary>
     class KitsuAPIState : APIState
     {
         public KitsuAPIState() : base("https://kitsu.io/api/edge/")

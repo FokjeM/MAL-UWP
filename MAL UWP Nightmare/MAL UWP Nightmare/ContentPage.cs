@@ -33,17 +33,18 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// This is really only gonna see use in the SavePage function.
         /// </summary>
-        private long id;
-        private string synopsis;
-        private string background;
-        private string url;
-        private string title;
-        private string japTitle;
-        private string engTitle;
-        private bool running;
-        private DateTime startDate;
-        private DateTime endDate;
-        private BitmapImage mainImage;
+        protected long id;
+        protected string synopsis;
+        protected string background;
+        protected string url;
+        protected string title;
+        protected string japTitle;
+        protected string engTitle;
+        protected bool running;
+        protected DateTime startDate;
+        protected DateTime endDate;
+        protected BitmapImage mainImage;
+        protected JObject origin;
 
         /// <summary>
         /// Supplies info on wether or not this content is still being produced.
@@ -109,7 +110,31 @@ namespace MAL_UWP_Nightmare
 
         public abstract bool SavePage();
 
-        public abstract void SetContent(JObject json);
+        public virtual void SetContent(JObject json)
+        {
+            id = long.Parse((string)json.GetValue("mal_id").ToObject("".GetType()));
+            url = (string)json.GetValue("url").ToObject("".GetType());
+            title = (string)json.GetValue("title").ToObject("".GetType());
+            japTitle = (string)json.GetValue("title_japanese").ToObject("".GetType());
+            engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
+            //Set properties about running and the dates in the extending classes
+            //For anime, this is the "airing" and "aired" property
+            //For manga, it's "publishing" and "published"
+            synopsis = (string)json.GetValue("synopsis").ToObject("".GetType());
+            background = (string)json.GetValue("background").ToObject("".GetType());
+            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType())));
+            images = new List<BitmapImage>((BitmapImage[])json.GetValue("images").ToObject(new BitmapImage[] { }.GetType()));
+            related = (Dictionary<ContentPage, string>)json.GetValue("related").ToObject(new Dictionary<ContentPage, string>().GetType());
+            characters = new List<CharacterPage>((CharacterPage[])json.GetValue("characters").ToObject(new CharacterPage[] { }.GetType()));
+            altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
+            JToken gens = json.GetValue("genres");
+            genres = new List<string>();
+            foreach (JToken jt in gens.Children())
+            {
+                genres.Add(jt.Children()["name"].Value<string>());
+            }
+            origin = json;
+        }
         
         public void SetErrorContent(string errorMessage)
         {
