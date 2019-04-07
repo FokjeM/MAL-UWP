@@ -85,10 +85,10 @@ namespace MAL_UWP_Nightmare
                     ret.Add("run_to", result.GetValue("published")["to"]);
                     ret.Add("authors", result.GetValue("authors"));
                 }
-            }
 #pragma warning disable CS4014 // Is niet relevant voor deze method.
             var added = AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L).Result;
 #pragma warning restore CS4014 // Bij de volgende call is het al klaar.
+            }
             return result;
         }
 
