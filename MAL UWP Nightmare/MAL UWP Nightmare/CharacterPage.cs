@@ -16,7 +16,7 @@ namespace MAL_UWP_Nightmare
         private string about;
         private BitmapImage mainImage;
         private List<BitmapImage> images;
-        private List<AnimePage> anime;
+        private List<AnimeInfoPage> anime;
         private List<MangaPage> manga;
         private Dictionary<PersonPage, string> voiceActors;
         private JObject origin;
@@ -53,9 +53,9 @@ namespace MAL_UWP_Nightmare
             kanjiName = (string)json.GetValue("name_kanji").ToObject("".GetType());
             nicknames = new List<string>((string[])json.GetValue("nicknames").ToObject(new string[] {  }.GetType()));
             about = (string)json.GetValue("about").ToObject("".GetType());
-            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType())));
+            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType());
             images = new List<BitmapImage>((BitmapImage[])json.GetValue("images").ToObject(new BitmapImage[] { }.GetType()));
-            anime = new List<AnimePage>((AnimePage[])json.GetValue("anime").ToObject(new AnimePage[] { }.GetType()));
+            anime = new List<AnimeInfoPage>((AnimeInfoPage[])json.GetValue("anime").ToObject(new AnimeInfoPage[] { }.GetType()));
             manga = new List<MangaPage>((MangaPage[])json.GetValue("manga").ToObject(new MangaPage[] { }.GetType()));
             voiceActors = (Dictionary<PersonPage, string>)json.GetValue("voice_actors").ToObject(new Dictionary<PersonPage, string>().GetType());
             origin = json;

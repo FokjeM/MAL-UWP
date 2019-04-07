@@ -122,7 +122,7 @@ namespace MAL_UWP_Nightmare
             //For manga, it's "publishing" and "published"
             synopsis = (string)json.GetValue("synopsis").ToObject("".GetType());
             background = (string)json.GetValue("background").ToObject("".GetType());
-            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType())));
+            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType());
             images = new List<BitmapImage>((BitmapImage[])json.GetValue("images").ToObject(new BitmapImage[] { }.GetType()));
             related = (Dictionary<ContentPage, string>)json.GetValue("related").ToObject(new Dictionary<ContentPage, string>().GetType());
             characters = new List<CharacterPage>((CharacterPage[])json.GetValue("characters").ToObject(new CharacterPage[] { }.GetType()));
