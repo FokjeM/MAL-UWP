@@ -150,7 +150,7 @@ namespace MAL_UWP_Nightmare
             knownIDs.Add(token, value);
             try
             {
-                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString());
+                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Wait();
             } catch
             {
                 return false;

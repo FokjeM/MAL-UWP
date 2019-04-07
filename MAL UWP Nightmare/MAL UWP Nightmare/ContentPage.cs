@@ -33,91 +33,112 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// This is really only gonna see use in the SavePage function.
         /// </summary>
-        private long id;
-        private string synopsis;
-        private string background;
-        private string url;
-        private string title;
-        private string japTitle;
-        private string engTitle;
-        private bool running;
-        private DateTime startDate;
-        private DateTime endDate;
-        private BitmapImage mainImage;
+        protected long id;
+        protected string synopsis;
+        protected string background;
+        protected string url;
+        protected string title;
+        protected string japTitle;
+        protected string engTitle;
+        protected bool running;
+        protected DateTime startDate;
+        protected DateTime endDate;
+        protected BitmapImage mainImage;
+        protected JObject origin;
 
-        public bool isRunning()
+        /// <summary>
+        /// Supplies info on wether or not this content is still being produced.
+        /// </summary>
+        /// <returns>true if in production, false if not.</returns>
+        public bool IsRunning()
         {
             return running;
         }
 
-        public bool hasGenre(string genre)
+        /// <summary>
+        /// Check to see if this content has certain genres.
+        /// Useful if someone decides to modify the application to block R-Rated content.
+        /// Or if someone decides to implement genres for anything.
+        /// </summary>
+        /// <param name="genre">the genre to check for.</param>
+        /// <returns></returns>
+        public bool HasGenre(string genre)
         {
-            return genres.Contains(genre);
+            return genres.Contains(genre.ToLower());
         }
 
-        public void setSynopsis(string synopsis)
+        /// <summary>
+        /// Set the suppplied synopsis for this content.
+        /// </summary>
+        /// <param name="synopsis">the supplied synopsis, as a string.</param>
+        public void SetSynopsis(string synopsis)
         {
             this.synopsis = synopsis;
         }
 
-        public void setBackground(string background)
+        /// <summary>
+        /// Set the supplied background information for this content.
+        /// </summary>
+        /// <param name="background">the supplied background info, as a string</param>
+        public void SetBackground(string background)
         {
             this.background = background;
         }
 
-        public void setRelated(Dictionary<ContentPage, string> related)
+        /// <summary>
+        /// Set the related media for this object and pretend you know how it matches up.
+        /// </summary>
+        /// <param name="related">the supplied related media, as a Dictionary</param>
+        public void SetRelated(Dictionary<ContentPage, string> related)
         {
             this.related = related;
         }
 
-        public void setCharacters(List<CharacterPage> characters)
+        /// <summary>
+        /// Set the characters for this media. Don't even think you know all of them.
+        /// </summary>
+        /// <param name="characters">The supplied list of characters</param>
+        public void SetCharacters(List<CharacterPage> characters)
         {
             this.characters = characters;
         }
-
+        
         public bool IsLocal()
         {
             return !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
-        public void LoadPage()
-        {
-            //Load the page anew from the source! Might be better to figure out a way to replace this with another ContentPage
-            throw new NotImplementedException();
-        }
+        public abstract bool SavePage();
 
-        public bool SavePage()
+        public virtual void SetContent(JObject json)
         {
-            //Save the page to a JSON file. Save the file in LocalFolder/{type}/{title}
-            throw new NotImplementedException();
+            id = long.Parse((string)json.GetValue("mal_id").ToObject("".GetType()));
+            url = (string)json.GetValue("url").ToObject("".GetType());
+            title = (string)json.GetValue("title").ToObject("".GetType());
+            japTitle = (string)json.GetValue("title_japanese").ToObject("".GetType());
+            engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
+            //Set properties about running and the dates in the extending classes
+            //For anime, this is the "airing" and "aired" property
+            //For manga, it's "publishing" and "published"
+            synopsis = (string)json.GetValue("synopsis").ToObject("".GetType());
+            background = (string)json.GetValue("background").ToObject("".GetType());
+            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType())));
+            images = new List<BitmapImage>((BitmapImage[])json.GetValue("images").ToObject(new BitmapImage[] { }.GetType()));
+            related = (Dictionary<ContentPage, string>)json.GetValue("related").ToObject(new Dictionary<ContentPage, string>().GetType());
+            characters = new List<CharacterPage>((CharacterPage[])json.GetValue("characters").ToObject(new CharacterPage[] { }.GetType()));
+            altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
+            JToken gens = json.GetValue("genres");
+            genres = new List<string>();
+            foreach (JToken jt in gens.Children())
+            {
+                genres.Add(jt.Children()["name"].Value<string>());
+            }
+            origin = json;
         }
-
-        public void SetContent(JObject json)
-        {
-            //Pull off a magic trick to get the right info out of the JObject
-            setSynopsis(json.GetValue("synopsis").ToString());
-            setBackground(json.GetValue("background").ToString());
-            setRelated(json.GetValue("related"));
-        }
-
-        public void SetImages(BitmapImage[] images)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetMainImage(BitmapImage image)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetInfo(string[] info)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public void SetErrorContent(string errorMessage)
         {
-            throw new NotImplementedException();
+            title = errorMessage;
         }
     }
 }
