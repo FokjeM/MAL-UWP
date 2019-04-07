@@ -34,22 +34,23 @@ namespace MAL_UWP_Nightmare
             }
             base.SetContent(json);
             running = (bool)json.GetValue("publishing").ToObject(new bool().GetType());
-            JToken published = json.GetValue("published");
-            if (published["from"].Value<object>() == null)
+            JToken publishedFrom = json.GetValue("published")["from"];
+            if (publishedFrom.Value<object>() == null)
             {
                 startDate = DateTime.MaxValue;
             }
             else
             {
-                startDate = published["from"].Value<DateTime>();
+                startDate = publishedFrom.Value<DateTime>();
             }
-            if (published["to"].Value<object>() == null)
+            JToken publishedTo = json.GetValue("published")["to"];
+            if (publishedTo.Value<object>() == null)
             {
                 endDate = DateTime.MaxValue;
             }
             else
             {
-                endDate = published["from"].Value<DateTime>();
+                endDate = publishedTo.Value<DateTime>();
             }
             authors = new List<string>();
             JToken auths = json.GetValue("authors");

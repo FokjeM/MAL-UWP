@@ -75,7 +75,7 @@ namespace MAL_UWP_Nightmare
                         long id = long.Parse((string)file.GetValue("mal_id").ToObject("".GetType()));
                         string title = (string)file.GetValue("title").ToObject("".GetType());
                         string image = (string)file.GetValue("image").ToObject("".GetType());
-                        SearchResult res = new SearchResult(title, image, id);
+                        SearchResult res = new SearchResult(path[0], title, image, id);
                         resultList.Add(res);
                     }
                 }

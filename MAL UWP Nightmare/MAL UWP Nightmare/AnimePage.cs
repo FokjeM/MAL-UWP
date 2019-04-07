@@ -41,21 +41,22 @@ namespace MAL_UWP_Nightmare
             }
             base.SetContent(json);
             running = (bool)json.GetValue("airing").ToObject(new bool().GetType());
-            JToken aired = json.GetValue("aired");
-            if(aired["from"].Value<object>() == null)
+            JToken airedFrom = json.GetValue("aired_from");
+            if(airedFrom.Value<object>() == null)
             {
                 startDate = DateTime.MaxValue;
             } else
             {
-                startDate = aired["from"].Value<DateTime>();
+                startDate = airedFrom.Value<DateTime>();
             }
-            if (aired["to"].Value<object>() == null)
+            JToken airedTo = json.GetValue("aired_to");
+            if (airedTo.Value<object>() == null)
             {
                 endDate = DateTime.MaxValue;
             }
             else
             {
-                endDate = aired["from"].Value<DateTime>();
+                endDate = airedTo.Value<DateTime>();
             }
             premiereSeason = (string)json.GetValue("premiered").ToObject("".GetType());
             broadcast = (string)json.GetValue("broadcast").ToObject("".GetType());

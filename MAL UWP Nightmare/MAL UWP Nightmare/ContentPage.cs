@@ -84,12 +84,7 @@ namespace MAL_UWP_Nightmare
             background = (string)json.GetValue("background").ToObject("".GetType());
             mainImage = (string)json.GetValue("image").ToObject("".GetType());
             altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
-            JToken gens = json.GetValue("genres");
-            genres = new List<string>();
-            foreach (JToken jt in gens.Children())
-            {
-                genres.Add(jt.Children()["name"].Value<string>());
-            }
+            genres = new List<string>((string[])json.GetValue("genres").ToObject(new string[] { }.GetType()));
             origin = json;
         }
         

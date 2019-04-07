@@ -51,12 +51,38 @@ namespace MAL_UWP_Nightmare
                 ret.Add("id", result.GetValue("id"));
                 ret.Add("url", JToken.FromObject(api.ToString()));
                 ret.Add("title_japanese", result.GetValue("title_japanese"));
-                if (request.Contains("manga"))
+                ret.Add("title_english", result.GetValue("title_english"));
+                ret.Add("synopsis", result.GetValue("synopsis"));
+                ret.Add("background", result.GetValue("background"));
+                ret.Add("image", result.GetValue("image"));
+                ret.Add("title_synonyms", result.GetValue("title_synonyms"));
+                JToken gens = result.GetValue("genres");
+                List<string> genres = new List<string>();
+                foreach (JToken jt in gens.Children())
                 {
-                    //add manga-specific parts
-                } else if (request.Contains("anime"))
+                    genres.Add(jt.Children()["name"].Value<string>());
+                }
+                ret.Add("genres", JToken.FromObject(genres));
+                if (request.Contains("anime"))
                 {
                     //add anime-specific parts
+                    ret.Add("airing", result.GetValue("airing"));
+                    ret.Add("aired_from", result.GetValue("aired")["from"]);
+                    ret.Add("aired_to", result.GetValue("aired")["to"]);
+                    ret.Add("premiered", result.GetValue("premiered"));
+                    ret.Add("broadcast", result.GetValue("broadcast"));
+                    ret.Add("producers", result.GetValue("producers"));
+                    ret.Add("licensors", result.GetValue("licensors"));
+                    ret.Add("studios", result.GetValue("studios"));
+                    ret.Add("opening_themes", result.GetValue("opening_themes"));
+                    ret.Add("ending_themes", result.GetValue("ending_themes"));
+                } else if (request.Contains("manga"))
+                {
+                    //add manga-specific parts
+                    ret.Add("publishing", result.GetValue("publishing"));
+                    ret.Add("published_from", result.GetValue("published")["from"]);
+                    ret.Add("published_to", result.GetValue("published")["to"]);
+                    ret.Add("authors", result.GetValue("authors"));
                 }
             }
 #pragma warning disable CS4014 // Is niet relevant voor deze method.
