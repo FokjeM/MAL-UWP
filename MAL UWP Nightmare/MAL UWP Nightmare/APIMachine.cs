@@ -28,7 +28,6 @@ namespace MAL_UWP_Nightmare
             string offlineSearchResult = offline.getRequestFromSearch(request).Result;
             if (string.IsNullOrEmpty(offlineSearchResult))
             {
-                //We still need some black magic here to control the output!
                 return jikan.requestAPI(jikan.getRequestFromSearch(request).Result).Result;
             } else
             {

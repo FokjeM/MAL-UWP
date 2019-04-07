@@ -13,11 +13,11 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// Dictionary to hold related items. Has to be set by the factory.
         /// </summary>
-        protected Dictionary<ContentPage, string> related;
+        protected Dictionary<Related, string> related;
         /// <summary>
         /// List to link all of the CharacterPages. Has to be set by the factory.
         /// </summary>
-        protected List<CharacterPage> characters;
+        protected Dictionary<CharacterPage, string> characters;
         /// <summary>
         /// A List to hold all of the alternative titles. Has to be set by the factory.
         /// </summary>
@@ -83,8 +83,6 @@ namespace MAL_UWP_Nightmare
             synopsis = (string)json.GetValue("synopsis").ToObject("".GetType());
             background = (string)json.GetValue("background").ToObject("".GetType());
             mainImage = (string)json.GetValue("image").ToObject("".GetType());
-            related = (Dictionary<ContentPage, string>)json.GetValue("related").ToObject(new Dictionary<ContentPage, string>().GetType());
-            characters = new List<CharacterPage>((CharacterPage[])json.GetValue("characters").ToObject(new CharacterPage[] { }.GetType()));
             altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
             JToken gens = json.GetValue("genres");
             genres = new List<string>();
@@ -98,6 +96,11 @@ namespace MAL_UWP_Nightmare
         public void SetErrorContent(string errorMessage)
         {
             title = errorMessage;
+        }
+
+        public void setRelated(Dictionary<Related, string> related)
+        {
+            this.related = related;
         }
     }
 }

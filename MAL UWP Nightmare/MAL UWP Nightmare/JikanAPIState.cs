@@ -46,12 +46,22 @@ namespace MAL_UWP_Nightmare
             JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
             if (result.ContainsKey("title"))
             {
-                result.TryGetValue("title", out JToken jt);
-                System.Diagnostics.Debug.WriteLine(jt.ToString());
-#pragma warning disable CS4014 // Is niet relevant voor deze method.
-                AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
-#pragma warning restore CS4014 // Bij de volgende call is het al klaar.
+                JObject ret = new JObject();
+                ret.Add("title", result.GetValue("title"));
+                ret.Add("id", result.GetValue("id"));
+                ret.Add("url", JToken.FromObject(api.ToString()));
+                ret.Add("title_japanese", result.GetValue("title_japanese"));
+                if (request.Contains("manga"))
+                {
+                    //add manga-specific parts
+                } else if (request.Contains("anime"))
+                {
+                    //add anime-specific parts
+                }
             }
+#pragma warning disable CS4014 // Is niet relevant voor deze method.
+            var added = AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L).Result;
+#pragma warning restore CS4014 // Bij de volgende call is het al klaar.
             return result;
         }
 
@@ -75,7 +85,7 @@ namespace MAL_UWP_Nightmare
                 string title = jt.Value<string>("title");
                 string image = jt.Value<string>("image_url");
                 long id = jt.Value<long>("mal_id");
-                SearchResult res = new SearchResult(title, image, id);
+                SearchResult res = new SearchResult(reqParts[0], title, image, id);
                 resultList.Add(res);
             }
             return resultList;

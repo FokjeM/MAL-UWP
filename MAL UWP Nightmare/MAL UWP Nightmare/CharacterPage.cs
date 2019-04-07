@@ -6,6 +6,13 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MAL_UWP_Nightmare
 {
+    /// <summary>
+    /// This has been dropped, beause we cannot implement it without exceeding the APIs
+    /// Request limit. We are only allowed 2 calls a second for a maximum of 30 a minute.
+    /// That makes it impossible to add character info, which is an extra API call.
+    /// 
+    /// Not to mention that Kitsu still hasn't implemented this information.
+    /// </summary>
     class CharacterPage : IPage
     {
         private long id;
