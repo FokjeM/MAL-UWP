@@ -23,6 +23,7 @@ namespace MAL_UWP_Nightmare
             try
             {
                 FileIO.WriteTextAsync(file, origin.ToString()).AsTask().Wait();
+                url = file.Path;
             }
             catch
             {
