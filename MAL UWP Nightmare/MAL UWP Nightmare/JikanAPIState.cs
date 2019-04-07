@@ -56,6 +56,8 @@ namespace MAL_UWP_Nightmare
                 ret.Add("background", result.GetValue("background"));
                 ret.Add("image", result.GetValue("image"));
                 ret.Add("title_synonyms", result.GetValue("title_synonyms"));
+                ret.Add("status", result.GetValue("status"));
+                ret.Add("type", result.GetValue("type"));
                 JToken gens = result.GetValue("genres");
                 List<string> genres = new List<string>();
                 foreach (JToken jt in gens.Children())
