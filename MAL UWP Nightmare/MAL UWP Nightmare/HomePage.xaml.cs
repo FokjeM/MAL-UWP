@@ -42,7 +42,12 @@ namespace MAL_UWP_Nightmare
 
         private void seasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame.Navigate(typeof(MangaInfoPage), null);
+            Frame.Navigate(typeof(AnimeInfoPage), null);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultsPage), null);
         }
     }
 }
