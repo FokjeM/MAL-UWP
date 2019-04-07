@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MAL_UWP_Nightmare
 {
-    abstract class ContentPage : IPage
+    public abstract class ContentPage : IPage
     {
         /// <summary>
         /// Dictionary to hold related items. Has to be set by the factory.
@@ -131,11 +131,11 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _mainImage;
-        public string synopsis
+        public string mainImage
         {
             get
             {
-                return _synopsis;
+                return _mainImage;
             }
         }
         protected string _status;
@@ -191,7 +191,7 @@ namespace MAL_UWP_Nightmare
             _url = (string)json.GetValue("url").ToObject("".GetType());
             _title = (string)json.GetValue("title").ToObject("".GetType());
             _japTitle = (string)json.GetValue("title_japanese").ToObject("".GetType());
-            engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
+            _engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
             _running = (bool)json.GetValue("running").ToObject(new bool().GetType());
             JToken runFrom = json.GetValue("run_from");
             if (runFrom.Value<object>() == null)
@@ -228,7 +228,7 @@ namespace MAL_UWP_Nightmare
 
         public void setRelated(Dictionary<Related, string> related)
         {
-            this.related = related;
+            _related = related;
         }
     }
 }

@@ -42,6 +42,7 @@ namespace MAL_UWP_Nightmare
 
         private void seasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
+
             Frame.Navigate(typeof(AnimeInfoPage), null);
         }
 

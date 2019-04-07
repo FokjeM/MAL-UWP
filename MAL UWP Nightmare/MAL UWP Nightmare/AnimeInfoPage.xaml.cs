@@ -19,6 +19,7 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class AnimeInfoPage : Page
     {
+        private AnimePage anime;
         public string synopsis { get; set; }
         public string background { get; set; }
         public string altTitles { get; set; }
@@ -39,14 +40,15 @@ namespace MAL_UWP_Nightmare
         public string broadcast { get; set; }
         public string premiered { get; set; }
 
-        public AnimeInfoPage()
+        public AnimeInfoPage(AnimePage anime)
         {
+            this.anime = anime;
             this.InitializeComponent();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            setTestData(); //To do: Remove or edit when connected to API.
+            setData(anime); //To do: Remove or edit when connected to API.
             DataContext = this;
         }
 
@@ -78,6 +80,28 @@ namespace MAL_UWP_Nightmare
             }
 
             return s;
+        }
+
+        private void setData(AnimePage anime)
+        {
+            synopsis = anime.synopsis;
+            background = anime.background;
+            altTitles = ConvertListToString(anime.altTitles, false);
+            jpTitle = anime.japTitle;
+            enTitle = anime.engTitle;
+            //Type
+            //Status
+            startDate = anime.startDate.ToString("MMMM dd, yyyy");
+            endDate = anime.endDate.ToString("MMMM dd, yyyy");
+            running = anime.running;
+            genres = ConvertListToString(anime.genres, true);
+            producers = ConvertListToString(anime.producers, false);
+            licensors = ConvertListToString(anime.licensors, false);
+            studios = ConvertListToString(anime.studios, false);
+            openings= ConvertListToString(anime.openings, false);
+            endings = ConvertListToString(anime.endings, false);
+            broadcast = anime.broadcast;
+            premiered = anime.premiereSeason;
         }
 
         private void setTestData() //To do: Remove or edit when connected to API.

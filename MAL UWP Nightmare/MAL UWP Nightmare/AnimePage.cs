@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MAL_UWP_Nightmare
 {
-    class AnimePage : ContentPage
+    public class AnimePage : ContentPage
     {
         private string _premiereSeason;
         public string premiereSeason
@@ -33,16 +33,37 @@ namespace MAL_UWP_Nightmare
             }
         }
         private List<string> _licensors;
-        public string synopsis
+        public List<string> licensors
         {
             get
             {
-                return _synopsis;
+                return _licensors;
             }
         }
         private List<string> _studios;
+        public List<string> studios
+        {
+            get
+            {
+                return _studios;
+            }
+        }
         private List<string> _openings;
+        public List<string> openings
+        {
+            get
+            {
+                return _openings;
+            }
+        }
         private List<string> _endings;
+        public List<string> endings
+        {
+            get
+            {
+                return _endings;
+            }
+        }
 
         public override bool SavePage()
         {
@@ -68,7 +89,7 @@ namespace MAL_UWP_Nightmare
                 return;
             }
             base.SetContent(json);
-            premiereSeason = (string)json.GetValue("premiered").ToObject("".GetType());
+            _premiereSeason = (string)json.GetValue("premiered").ToObject("".GetType());
             _broadcast = (string)json.GetValue("broadcast").ToObject("".GetType());
             JToken prods = json.GetValue("producers");
             _producers = new List<string>();
