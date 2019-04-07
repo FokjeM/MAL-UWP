@@ -12,11 +12,11 @@ namespace MAL_UWP_Nightmare
         public override bool SavePage()
         {
             StorageFolder folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("manga", CreationCollisionOption.OpenIfExists).AsTask().Result;
-            StorageFile file = folder.CreateFileAsync(title.ToString() + ".json", CreationCollisionOption.OpenIfExists).AsTask().Result;
+            StorageFile file = folder.CreateFileAsync(_title.ToString() + ".json", CreationCollisionOption.OpenIfExists).AsTask().Result;
             try
             {
                 FileIO.WriteTextAsync(file, origin.ToString()).AsTask().Wait();
-                url = file.Path;
+                _url = file.Path;
             }
             catch
             {
@@ -37,7 +37,7 @@ namespace MAL_UWP_Nightmare
             JToken auths = json.GetValue("authors");
             foreach (JToken jt in auths.Children())
             {
-                authors.Add(jt.Children()["name"].Value<string>());
+                authors.Add(jt["name"].Value<string>());
             }
         }
     }

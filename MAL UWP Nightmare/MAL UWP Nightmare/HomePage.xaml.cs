@@ -17,11 +17,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MAL_UWP_Nightmare
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class HomePage : Page
     {
         public Dictionary<string,string> seasonalAnime { get; set; } //To do: Replace Value type string with BitmapImage.
 
-        public MainPage()
+        public HomePage()
         {
             this.InitializeComponent();
         }
@@ -38,6 +38,20 @@ namespace MAL_UWP_Nightmare
             seasonalList.Add("Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?", "https://cdn.myanimelist.net/images/anime/1857/94908.jpg?s=ff1349992ecce2dc5b5b1ab3d4bf6846"); //To do: Remove test data.
 
             return seasonalList;
+        }
+
+        private void seasonalView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            JikanAPIState state = new JikanAPIState();
+            AnimePage a = new AnimePage();
+            a.SetContent(state.requestAPI("anime/5081").Result);
+
+            Frame.Navigate(typeof(AnimeInfoPage), a);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SearchResultsPage), null);
         }
     }
 }

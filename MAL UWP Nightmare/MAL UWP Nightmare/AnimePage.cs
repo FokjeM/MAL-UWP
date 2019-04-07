@@ -6,24 +6,73 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MAL_UWP_Nightmare
 {
-    class AnimePage : ContentPage
+    public class AnimePage : ContentPage
     {
-        private string premiereSeason;
-        private string broadcast;
-        private List<string> producers;
-        private List<string> licensors;
-        private List<string> studios;
-        private List<string> openings;
-        private List<string> endings;
+        private string _premiereSeason;
+        public string premiereSeason
+        {
+            get
+            {
+                return _premiereSeason;
+            }
+        }
+        private string _broadcast;
+        public string broadcast
+        {
+            get
+            {
+                return _broadcast;
+            }
+        }
+        private List<string> _producers;
+        public List<string> producers
+        {
+            get
+            {
+                return _producers;
+            }
+        }
+        private List<string> _licensors;
+        public List<string> licensors
+        {
+            get
+            {
+                return _licensors;
+            }
+        }
+        private List<string> _studios;
+        public List<string> studios
+        {
+            get
+            {
+                return _studios;
+            }
+        }
+        private List<string> _openings;
+        public List<string> openings
+        {
+            get
+            {
+                return _openings;
+            }
+        }
+        private List<string> _endings;
+        public List<string> endings
+        {
+            get
+            {
+                return _endings;
+            }
+        }
 
         public override bool SavePage()
         {
             StorageFolder folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("anime", CreationCollisionOption.OpenIfExists).AsTask().Result;
-            StorageFile file = folder.CreateFileAsync(title.ToString() + ".json", CreationCollisionOption.OpenIfExists).AsTask().Result;
+            StorageFile file = folder.CreateFileAsync(_title.ToString() + ".json", CreationCollisionOption.OpenIfExists).AsTask().Result;
             try
             {
                 FileIO.WriteTextAsync(file, origin.ToString()).AsTask().Wait();
-                url = file.Path;
+                _url = file.Path;
             }
             catch
             {
@@ -34,34 +83,34 @@ namespace MAL_UWP_Nightmare
 
         public override void SetContent(JObject json)
         {
-            if (json.First.Value<string>().ToLower().Contains("error"))
+            if (json.First.ToObject<string>().ToLower().Contains("error"))
             {
-                SetErrorContent(json.First.Value<string>());
+                SetErrorContent(json.First.ToObject<string>());
                 return;
             }
             base.SetContent(json);
-            premiereSeason = (string)json.GetValue("premiered").ToObject("".GetType());
-            broadcast = (string)json.GetValue("broadcast").ToObject("".GetType());
+            _premiereSeason = (string)json.GetValue("premiered").ToObject("".GetType());
+            _broadcast = (string)json.GetValue("broadcast").ToObject("".GetType());
             JToken prods = json.GetValue("producers");
-            producers = new List<string>();
+            _producers = new List<string>();
             foreach(JToken jt in prods.Children())
             {
-                producers.Add(jt.Children()["name"].Value<string>());
+                _producers.Add(jt["name"].Value<string>());
             }
             JToken lics = json.GetValue("licensors");
-            licensors = new List<string>();
+            _licensors = new List<string>();
             foreach (JToken jt in lics.Children())
             {
-                licensors.Add(jt.Children()["name"].Value<string>());
+                _licensors.Add(jt["name"].Value<string>());
             }
             JToken studs = json.GetValue("studios");
-            studios = new List<string>((string[])json.GetValue("").ToObject(new string[] { }.GetType()));
+            _studios = new List<string>();
             foreach (JToken jt in studs.Children())
             {
-                studios.Add(jt.Children()["name"].Value<string>());
+                _studios.Add(jt["name"].Value<string>());
             }
-            openings = new List<string>((string[])json.GetValue("opening_themes").ToObject(new string[] { }.GetType()));
-            endings = new List<string>((string[])json.GetValue("ending_themes").ToObject(new string[] { }.GetType()));
+            _openings = new List<string>((string[])json.GetValue("opening_themes").ToObject(new string[] { }.GetType()));
+            _endings = new List<string>((string[])json.GetValue("ending_themes").ToObject(new string[] { }.GetType()));
         }
     }
 }
