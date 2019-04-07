@@ -34,6 +34,7 @@ namespace MAL_UWP_Nightmare
         public object related { get; set; } //To do: Replace when API code is ready.
         public bool running { get; set; }
         public string genres { get; set; }
+        public string authors { get; set; }
 
         public MangaInfoPage()
         {
@@ -46,16 +47,30 @@ namespace MAL_UWP_Nightmare
             DataContext = this;
         }
 
-        private string ConvertListToString(List<string> list)
+        private string ConvertListToString(List<string> list, bool sameLine)
         {
             string s = "";
 
-            for (int i = 0; i < list.Count; i++)
+            if (sameLine)
             {
-                s += list[i];
-                if (i != list.Count - 1)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    s += ", ";
+                    s += list[i];
+                    if (i != list.Count - 1)
+                    {
+                        s += ", ";
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    s += list[i];
+                    if (i != list.Count - 1)
+                    {
+                        s += "\r\n";
+                    }
                 }
             }
 
@@ -75,11 +90,11 @@ namespace MAL_UWP_Nightmare
             List<string> altTitlesList = new List<string>();
             altTitlesList.Add("Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power");
             altTitlesList.Add("Okaasan online");
-            altTitles = ConvertListToString(altTitlesList);
+            altTitles = ConvertListToString(altTitlesList, false);
 
             jpTitle = "通常攻撃が全体攻撃で二回攻撃のお母さんは好きですか？";
             enTitle = "Unknown";
-            type = "TV";
+            type = "Manga";
             status = "Not yet aired";
             startDate = "Unknown";
             endDate = "Unknown";
@@ -89,7 +104,11 @@ namespace MAL_UWP_Nightmare
             genresList.Add("Adventure");
             genresList.Add("Comedy");
             genresList.Add("Fantasy");
-            genres = ConvertListToString(genresList);
+            genres = ConvertListToString(genresList, true);
+
+            List<string> authorsList = new List<string>();
+            authorsList.Add("Jyura");
+            authors = ConvertListToString(authorsList, false);
         }
     }
 }

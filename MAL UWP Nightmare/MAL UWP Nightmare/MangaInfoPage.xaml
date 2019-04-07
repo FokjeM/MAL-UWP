@@ -22,43 +22,52 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" Margin="0,0,20,0" Width="225" Height="326" Source="https://cdn.myanimelist.net/images/anime/1857/94908.jpg?s=ff1349992ecce2dc5b5b1ab3d4bf6846" VerticalAlignment="Top"/>
+                    <StackPanel Grid.Column="0" Margin="0,0,0,5" MaxWidth="245" HorizontalAlignment="Left">
+                        <Image Grid.Column="0" Margin="0,0,20,5" Width="225" Height="326" Source="https://cdn.myanimelist.net/images/anime/1857/94908.jpg?s=ff1349992ecce2dc5b5b1ab3d4bf6846" VerticalAlignment="Top"/>
+
+                        <StackPanel Padding="0,0,20,0" MaxWidth="245" HorizontalAlignment="Left">
+                            <TextBlock Margin="0,0,0,5" FontWeight="Bold">Type</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding type}" HorizontalAlignment="Left"/>
+
+                            <TextBlock Margin="0,0,0,5" FontWeight="Bold">Status</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding status}" HorizontalAlignment="Left"/>
+
+                            <TextBlock Margin="0,0,0,5" FontWeight="Bold">Running</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding running}" HorizontalAlignment="Left"/>
+
+                            <TextBlock Margin="0,0,0,5" FontWeight="Bold">Start Date</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding startDate}" HorizontalAlignment="Left"/>
+
+                            <TextBlock Margin="0,0,0,5" FontWeight="Bold">End Date</TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding endDate}" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </StackPanel>
+
                     <StackPanel Grid.Column="1" Width="auto" Margin="0,0,0,5">
+                        <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">Synonims</TextBlock>
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding altTitles}"/>
+
+                        <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">Japanese Title</TextBlock>
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding jpTitle}"/>
+
+                        <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">English Title</TextBlock>
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding enTitle}"/>
+                        
                         <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">Synopsis</TextBlock>
                         <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding synopsis}"/>
+
                         <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">Background</TextBlock>
                         <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding background}"/>
+
                         <!-- To do: Add related when API code is ready. -->
+
+                        <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">Authors</TextBlock>
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding authors}"/>
+                        
+                        <TextBlock Margin="0,0,0,5" FontWeight="Bold" FontSize="18">Genres</TextBlock>
+                        <TextBlock TextWrapping="WrapWholeWords" Margin="0,0,0,15" Text="{Binding genres}"/>
                     </StackPanel>
                 </Grid>
-                <StackPanel Width="225" MaxWidth="225" HorizontalAlignment="Left">
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Synonims</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding altTitles}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Japanese Title</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding jpTitle}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">English Title</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding enTitle}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Type</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding type}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Status</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding status}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Running</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding running}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Start Date</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding startDate}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">End Date</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding endDate}" HorizontalAlignment="Left"/>
-
-                    <TextBlock Margin="0,0,0,5" FontWeight="Bold">Genres</TextBlock>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding genres}" HorizontalAlignment="Left"/>
-                </StackPanel>
             </StackPanel>
         </Grid>
     </ScrollViewer>
