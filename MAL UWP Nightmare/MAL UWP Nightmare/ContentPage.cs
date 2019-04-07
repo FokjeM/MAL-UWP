@@ -27,10 +27,6 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         protected List<string> genres;
         /// <summary>
-        /// A list to hold all of the Images once loaded. Has to be set by the factory.
-        /// </summary>
-        protected List<BitmapImage> images;
-        /// <summary>
         /// This is really only gonna see use in the SavePage function.
         /// </summary>
         protected long id;
@@ -43,7 +39,7 @@ namespace MAL_UWP_Nightmare
         protected bool running;
         protected DateTime startDate;
         protected DateTime endDate;
-        protected BitmapImage mainImage;
+        protected string mainImage;
         protected JObject origin;
 
         /// <summary>
@@ -67,42 +63,6 @@ namespace MAL_UWP_Nightmare
             return genres.Contains(genre.ToLower());
         }
 
-        /// <summary>
-        /// Set the suppplied synopsis for this content.
-        /// </summary>
-        /// <param name="synopsis">the supplied synopsis, as a string.</param>
-        public void SetSynopsis(string synopsis)
-        {
-            this.synopsis = synopsis;
-        }
-
-        /// <summary>
-        /// Set the supplied background information for this content.
-        /// </summary>
-        /// <param name="background">the supplied background info, as a string</param>
-        public void SetBackground(string background)
-        {
-            this.background = background;
-        }
-
-        /// <summary>
-        /// Set the related media for this object and pretend you know how it matches up.
-        /// </summary>
-        /// <param name="related">the supplied related media, as a Dictionary</param>
-        public void SetRelated(Dictionary<ContentPage, string> related)
-        {
-            this.related = related;
-        }
-
-        /// <summary>
-        /// Set the characters for this media. Don't even think you know all of them.
-        /// </summary>
-        /// <param name="characters">The supplied list of characters</param>
-        public void SetCharacters(List<CharacterPage> characters)
-        {
-            this.characters = characters;
-        }
-        
         public bool IsLocal()
         {
             return !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
@@ -122,8 +82,7 @@ namespace MAL_UWP_Nightmare
             //For manga, it's "publishing" and "published"
             synopsis = (string)json.GetValue("synopsis").ToObject("".GetType());
             background = (string)json.GetValue("background").ToObject("".GetType());
-            mainImage = (BitmapImage)json.GetValue("image").ToObject(new BitmapImage().GetType());
-            images = new List<BitmapImage>((BitmapImage[])json.GetValue("images").ToObject(new BitmapImage[] { }.GetType()));
+            mainImage = (string)json.GetValue("image").ToObject("".GetType());
             related = (Dictionary<ContentPage, string>)json.GetValue("related").ToObject(new Dictionary<ContentPage, string>().GetType());
             characters = new List<CharacterPage>((CharacterPage[])json.GetValue("characters").ToObject(new CharacterPage[] { }.GetType()));
             altTitles = new List<string>((string[])json.GetValue("title_synonyms").ToObject(new string[] { }.GetType()));
