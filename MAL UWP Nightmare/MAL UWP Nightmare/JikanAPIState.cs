@@ -54,7 +54,7 @@ namespace MAL_UWP_Nightmare
                 ret.Add("title_english", result.GetValue("title_english"));
                 ret.Add("synopsis", result.GetValue("synopsis"));
                 ret.Add("background", result.GetValue("background"));
-                ret.Add("image", result.GetValue("image"));
+                ret.Add("image", result.GetValue("image_url"));
                 ret.Add("title_synonyms", result.GetValue("title_synonyms"));
                 ret.Add("status", result.GetValue("status"));
                 ret.Add("type", result.GetValue("type"));
