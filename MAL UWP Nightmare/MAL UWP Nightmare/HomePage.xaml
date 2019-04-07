@@ -7,45 +7,47 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" Loaded="Page_Loaded">
 
-    <Grid Background="#FF0A0A0A">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <ScrollViewer>
+        <Grid Background="#FF0A0A0A">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="1" Width="auto" Margin="0,30,0,0">
-            <TextBlock Foreground="White" Margin="0,0,0,5" FontSize="18">Search Anime or Manga</TextBlock>
-            
-            <TextBox AcceptsReturn="True" Background="#FF2B2B2B" Foreground="White" Margin="0,0,0,5"/>
-            
-            <Grid Margin="0,0,0,30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Width="auto" Margin="0,30,0,0">
+                <TextBlock Foreground="White" Margin="0,0,0,5" FontSize="18" FontWeight="Bold">Search Anime or Manga</TextBlock>
 
-                <Button Content="Search Anime" Grid.Column="0" Margin="0,0,5,0"/>
-                <Button Content="Search Manga" Grid.Column="1" Margin="0,0,5,0"/>
-            </Grid>
+                <TextBox AcceptsReturn="True" Background="#FF2B2B2B" Foreground="White" Margin="0,0,0,5"/>
 
-            <TextBlock Margin="0,0,0,5" FontSize="18">Seasonal Anime</TextBlock>
+                <Grid Margin="0,0,0,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
 
-            <ListView Margin="0,0,0,5" x:Name="seasonalView" ItemsSource="{Binding seasonalAnime}" ItemClick="seasonalView_ItemClick" IsItemClickEnabled="True">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
+                    <Button Content="Search Anime" Grid.Column="0" Margin="0,0,5,0"/>
+                    <Button Content="Search Manga" Grid.Column="1" Margin="0,0,5,0"/>
+                </Grid>
 
-                            <Image Margin="0,0,10,0" Grid.Column="0" Width="112.5" Height="163.5" Source="{Binding Path=Value}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Path=Key}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
-    </Grid>
+                <TextBlock Margin="0,0,0,5" FontSize="18" FontWeight="Bold">Seasonal Anime</TextBlock>
+
+                <ListView Margin="0,0,0,5" x:Name="seasonalView" ItemsSource="{Binding seasonalAnime}" ItemClick="seasonalView_ItemClick" IsItemClickEnabled="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image Margin="0,0,10,0" Grid.Column="0" Width="112.5" Height="163.5" Source="{Binding Value}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Key}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Page>
