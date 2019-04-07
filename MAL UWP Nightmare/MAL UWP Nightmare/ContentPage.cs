@@ -45,79 +45,75 @@ namespace MAL_UWP_Nightmare
         private DateTime endDate;
         private BitmapImage mainImage;
 
-        public bool isRunning()
+        /// <summary>
+        /// Supplies info on wether or not this content is still being produced.
+        /// </summary>
+        /// <returns>true if in production, false if not.</returns>
+        public bool IsRunning()
         {
             return running;
         }
 
-        public bool hasGenre(string genre)
+        /// <summary>
+        /// Check to see if this content has certain genres.
+        /// Useful if someone decides to modify the application to block R-Rated content.
+        /// Or if someone decides to implement genres for anything.
+        /// </summary>
+        /// <param name="genre">the genre to check for.</param>
+        /// <returns></returns>
+        public bool HasGenre(string genre)
         {
-            return genres.Contains(genre);
+            return genres.Contains(genre.ToLower());
         }
 
-        public void setSynopsis(string synopsis)
+        /// <summary>
+        /// Set the suppplied synopsis for this content.
+        /// </summary>
+        /// <param name="synopsis">the supplied synopsis, as a string.</param>
+        public void SetSynopsis(string synopsis)
         {
             this.synopsis = synopsis;
         }
 
-        public void setBackground(string background)
+        /// <summary>
+        /// Set the supplied background information for this content.
+        /// </summary>
+        /// <param name="background">the supplied background info, as a string</param>
+        public void SetBackground(string background)
         {
             this.background = background;
         }
 
-        public void setRelated(Dictionary<ContentPage, string> related)
+        /// <summary>
+        /// Set the related media for this object and pretend you know how it matches up.
+        /// </summary>
+        /// <param name="related">the supplied related media, as a Dictionary</param>
+        public void SetRelated(Dictionary<ContentPage, string> related)
         {
             this.related = related;
         }
 
-        public void setCharacters(List<CharacterPage> characters)
+        /// <summary>
+        /// Set the characters for this media. Don't even think you know all of them.
+        /// </summary>
+        /// <param name="characters">The supplied list of characters</param>
+        public void SetCharacters(List<CharacterPage> characters)
         {
             this.characters = characters;
         }
-
+        
         public bool IsLocal()
         {
             return !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
-        public void LoadPage()
-        {
-            //Load the page anew from the source! Might be better to figure out a way to replace this with another ContentPage
-            throw new NotImplementedException();
-        }
+        public abstract bool SavePage();
 
-        public bool SavePage()
-        {
-            //Save the page to a JSON file. Save the file in LocalFolder/{type}/{title}
-            throw new NotImplementedException();
-        }
-
-        public void SetContent(JObject json)
-        {
-            //Pull off a magic trick to get the right info out of the JObject
-            setSynopsis(json.GetValue("synopsis").ToString());
-            setBackground(json.GetValue("background").ToString());
-            setRelated(json.GetValue("related"));
-        }
-
-        public void SetImages(BitmapImage[] images)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetMainImage(BitmapImage image)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetInfo(string[] info)
-        {
-            throw new NotImplementedException();
-        }
-
+        public abstract void SetContent(JObject json);
+        
         public void SetErrorContent(string errorMessage)
         {
-            throw new NotImplementedException();
+            title = errorMessage;
         }
     }
 }
