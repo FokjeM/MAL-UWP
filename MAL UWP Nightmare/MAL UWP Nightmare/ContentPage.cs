@@ -62,7 +62,7 @@ namespace MAL_UWP_Nightmare
         {
             return genres.Contains(genre.ToLower());
         }
-        
+
         public bool IsLocal()
         {
             return !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
