@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using System.Collections.Generic;
 
 namespace MAL_UWP_Nightmare
 {
@@ -157,5 +158,7 @@ namespace MAL_UWP_Nightmare
             }
             return true;
         }
+
+        public abstract List<SearchResult> searchAPI(string query);
     }
 }

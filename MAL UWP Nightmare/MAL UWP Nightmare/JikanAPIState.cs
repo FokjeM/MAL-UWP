@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
-using Windows.Storage;
+using System.Collections.Generic;
 
 namespace MAL_UWP_Nightmare
 {
@@ -32,7 +32,6 @@ namespace MAL_UWP_Nightmare
                 searchReq += Uri.EscapeDataString(reqParts[i]);
             }
             searchReq += "&limit=1";
-            System.Diagnostics.Debug.WriteLine(searchReq);
             JObject result = requestAPI(searchReq).Result;
             return reqParts[0] + "/" + result.GetValue("results").First.First.ToObject("".GetType());
         }
@@ -54,6 +53,32 @@ namespace MAL_UWP_Nightmare
 #pragma warning restore CS4014 // Bij de volgende call is het al klaar.
             }
             return result;
+        }
+
+        public override List<SearchResult> searchAPI(string query)
+        {
+            string[] reqParts = query.Split('/');
+            string searchReq = "search/" + reqParts[0] + "?q=";
+            for (int i = 1; i < reqParts.Length; i++)
+            {
+                if (i > 1)
+                {
+                    searchReq += Uri.EscapeDataString("/");
+                }
+                searchReq += Uri.EscapeDataString(reqParts[i]);
+            }
+            searchReq += "&limit=25";
+            JObject result = requestAPI(searchReq).Result;
+            List<SearchResult> resultList = new List<SearchResult>(25);
+            foreach(JToken jt in result.GetValue("results").Values())
+            {
+                string title = jt.Value<string>("title");
+                string image = jt.Value<string>("image_url");
+                long id = jt.Value<long>("mal_id");
+                SearchResult res = new SearchResult(title, image, id);
+                resultList.Add(res);
+            }
+            return resultList;
         }
 
         /// <summary>

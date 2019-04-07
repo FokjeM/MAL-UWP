@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Windows.Storage;
@@ -24,13 +22,20 @@ namespace MAL_UWP_Nightmare
         /// <returns>The path to the file if it's locally availlable</returns>
         public override async Task<string> getRequestFromSearch(string query)
         {
-            string[] path = query.Split('/');
+            string[] path = query.ToLower().Split('/');
             try
             {
                 StorageFolder folder = localPages.GetFolderAsync(path[0]).AsTask().Result;
+                var fileList = folder.GetFilesAsync().AsTask().Result;
+                foreach(StorageFile s in fileList)
+                {
+                    if(s.Name.ToLower().Equals(path[1] + ".json"))
+                    {
+                        return string.Concat(query.ToLower(), ".json");
+                    }
+                }
                 if(folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
                 {
-                    return string.Concat(query, ".json");
                 }
                 return null;
             }
@@ -52,6 +57,33 @@ namespace MAL_UWP_Nightmare
             {
                 return null;
             }
+        }
+
+        public override List<SearchResult> searchAPI(string query)
+        {
+            string[] path = query.ToLower().Split('/');
+            List<SearchResult> resultList = new List<SearchResult>(25);
+            try
+            {
+                StorageFolder folder = localPages.GetFolderAsync(path[0]).AsTask().Result;
+                var fileList = folder.GetFilesAsync().AsTask().Result;
+                foreach (StorageFile s in fileList)
+                {
+                    if (s.Name.ToLower().Contains(path[1]))
+                    {
+                        JObject file = JObject.Parse(FileIO.ReadTextAsync(s).AsTask().Result);
+                        long id = long.Parse((string)file.GetValue("mal_id").ToObject("".GetType()));
+                        string title = (string)file.GetValue("title").ToObject("".GetType());
+                        string image = (string)file.GetValue("image").ToObject("".GetType());
+                        SearchResult res = new SearchResult(title, image, id);
+                        resultList.Add(res);
+                    }
+                }
+            } catch
+            {
+                return null;
+            }
+            return resultList;
         }
 
         public override bool testAPI()
