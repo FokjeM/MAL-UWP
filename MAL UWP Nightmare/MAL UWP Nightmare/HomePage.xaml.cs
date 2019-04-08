@@ -43,11 +43,9 @@ namespace MAL_UWP_Nightmare
         private void seasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
             JikanAPIState state = new JikanAPIState();
-            AnimePage a = new AnimePage();
-            a.SetContent(state.requestAPI("manga/15").Result);
-            System.Diagnostics.Debug.WriteLine(Frame);
-            Window.Current.Content = new AnimeInfoPage(a);
-            //Frame.Navigate(typeof(AnimeInfoPage), a);
+            MangaPage a = new MangaPage();
+            a.SetContent(state.requestAPI("manga/1").Result);
+            Window.Current.Content = new MangaInfoPage(a);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

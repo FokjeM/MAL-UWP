@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
 {
-    class SearchResult
+    public class SearchResult
     {
         public readonly string type;
         public readonly string title;

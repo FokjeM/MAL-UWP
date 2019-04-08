@@ -39,6 +39,8 @@ namespace MAL_UWP_Nightmare
         public string endings { get; set; }
         public string broadcast { get; set; }
         public string premiered { get; set; }
+        public string image { get; set; }
+        public string title { get; set; }
 
         public AnimeInfoPage(AnimePage anime)
         {
@@ -48,7 +50,7 @@ namespace MAL_UWP_Nightmare
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            setData(anime); //To do: Remove or edit when connected to API.
+            setData(anime);
             DataContext = this;
         }
 
@@ -84,80 +86,26 @@ namespace MAL_UWP_Nightmare
 
         private void setData(AnimePage anime)
         {
-            synopsis = anime.synopsis;
-            background = anime.background;
-            altTitles = ConvertListToString(anime.altTitles, false);
-            jpTitle = anime.japTitle;
-            enTitle = anime.engTitle;
-            type = anime.type;
-            status = anime.status;
-            startDate = anime.startDate.ToString("MMMM dd, yyyy");
-            endDate = anime.endDate.ToString("MMMM dd, yyyy");
+            title = anime.title != null ? anime.title : "Title Unavailable";
+            synopsis = anime.synopsis != null ? anime.synopsis : "No synopsis information has been added to this title.";
+            background = anime.background != null ? anime.background : "No background information has been added to this title.";
+            altTitles = anime.altTitles != null ? ConvertListToString(anime.altTitles, false) : "Unavailable";
+            jpTitle = anime.japTitle != null ? anime.japTitle : "Unavailable";
+            enTitle = anime.engTitle != null ? anime.engTitle : "Unavailable";
+            type = anime.type != null ? anime.type : "Unavailable";
+            status = anime.status != null ? anime.status : "Unavailable";
+            startDate = anime.startDate != null ? anime.startDate.ToString("MMMM dd, yyyy") : "Unavailable";
+            endDate = anime.endDate != null ? anime.endDate.ToString("MMMM dd, yyyy") : "Unavailable";
             running = anime.running;
-            genres = ConvertListToString(anime.genres, true);
-            producers = ConvertListToString(anime.producers, false);
-            licensors = ConvertListToString(anime.licensors, false);
-            studios = ConvertListToString(anime.studios, false);
-            openings= ConvertListToString(anime.openings, false);
-            endings = ConvertListToString(anime.endings, false);
-            broadcast = anime.broadcast;
-            premiered = anime.premiereSeason;
-        }
-
-        private void setTestData() //To do: Remove or edit when connected to API.
-        {
-            synopsis = "Just when Masato thought that a random survey conducted in school was over, he got involved in a secret Government scheme. " +
-                "As he was carried along with the flow, he ended up in a Game world! As if that wasn't enough, shockingly, his mother was there as well! " +
-                "It was a little different from a typical transported to another world setting, but after some bickering, Mom wants go on an adventure " +
-                "together with Maa-kun. Can mom become Maa-kun's companion? With that, Masato and Mamako began their adventure as a mother and son pair. " +
-                "They met Porta, a cute traveling merchant, and Wise, a regrettable philosopher. Along with their new party members, Masato and co. start on their " +
-                "journey.";
-            background = "No background information has been added to this title.";
-
-            List<string> altTitlesList = new List<string>();
-            altTitlesList.Add("Do You Like Your Mom? Her Normal Attack is Two Attacks at Full Power");
-            altTitlesList.Add("Okaasan online");
-            altTitles = ConvertListToString(altTitlesList, false);
-
-            jpTitle = "通常攻撃が全体攻撃で二回攻撃のお母さんは好きですか？";
-            enTitle = "Unknown";
-            type = "TV";
-            status = "Not yet aired";
-            startDate = "Unknown";
-            endDate = "Unknown";
-            running = false;
-
-            List<string> genresList = new List<string>();
-            genresList.Add("Adventure");
-            genresList.Add("Comedy");
-            genresList.Add("Fantasy");
-            genres = ConvertListToString(genresList, true);
-
-            List<string> producersList = new List<string>();
-            producersList.Add("Bandai Visual");
-            producersList.Add("Bandai Visual");
-            producers = ConvertListToString(producersList, false);
-
-            List<string> licensorsList = new List<string>();
-            licensorsList.Add("Funimation");
-            licensorsList.Add("Bandai Entertainment");
-            licensors = ConvertListToString(licensorsList, false);
-
-            List<string> studiosList = new List<string>();
-            studiosList.Add("Sunrise");
-            studios = ConvertListToString(studiosList, false);
-
-            List<string> openingsList = new List<string>();
-            openingsList.Add("\"Tank!\" by The Seatbelts (eps 1-25)");
-            openings = ConvertListToString(openingsList, false);
-
-            List<string> endingsList = new List<string>();
-            endingsList.Add("\"The Real Folk Blues\" by The Seatbelts feat. Mai Yamane (eps 1-12, 14-25)");
-            endingsList.Add("\"Space Lion\" by The Seatbelts (ep 13)");
-            endings = ConvertListToString(endingsList, false);
-
-            broadcast = "Unknown";
-            premiered = "Summer 2019";
+            genres = anime.genres != null ? ConvertListToString(anime.genres, true) : "Unavailable";
+            producers = anime.producers != null ? ConvertListToString(anime.producers, false) : "Unavailable";
+            licensors = anime.licensors != null ? ConvertListToString(anime.licensors, false) : "Unavailable";
+            studios = anime.studios != null ? ConvertListToString(anime.studios, false) : "Unavailable";
+            openings= anime.openings != null ? ConvertListToString(anime.openings, false) : "Unavailable";
+            endings = anime.endings != null ? ConvertListToString(anime.endings, false) : "Unavailable";
+            broadcast = anime.broadcast != null ? anime.broadcast : "Unavailable";
+            premiered = anime.premiereSeason != null ? anime.premiereSeason : "Unavailable";
+            image = anime.mainImage;
         }
     }
 }
