@@ -24,6 +24,16 @@ namespace MAL_UWP_Nightmare
 
         public void SetContent(JObject json)
         {
+            List<SearchResult> resultList = new List<SearchResult>(25);
+            foreach (JToken jt in json.GetValue("results"))
+            {
+                string title = jt.Value<string>("title");
+                string image = jt.Value<string>("image_url");
+                string type = jt.Value<string>("type");
+                long id = jt.Value<long>("mal_id");
+                SearchResult res = new SearchResult(type, title, image, id);
+                resultList.Add(res);
+            }
             throw new NotImplementedException();
         }
 

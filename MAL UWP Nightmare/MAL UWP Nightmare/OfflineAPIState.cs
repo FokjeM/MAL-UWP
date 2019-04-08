@@ -45,9 +45,9 @@ namespace MAL_UWP_Nightmare
             }
         }
 
-        public override List<SearchResult> GetSeasonals()
+        public override JObject GetSeasonals()
         {
-            return new List<SearchResult>();
+            return new JObject();
         }
 
         public override async Task<JObject> requestAPI(string request)

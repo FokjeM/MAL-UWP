@@ -161,6 +161,6 @@ namespace MAL_UWP_Nightmare
 
         public abstract List<SearchResult> SearchAPI(string query);
 
-        public abstract List<SearchResult> GetSeasonals();
+        public abstract JObject GetSeasonals();
     }
 }

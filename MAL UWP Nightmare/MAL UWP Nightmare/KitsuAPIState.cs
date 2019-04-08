@@ -24,7 +24,7 @@ namespace MAL_UWP_Nightmare
             throw new NotImplementedException();
         }
 
-        public override List<SearchResult> GetSeasonals()
+        public override JObject GetSeasonals()
         {
             throw new NotImplementedException();
         }

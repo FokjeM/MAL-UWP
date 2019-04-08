@@ -36,9 +36,11 @@ namespace MAL_UWP_Nightmare
             return reqParts[0] + "/" + result.GetValue("results").First.First.ToObject("".GetType());
         }
 
-        public override List<SearchResult> GetSeasonals()
+        public override JObject GetSeasonals()
         {
-            throw new NotImplementedException();
+            int doy = DateTime.Now.DayOfYear - Convert.ToInt32((DateTime.IsLeapYear(DateTime.Now.Year)) && DateTime.Now.DayOfYear > 59);
+            string seasonRequest = string.Format("{0}/{1}", DateTime.Now.Year.ToString(), ((doy < 80 || doy >= 355) ? "winter" : ((doy >= 80 && doy < 172) ? "spring" : ((doy >= 172 && doy < 266) ? "summer" : "fall"))));
+            return requestAPI(seasonRequest).Result;
         }
 
         public override async Task<JObject> requestAPI(string request)
@@ -115,7 +117,7 @@ namespace MAL_UWP_Nightmare
             searchReq += "&limit=25";
             JObject result = requestAPI(searchReq).Result;
             List<SearchResult> resultList = new List<SearchResult>(25);
-            foreach(JToken jt in result.GetValue("results").Values())
+            foreach(JToken jt in result.GetValue("results"))
             {
                 string title = jt.Value<string>("title");
                 string image = jt.Value<string>("image_url");
