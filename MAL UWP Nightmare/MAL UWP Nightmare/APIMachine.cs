@@ -23,27 +23,36 @@ namespace MAL_UWP_Nightmare
 
         }
 
-        public JObject requestAPI(string request)
+        public JObject RequestAPI(string request)
         {
-            string offlineSearchResult = offline.getRequestFromSearch(request).Result;
+            string offlineSearchResult = offline.GetRequestFromSearch(request).Result;
             if (string.IsNullOrEmpty(offlineSearchResult))
             {
-                return jikan.requestAPI(jikan.getRequestFromSearch(request).Result).Result;
+                return jikan.RequestAPI(jikan.GetRequestFromSearch(request).Result).Result;
             } else
             {
-                return offline.requestAPI(offlineSearchResult).Result;
+                return offline.RequestAPI(offlineSearchResult).Result;
             }
         }
 
-        public bool[] checkAPIs()
+        public bool[] CheckAPIs()
         {
             bool[] res = new bool[2];
-            res[0] = jikan.testAPI();
-            res[1] = offline.testAPI();
+            res[0] = jikan.TestAPI();
+            res[1] = offline.TestAPI();
             return res;
         }
 
-        public List<SearchResult> searchAPI(string query)
+        public JObject GetSeasonals()
+        {
+            if (jikan.TestAPI())
+            {
+                return jikan.GetSeasonals();
+            }
+            return offline.GetSeasonals();
+        }
+
+        public List<SearchResult> SearchAPI(string query)
         {
             List<SearchResult> search = new List<SearchResult>(50);
             foreach (SearchResult s in offline.SearchAPI(query)) { search.Add(s); }

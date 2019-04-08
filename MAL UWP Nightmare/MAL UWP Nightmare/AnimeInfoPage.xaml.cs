@@ -86,26 +86,26 @@ namespace MAL_UWP_Nightmare
 
         private void setData(AnimePage anime)
         {
-            title = anime.title != null ? anime.title : "Title Unavailable";
-            synopsis = anime.synopsis != null ? anime.synopsis : "No synopsis information has been added to this title.";
-            background = anime.background != null ? anime.background : "No background information has been added to this title.";
-            altTitles = anime.altTitles != null ? ConvertListToString(anime.altTitles, false) : "Unavailable";
-            jpTitle = anime.japTitle != null ? anime.japTitle : "Unavailable";
-            enTitle = anime.engTitle != null ? anime.engTitle : "Unavailable";
-            type = anime.type != null ? anime.type : "Unavailable";
-            status = anime.status != null ? anime.status : "Unavailable";
-            startDate = anime.startDate != null ? anime.startDate.ToString("MMMM dd, yyyy") : "Unavailable";
-            endDate = anime.endDate != null ? anime.endDate.ToString("MMMM dd, yyyy") : "Unavailable";
-            running = anime.running;
-            genres = anime.genres != null ? ConvertListToString(anime.genres, true) : "Unavailable";
-            producers = anime.producers != null ? ConvertListToString(anime.producers, false) : "Unavailable";
-            licensors = anime.licensors != null ? ConvertListToString(anime.licensors, false) : "Unavailable";
-            studios = anime.studios != null ? ConvertListToString(anime.studios, false) : "Unavailable";
-            openings= anime.openings != null ? ConvertListToString(anime.openings, false) : "Unavailable";
-            endings = anime.endings != null ? ConvertListToString(anime.endings, false) : "Unavailable";
-            broadcast = anime.broadcast != null ? anime.broadcast : "Unavailable";
-            premiered = anime.premiereSeason != null ? anime.premiereSeason : "Unavailable";
-            image = anime.mainImage;
+            title = anime.Title != null ? anime.Title : "Title Unavailable";
+            synopsis = anime.Synopsis != null ? anime.Synopsis : "No synopsis information has been added to this title.";
+            background = anime.Background != null ? anime.Background : "No background information has been added to this title.";
+            altTitles = anime.AltTitles != null ? ConvertListToString(anime.AltTitles, false) : "Unavailable";
+            jpTitle = anime.JapTitle != null ? anime.JapTitle : "Unavailable";
+            enTitle = anime.EngTitle != null ? anime.EngTitle : "Unavailable";
+            type = anime.Type != null ? anime.Type : "Unavailable";
+            status = anime.Status != null ? anime.Status : "Unavailable";
+            startDate = anime.StartDate != null ? anime.StartDate.ToString("MMMM dd, yyyy") : "Unavailable";
+            endDate = anime.EndDate != null ? anime.EndDate.ToString("MMMM dd, yyyy") : "Unavailable";
+            running = anime.Running;
+            genres = anime.Genres != null ? ConvertListToString(anime.Genres, true) : "Unavailable";
+            producers = anime.Producers != null ? ConvertListToString(anime.Producers, false) : "Unavailable";
+            licensors = anime.Licensors != null ? ConvertListToString(anime.Licensors, false) : "Unavailable";
+            studios = anime.Studios != null ? ConvertListToString(anime.Studios, false) : "Unavailable";
+            openings= anime.Openings != null ? ConvertListToString(anime.Openings, false) : "Unavailable";
+            endings = anime.Endings != null ? ConvertListToString(anime.Endings, false) : "Unavailable";
+            broadcast = anime.Broadcast != null ? anime.Broadcast : "Unavailable";
+            premiered = anime.PremiereSeason != null ? anime.PremiereSeason : "Unavailable";
+            image = anime.MainImage;
         }
     }
 }

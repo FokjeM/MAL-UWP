@@ -20,7 +20,7 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="query">The query to search for. Same as with the APIs, "{type}/{search}"</param>
         /// <returns>The path to the file if it's locally availlable</returns>
-        public override async Task<string> getRequestFromSearch(string query)
+        public override async Task<string> GetRequestFromSearch(string query)
         {
             string[] path = query.ToLower().Split('/');
             try
@@ -50,7 +50,7 @@ namespace MAL_UWP_Nightmare
             return new JObject();
         }
 
-        public override async Task<JObject> requestAPI(string request)
+        public override async Task<JObject> RequestAPI(string request)
         {
             string[] path = request.Split('/');
             try
@@ -91,9 +91,9 @@ namespace MAL_UWP_Nightmare
             return resultList;
         }
 
-        public override bool testAPI()
+        public override bool TestAPI()
         {
-           JObject response = requestAPI("anime/Bakemonogatari").Result;
+           JObject response = RequestAPI("anime/Bakemonogatari").Result;
             if (response != null)
             {
                 availlable = true;

@@ -2,16 +2,24 @@
 {
     public class Main : IObserver
     {
-        ThreadingStrategy multiThreading = new ThreadingStrategy();
+        IThreadingStrategy CurrentStrategy;
+        MultiThreadingStrategy MultiThreaded;
+        SingleThreadingStrategy SingleThreaded;
 
-        public IPage loadTarget()
+
+        public IPage LoadTarget()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void NotifyMe(SearchResult res)
         {
-            throw new System.NotImplementedException();
+            
+        }
+
+        public void NotifyMe(IPage p)
+        {
+            
         }
     }
 }

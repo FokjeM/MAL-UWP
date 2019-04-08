@@ -112,6 +112,7 @@
     <Compile Include="HomePageBackend.cs" />
     <Compile Include="IObserver.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="MultiThreadingStrategy.cs" />
     <Compile Include="PageFactory.cs" />
     <Compile Include="Related.cs" />
     <Compile Include="SearchPage.cs" />
@@ -133,7 +134,9 @@
     <Compile Include="SearchResultsPage.xaml.cs">
       <DependentUpon>SearchResultsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ThreadingStrategy.cs" />
+    <Compile Include="SingleThreadingStrategy.cs" />
+    <Compile Include="IThreadingStrategy.cs" />
+    <Compile Include="SplashScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

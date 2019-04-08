@@ -14,7 +14,7 @@ namespace MAL_UWP_Nightmare
         /// Dictionary to hold related items. Has to be set by the factory.
         /// </summary>
         private Dictionary<Related, string> _related;
-        public Dictionary<Related,string> related
+        public Dictionary<Related,string> Related
         {
             get
             {
@@ -29,7 +29,7 @@ namespace MAL_UWP_Nightmare
         /// A List to hold all of the alternative titles. Has to be set by the factory.
         /// </summary>
         protected List<string> _altTitles;
-        public List<string> altTitles
+        public List<string> AltTitles
         {
             get
             {
@@ -40,7 +40,7 @@ namespace MAL_UWP_Nightmare
         /// A list to hold all of the Genres. Has to be set by the factory.
         /// </summary>
         protected List<string> _genres;
-        public List<string> genres
+        public List<string> Genres
         {
             get
             {
@@ -51,7 +51,7 @@ namespace MAL_UWP_Nightmare
         /// This is really only gonna see use in the SavePage function.
         /// </summary>
         protected long _id;
-        public long id
+        public long Id
         {
             get
             {
@@ -59,7 +59,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _synopsis;
-        public string synopsis
+        public string Synopsis
         {
             get
             {
@@ -67,7 +67,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _background;
-        public string background
+        public string Background
         {
             get
             {
@@ -75,7 +75,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _url;
-        public string url
+        public string Url
         {
             get
             {
@@ -83,7 +83,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _title;
-        public string title
+        public string Title
         {
             get
             {
@@ -91,7 +91,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _japTitle;
-        public string japTitle
+        public string JapTitle
         {
             get
             {
@@ -99,7 +99,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _engTitle;
-        public string engTitle
+        public string EngTitle
         {
             get
             {
@@ -107,7 +107,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected bool _running;
-        public bool running
+        public bool Running
         {
             get
             {
@@ -115,7 +115,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected DateTime _startDate;
-        public DateTime startDate
+        public DateTime StartDate
         {
             get
             {
@@ -123,7 +123,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected DateTime _endDate;
-        public DateTime endDate
+        public DateTime EndDate
         {
             get
             {
@@ -131,7 +131,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _mainImage;
-        public string mainImage
+        public string MainImage
         {
             get
             {
@@ -139,7 +139,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _status;
-        public string status
+        public string Status
         {
             get
             {
@@ -147,7 +147,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         protected string _type;
-        public string type
+        public string Type
         {
             get
             {
@@ -175,7 +175,7 @@ namespace MAL_UWP_Nightmare
         /// <returns></returns>
         public bool HasGenre(string genre)
         {
-            return genres.Contains(genre.ToLower());
+            return Genres.Contains(genre.ToLower());
         }
 
         public bool IsLocal()
@@ -226,7 +226,7 @@ namespace MAL_UWP_Nightmare
             _title = errorMessage;
         }
 
-        public void setRelated(Dictionary<Related, string> related)
+        public void SetRelated(Dictionary<Related, string> related)
         {
             _related = related;
         }

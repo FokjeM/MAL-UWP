@@ -16,9 +16,11 @@ namespace MAL_UWP_Nightmare
         }
         
 
-        public IPage Home()
+        public IPage Home(IObserver o)
         {
-            throw new NotImplementedException();
+            HomePageBackend home = new HomePageBackend(o);
+            home.SetContent(source.GetSeasonals());
+            return home;
         }
 
         public IPage Content(string type, long id)
@@ -34,13 +36,14 @@ namespace MAL_UWP_Nightmare
             {
                 return null;
             }
-            page.SetContent(source.requestAPI(type + id.ToString()));
+            page.SetContent(source.RequestAPI(type + id.ToString()));
             return page;
         }
 
         public IPage Search(string query)
         {
             SearchPage s = new SearchPage();
+            s.SetResults(source.SearchAPI(query));
             return s;
         }
 

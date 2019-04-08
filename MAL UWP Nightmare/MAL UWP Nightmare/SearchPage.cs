@@ -10,7 +10,7 @@ namespace MAL_UWP_Nightmare
     public class SearchPage : IPage
     {
         private List<SearchResult> _results;
-        public List<SearchResult> results
+        public List<SearchResult> Results
         {
             get
             {
@@ -43,7 +43,7 @@ namespace MAL_UWP_Nightmare
         /// Just not in a kind manner.
         /// </summary>
         /// <param name="res"></param>
-        private void notifyObserver(SearchResult res)
+        private void NotifyObserver(SearchResult res)
         {
             observer.NotifyMe(res);
         }

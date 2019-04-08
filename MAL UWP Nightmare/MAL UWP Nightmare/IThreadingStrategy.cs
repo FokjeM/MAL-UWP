@@ -1,6 +1,6 @@
 ﻿namespace MAL_UWP_Nightmare
 {
-    public class ThreadingStrategy
+    public interface IThreadingStrategy
     {
 
     }

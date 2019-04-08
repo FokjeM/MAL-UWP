@@ -59,7 +59,7 @@ namespace MAL_UWP_Nightmare
         /// This is to prevent too many requests.
         /// </summary>
         /// <returns></returns>
-        public abstract bool testAPI();
+        public abstract bool TestAPI();
 
         /// <summary>
         /// Poll the API for a response. Use this for API calls.
@@ -67,7 +67,7 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="request">The request to add to the API URL</param>
         /// <returns>A JSON object from the APIs response</returns>
-        public abstract Task<JObject> requestAPI(string request);
+        public abstract Task<JObject> RequestAPI(string request);
 
         /// <summary>
         /// Poll an API for a search in order to find the ID, this should
@@ -75,13 +75,13 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="query">The search query in the form of "<code>type/name</code>"</param>
         /// <returns>The resulting request based on the first search result</returns>
-        public abstract Task<string> getRequestFromSearch(string query);
+        public abstract Task<string> GetRequestFromSearch(string query);
 
         /// <summary>
         /// A get function for <see cref="API_URL"/>
         /// </summary>
         /// <returns>The base URL for the implemented API</returns>
-        public string getURL()
+        public string GetURL()
         {
             return this.API_URL;
         }
