@@ -114,8 +114,9 @@ namespace MAL_UWP_Nightmare
             {
                 string title = jt.Value<string>("title");
                 string image = jt.Value<string>("image_url");
+                string type = jt.Value<string>("type");
                 long id = jt.Value<long>("mal_id");
-                SearchResult res = new SearchResult(reqParts[0], title, image, id);
+                SearchResult res = new SearchResult(type, title, image, id);
                 resultList.Add(res);
             }
             return resultList;

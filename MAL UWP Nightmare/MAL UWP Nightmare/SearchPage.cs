@@ -18,21 +18,14 @@ namespace MAL_UWP_Nightmare
             }
         }
         private object _observer; //To do: Change object to type Main.
-        public object observer
-        {
-            get
-            {
-                return _observer;
-            }
-        }
         public bool IsLocal()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool SavePage()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void SetContent(JObject json)
@@ -44,9 +37,24 @@ namespace MAL_UWP_Nightmare
         {
             throw new NotImplementedException();
         }
-        private void notifyObserver()
-        {
 
+        /// <summary>
+        /// Kindly ask main to load the requested page.
+        /// Just not in a kind manner.
+        /// </summary>
+        /// <param name="res"></param>
+        private void notifyObserver(SearchResult res)
+        {
+            observer.notifyMe(res);
+        }
+
+        /// <summary>
+        /// Be warned! Results from the OfflineAPIState will ALWAYS be manga or anime
+        /// </summary>
+        /// <param name="results"></param>
+        public void SetResults(List<SearchResult> results)
+        {
+            _results = results;
         }
     }
 }
