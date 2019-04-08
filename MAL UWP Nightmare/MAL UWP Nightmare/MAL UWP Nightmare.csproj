@@ -111,6 +111,7 @@
     <Compile Include="CharacterPage.cs" />
     <Compile Include="PageFactory.cs" />
     <Compile Include="Related.cs" />
+    <Compile Include="SearchPage.cs" />
     <Compile Include="SearchResult.cs" />
     <Compile Include="ContentPage.cs" />
     <Compile Include="IPage.cs" />
