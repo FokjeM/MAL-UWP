@@ -38,7 +38,10 @@ namespace MAL_UWP_Nightmare
         {
             Dictionary<string,string> seasonalList = new Dictionary<string, string>();
             seasonalList.Add("Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?", "https://cdn.myanimelist.net/images/anime/1857/94908.jpg?s=ff1349992ecce2dc5b5b1ab3d4bf6846"); //To do: Remove test data.
-
+            foreach(SearchResult s in main.getSeasonals())
+            {
+                seasonalList.Add(s.title, s.image);
+            }
             return seasonalList;
         }
 

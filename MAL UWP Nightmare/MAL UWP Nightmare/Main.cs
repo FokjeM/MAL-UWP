@@ -1,4 +1,6 @@
-﻿namespace MAL_UWP_Nightmare
+﻿using System.Collections.Generic;
+
+namespace MAL_UWP_Nightmare
 {
     public class Main : IObserver
     {
@@ -70,6 +72,11 @@
         public IPage ProduceSearchPage(string query)
         {
             return CurrentStrategy.ProduceSearchPage(query, this);
+        }
+
+        public List<SearchResult> getSeasonals()
+        {
+            return CurrentStrategy.getSeasonals();
         }
 
         public void NotifyMe(IPage p)

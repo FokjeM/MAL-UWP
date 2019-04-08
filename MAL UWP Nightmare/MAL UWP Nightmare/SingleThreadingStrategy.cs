@@ -1,4 +1,6 @@
-﻿namespace MAL_UWP_Nightmare
+﻿using System.Collections.Generic;
+
+namespace MAL_UWP_Nightmare
 {
     public class SingleThreadingStrategy : IThreadingStrategy
     {
@@ -7,6 +9,11 @@
         public SingleThreadingStrategy(PageFactory p)
         {
             pages = p;
+        }
+
+        public List<SearchResult> getSeasonals()
+        {
+            return ((HomePageBackend)pages.Home(new SplashScreen())).seasonals;
         }
 
         public CharacterPage ProduceCharacterPage(string request, long id)

@@ -1,4 +1,6 @@
-﻿namespace MAL_UWP_Nightmare
+﻿using System.Collections.Generic;
+
+namespace MAL_UWP_Nightmare
 {
     public interface IThreadingStrategy
     {
@@ -7,5 +9,6 @@
         PersonPage ProducePersonPage(string request, long id);
         HomePageBackend ProduceHomePage(IObserver observer);
         SearchPage ProduceSearchPage(string query, IObserver observer);
+        List<SearchResult> getSeasonals();
     }
 }

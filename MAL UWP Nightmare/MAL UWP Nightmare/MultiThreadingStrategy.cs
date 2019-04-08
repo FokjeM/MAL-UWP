@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace MAL_UWP_Nightmare
 {
@@ -10,6 +11,11 @@ namespace MAL_UWP_Nightmare
         public MultiThreadingStrategy(PageFactory p)
         {
             pages = p;
+        }
+
+        public List<SearchResult> getSeasonals()
+        {
+            return ((HomePageBackend)pages.Home(new SplashScreen())).seasonals;
         }
 
         public CharacterPage ProduceCharacterPage(string request, long id)
