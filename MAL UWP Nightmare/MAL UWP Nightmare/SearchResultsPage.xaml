@@ -17,9 +17,9 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="1" Width="auto" Margin="0,30,0,0">
-                <TextBlock Foreground="White" Margin="0,0,0,5" FontSize="18" FontWeight="Bold">Search Results</TextBlock>
+                <TextBlock Foreground="White" Margin="0,0,0,15" FontSize="18" FontWeight="Bold">Search Results</TextBlock>
 
-                <ListView Margin="0,0,0,5" x:Name="searchResultsView" ItemsSource="{Binding searchedAnime}" ItemClick="searchResultsView_ItemClick" IsItemClickEnabled="True">
+                <ListView Margin="0,0,0,5" x:Name="searchResultsView" ItemsSource="{Binding results}" ItemClick="searchResultsView_ItemClick" IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -28,8 +28,8 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Image Margin="0,0,10,0" Grid.Column="0" Width="112.5" Height="163.5" Source="{Binding Value}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Key}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Margin="0,0,10,5" Grid.Column="0" Width="112.5" Height="163.5" Source="{Binding image}"/>
+                                <TextBlock Grid.Column="1" TextWrapping="Wrap" Text="{Binding title}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
