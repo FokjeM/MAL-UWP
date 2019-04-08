@@ -1,8 +1,8 @@
 ﻿namespace MAL_UWP_Nightmare
 {
-    internal interface IObserver
+    public interface IObserver
     {
-        void NotifyMe(SearchResult res);
-        IPage loadTarget();
+        IPage NotifyMe(SearchResult res);
+        void NotifyMe(IPage p);
     }
 }

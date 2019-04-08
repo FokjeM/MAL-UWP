@@ -32,7 +32,7 @@
 
                 <TextBlock Margin="0,0,0,5" FontSize="18" FontWeight="Bold">Seasonal Anime</TextBlock>
 
-                <ListView Margin="0,0,0,5" x:Name="seasonalView" ItemsSource="{Binding seasonalAnime}" ItemClick="seasonalView_ItemClick" IsItemClickEnabled="True">
+                <ListView Margin="0,0,0,5" x:Name="seasonalView" ItemsSource="{Binding SeasonalAnime}" ItemClick="SeasonalView_ItemClick" IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
