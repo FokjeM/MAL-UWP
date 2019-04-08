@@ -46,6 +46,7 @@ namespace MAL_UWP_Nightmare
 
         private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) //Anime

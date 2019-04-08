@@ -17,11 +17,11 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class SearchResultsPage : Page
     {
-        public Dictionary<string, string> SearchedAnime { get; set; } //To do: Replace Value type string with BitmapImage.
+        public List<SearchResult> results { get; set; } //To do: Replace Value type string with BitmapImage.
         public SearchResultsPage(List<SearchResult> sr)
         {
-            SearchedAnime = LoadSearchedViewData(sr);
             this.InitializeComponent();
+            this.results = sr;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -42,7 +42,7 @@ namespace MAL_UWP_Nightmare
 
         private void SearchResultsView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Frame.Navigate(typeof(AnimeInfoPage), null);
+            
         }
     }
 }
