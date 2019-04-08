@@ -38,6 +38,11 @@ namespace MAL_UWP_Nightmare
             return page;
         }
 
+        public IPage Search(string query)
+        {
+            
+        }
+
         /// <summary>
         /// Because of time constraints, there is no handling for Character requests yet.
         /// If this is used, external data will need to be set for a CharacterPage.

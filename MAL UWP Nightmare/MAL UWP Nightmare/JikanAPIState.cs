@@ -95,7 +95,7 @@ namespace MAL_UWP_Nightmare
             return result;
         }
 
-        public override List<SearchResult> searchAPI(string query)
+        public override List<SearchResult> SearchAPI(string query)
         {
             string[] reqParts = query.Split('/');
             string searchReq = "search/" + reqParts[0] + "?q=";
