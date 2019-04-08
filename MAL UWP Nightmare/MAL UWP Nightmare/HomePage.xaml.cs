@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -48,9 +49,28 @@ namespace MAL_UWP_Nightmare
             Window.Current.Content = new MangaInfoPage(a);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e) //Anime
         {
+            string text = searchInput.Text;
+            if(text.Length > 2)
+            {
+
+            }
+            else
+            {
+                var dialog = new MessageDialog("The search query has to be at least 3 characters", "Error");
+                dialog.Commands.Add(new UICommand("Ok"));
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+                await dialog.ShowAsync();
+            }
+
             Frame.Navigate(typeof(SearchResultsPage), null);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) //Manga
+        {
+
         }
     }
 }
