@@ -67,7 +67,15 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="request">The request to add to the API URL</param>
         /// <returns>A JSON object from the APIs response</returns>
-        public abstract Task<JObject> RequestAPI(string request);
+        public abstract Task<JObject> RequestAPIAsync(string request);
+
+        /// <summary>
+        /// Poll the API for a response. Use this for API calls.
+        /// This should return a <see cref="Newtonsoft.Json.Linq.JObject"/>
+        /// </summary>
+        /// <param name="request">The request to add to the API URL</param>
+        /// <returns>A JSON object from the APIs response</returns>
+        public abstract JObject RequestAPI(string request);
 
         /// <summary>
         /// Poll an API for a search in order to find the ID, this should
@@ -75,7 +83,15 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="query">The search query in the form of "<code>type/name</code>"</param>
         /// <returns>The resulting request based on the first search result</returns>
-        public abstract Task<string> GetRequestFromSearch(string query);
+        public abstract string GetRequestFromSearch(string query);
+
+        /// <summary>
+        /// Poll an API for a search in order to find the ID, this should
+        /// assume an exact query is used and only return a single result.
+        /// </summary>
+        /// <param name="query">The search query in the form of "<code>type/name</code>"</param>
+        /// <returns>The resulting request based on the first search result</returns>
+        public abstract Task<string> GetRequestFromSearchAsync(string query);
 
         /// <summary>
         /// A get function for <see cref="API_URL"/>
@@ -98,7 +114,7 @@ namespace MAL_UWP_Nightmare
         /// <param name="idMAL">The MAL id provided by Jikan</param>
         /// <param name="idKitsu">the Kitsu ID provided by Kitsu</param>
         /// <returns>True if the info was added and updated, false if the info is already known or the file wasn't written.</returns>
-        protected async Task<bool> AddToKnownIDs(string type, string name, long idMAL, long idKitsu)
+        protected async Task<bool> AddToKnownIDsAsync(string type, string name, long idMAL, long idKitsu)
         {
             string token = string.Format("{0}/{1}", type, name).ToLower();
             JToken value;
@@ -151,8 +167,72 @@ namespace MAL_UWP_Nightmare
             knownIDs.Add(token, value);
             try
             {
-                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Wait();
+                await FileIO.WriteTextAsync(await localPages.GetFileAsync("known_pages.json"), knownIDs.ToString());
             } catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        protected bool AddToKnownIDs(string type, string name, long idMAL, long idKitsu)
+        {
+            string token = string.Format("{0}/{1}", type, name).ToLower();
+            JToken value;
+            if (knownIDs.ContainsKey(token))
+            {
+                string[] container = ((string)knownIDs.GetValue(token).ToObject("".GetType())).Split(new string[] { " : " }, StringSplitOptions.None);
+                if (container[0].Equals(idMAL.ToString()) && container[1].Equals(idKitsu.ToString()))
+                {
+                    return false;
+                }
+                if (idMAL > 0L && !container[0].Equals(idMAL.ToString()))
+                {
+                    container[0] = idMAL.ToString();
+                }
+                else
+                {
+                    container[0] = "0";
+                }
+                if (idKitsu > 0L && !container[1].Equals(idKitsu.ToString()))
+                {
+                    container[1] = idKitsu.ToString();
+                }
+                else
+                {
+                    container[1] = "0";
+                }
+                string val = string.Concat(container[0], " : ", container[1]);
+                value = JToken.FromObject(val);
+            }
+            else
+            {
+                string malVal;
+                string kitVal;
+                if (idMAL.Equals(0L))
+                {
+                    malVal = "0";
+                }
+                else
+                {
+                    malVal = idMAL.ToString();
+                }
+                if (idKitsu.Equals(0L))
+                {
+                    kitVal = "0";
+                }
+                else
+                {
+                    kitVal = idKitsu.ToString();
+                }
+                value = JToken.FromObject(string.Concat(malVal, " : ", kitVal).ToLower());
+            }
+            knownIDs.Add(token, value);
+            try
+            {
+                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Wait();
+            }
+            catch
             {
                 return false;
             }

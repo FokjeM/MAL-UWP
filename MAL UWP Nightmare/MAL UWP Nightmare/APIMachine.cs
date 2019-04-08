@@ -25,14 +25,19 @@ namespace MAL_UWP_Nightmare
 
         public JObject RequestAPI(string request)
         {
-            string offlineSearchResult = offline.GetRequestFromSearch(request).Result;
+            string offlineSearchResult = offline.GetRequestFromSearch(request);
             if (string.IsNullOrEmpty(offlineSearchResult))
             {
-                return jikan.RequestAPI(jikan.GetRequestFromSearch(request).Result).Result;
+                return jikan.RequestAPI(jikan.GetRequestFromSearch(request));
             } else
             {
-                return offline.RequestAPI(offlineSearchResult).Result;
+                return offline.RequestAPI(offlineSearchResult);
             }
+        }
+
+        public async Task<JObject> RequestAPIAsync(string request)
+        {
+            return await jikan.RequestAPIAsync(await jikan.GetRequestFromSearchAsync(request));
         }
 
         public bool[] CheckAPIs()

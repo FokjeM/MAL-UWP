@@ -20,7 +20,8 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class HomePage : Page
     {
-        public Dictionary<string,string> SeasonalAnime { get; set; } //To do: Replace Value type string with BitmapImage.
+        public Dictionary<string,string> SeasonalAnime { get; set; }
+        Main main = new Main();
 
         public HomePage()
         {
@@ -43,10 +44,6 @@ namespace MAL_UWP_Nightmare
 
         private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            JikanAPIState state = new JikanAPIState();
-            MangaPage a = new MangaPage();
-            a.SetContent(state.RequestAPI("manga/1").Result);
-            Window.Current.Content = new MangaInfoPage(a);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) //Anime
@@ -55,7 +52,7 @@ namespace MAL_UWP_Nightmare
             if(text.Length > 2)
             {
                 JikanAPIState state = new JikanAPIState();
-                SearchPage s = new SearchPage();
+                SearchPage s = new SearchPage(main);
                 List<SearchResult> results = state.SearchAPI("anime/" + text);
                 Window.Current.Content = new SearchResultsPage(results);
             }
@@ -75,7 +72,7 @@ namespace MAL_UWP_Nightmare
             if (text.Length > 2)
             {
                 JikanAPIState state = new JikanAPIState();
-                SearchPage s = new SearchPage();
+                SearchPage s = new SearchPage(main);
                 List<SearchResult> results = state.SearchAPI("manga/" + text);
                 Window.Current.Content = new SearchResultsPage(results);
             }

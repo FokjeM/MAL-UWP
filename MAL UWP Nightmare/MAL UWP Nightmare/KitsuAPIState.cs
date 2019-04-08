@@ -19,7 +19,12 @@ namespace MAL_UWP_Nightmare
             lastChecked = DateTime.UtcNow;
         }
 
-        public override Task<string> GetRequestFromSearch(string query)
+        public override string GetRequestFromSearch(string query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<string> GetRequestFromSearchAsync(string query)
         {
             throw new NotImplementedException();
         }
@@ -29,7 +34,12 @@ namespace MAL_UWP_Nightmare
             throw new NotImplementedException();
         }
 
-        public override Task<JObject> RequestAPI(string request)
+        public override JObject RequestAPI(string request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<JObject> RequestAPIAsync(string request)
         {
             throw new NotImplementedException();
         }

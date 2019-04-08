@@ -20,7 +20,7 @@ namespace MAL_UWP_Nightmare
         /// </summary>
         /// <param name="query">The query to search for. Same as with the APIs, "{type}/{search}"</param>
         /// <returns>The path to the file if it's locally availlable</returns>
-        public override async Task<string> GetRequestFromSearch(string query)
+        public override  string GetRequestFromSearch(string query)
         {
             string[] path = query.ToLower().Split('/');
             try
@@ -45,18 +45,57 @@ namespace MAL_UWP_Nightmare
             }
         }
 
+        public async override Task<string> GetRequestFromSearchAsync(string query)
+        {
+            string[] path = query.ToLower().Split('/');
+            try
+            {
+                StorageFolder folder = await localPages.GetFolderAsync(path[0]);
+                var fileList = await folder.GetFilesAsync();
+                foreach (StorageFile s in fileList)
+                {
+                    if (s.Name.ToLower().Equals(path[1] + ".json"))
+                    {
+                        return string.Concat(query.ToLower(), ".json");
+                    }
+                }
+                if (await folder.TryGetItemAsync(path[1] + ".json") != null)
+                {
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public override JObject GetSeasonals()
         {
             return new JObject();
         }
 
-        public override async Task<JObject> RequestAPI(string request)
+        public override JObject RequestAPI(string request)
         {
             string[] path = request.Split('/');
             try
             {
                 StorageFolder folder = localPages.GetFolderAsync(path[0]).AsTask().Result;
                 return JObject.Parse(FileIO.ReadTextAsync(folder.GetFileAsync(path[1] + ".json").AsTask().Result).AsTask().Result);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async override Task<JObject> RequestAPIAsync(string request)
+        {
+            string[] path = request.Split('/');
+            try
+            {
+                StorageFolder folder = await localPages.GetFolderAsync(path[0]);
+                return JObject.Parse(await FileIO.ReadTextAsync(await folder.GetFileAsync(path[1] + ".json")));
             }
             catch
             {
@@ -93,7 +132,7 @@ namespace MAL_UWP_Nightmare
 
         public override bool TestAPI()
         {
-           JObject response = RequestAPI("anime/Bakemonogatari").Result;
+           JObject response = RequestAPI("anime/Bakemonogatari");
             if (response != null)
             {
                 availlable = true;

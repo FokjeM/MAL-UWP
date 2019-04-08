@@ -17,7 +17,14 @@ namespace MAL_UWP_Nightmare
                 return _results;
             }
         }
+
         private IObserver observer;
+
+        public SearchPage(IObserver o)
+        {
+            observer = o;
+        }
+
         public bool IsLocal()
         {
             return false;
@@ -43,9 +50,14 @@ namespace MAL_UWP_Nightmare
         /// Just not in a kind manner.
         /// </summary>
         /// <param name="res"></param>
-        private void NotifyObserver(SearchResult res)
+        public IPage NotifyObserver(SearchResult res)
         {
-            observer.NotifyMe(res);
+            return observer.NotifyMe(res);
+        }
+
+        public void selectResult(SearchResult res)
+        {
+            NotifyObserver(res);
         }
 
         /// <summary>

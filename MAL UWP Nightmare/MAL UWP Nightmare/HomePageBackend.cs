@@ -11,11 +11,13 @@ namespace MAL_UWP_Nightmare
     {
         public List<SearchResult> seasonals;
         private IObserver observer;
+        public string ErrorText { get; private set; }
 
 
         public HomePageBackend(IObserver o)
         {
             observer = o;
+            observer.NotifyMe(this);
         }
 
         public bool IsLocal()
@@ -30,8 +32,8 @@ namespace MAL_UWP_Nightmare
 
         public void SetContent(JObject json)
         {
-            List<SearchResult> resultList = new List<SearchResult>(25);
-            foreach (JToken jt in json.GetValue("anime").Values())
+            List<SearchResult> resultList = new List<SearchResult>();
+            foreach (JToken jt in json.GetValue("anime"))
             {
                 string title = jt.Value<string>("title");
                 string image = jt.Value<string>("image_url");
@@ -45,7 +47,7 @@ namespace MAL_UWP_Nightmare
 
         public void SetErrorContent(string errorMessage)
         {
-            throw new NotImplementedException();
+            ErrorText = errorMessage;
         }
 
         private void NotifyObserver()
