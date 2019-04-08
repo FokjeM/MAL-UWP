@@ -112,6 +112,7 @@
     <Compile Include="HomePageBackend.cs" />
     <Compile Include="IObserver.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="MultiThreadingStrategy.cs" />
     <Compile Include="PageFactory.cs" />
     <Compile Include="Related.cs" />
     <Compile Include="SearchPage.cs" />
@@ -133,7 +134,9 @@
     <Compile Include="SearchResultsPage.xaml.cs">
       <DependentUpon>SearchResultsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ThreadingStrategy.cs" />
+    <Compile Include="SingleThreadingStrategy.cs" />
+    <Compile Include="IThreadingStrategy.cs" />
+    <Compile Include="SplashScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -146,13 +149,6 @@
     <Content Include="Properties\Default.rd.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

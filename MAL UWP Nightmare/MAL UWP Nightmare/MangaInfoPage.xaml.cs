@@ -83,20 +83,20 @@ namespace MAL_UWP_Nightmare
 
         private void setData()
         {
-            title = manga.title != null ? manga.title : "Title Unavailable";
-            synopsis = manga.synopsis != null ? manga.synopsis : "No synopsis information has been added to this title.";
-            background = manga.background != null ? manga.background : "No background information has been added to this title.";
-            altTitles = manga.altTitles != null ? ConvertListToString(manga.altTitles, false) : "Unavailable";
-            jpTitle = manga.japTitle != null ? manga.japTitle : "Unavailable";
-            enTitle = manga.engTitle != null ? manga.engTitle : "Unavailable";
-            type = manga.type != null ? manga.type : "Unavailable";
-            status = manga.status != null ? manga.status : "Unavailable";
-            startDate = manga.startDate != null ? manga.startDate.ToString("MMMM dd, yyyy") : "Unavailable";
-            endDate = manga.endDate != null ? manga.endDate.ToString("MMMM dd, yyyy") : "Unavailable";
-            running = manga.running;
-            genres = manga.genres != null ? ConvertListToString(manga.genres, true) : "Unavailable";
-            authors = manga.authors != null ? ConvertListToString(manga.authors, false) : "Unavailable";
-            image = manga.mainImage;
+            title = manga.Title != null ? manga.Title : "Title Unavailable";
+            synopsis = manga.Synopsis != null ? manga.Synopsis : "No synopsis information has been added to this title.";
+            background = manga.Background != null ? manga.Background : "No background information has been added to this title.";
+            altTitles = manga.AltTitles != null ? ConvertListToString(manga.AltTitles, false) : "Unavailable";
+            jpTitle = manga.JapTitle != null ? manga.JapTitle : "Unavailable";
+            enTitle = manga.EngTitle != null ? manga.EngTitle : "Unavailable";
+            type = manga.Type != null ? manga.Type : "Unavailable";
+            status = manga.Status != null ? manga.Status : "Unavailable";
+            startDate = manga.StartDate != null ? manga.StartDate.ToString("MMMM dd, yyyy") : "Unavailable";
+            endDate = manga.EndDate != null ? manga.EndDate.ToString("MMMM dd, yyyy") : "Unavailable";
+            running = manga.Running;
+            genres = manga.Genres != null ? ConvertListToString(manga.Genres, true) : "Unavailable";
+            authors = manga.Authors != null ? ConvertListToString(manga.Authors, false) : "Unavailable";
+            image = manga.MainImage;
         }
 
         private void setTestData() //To do: Remove or edit when connected to API.
