@@ -59,7 +59,7 @@ namespace MAL_UWP_Nightmare
             }
         }
 
-        public override List<SearchResult> searchAPI(string query)
+        public override List<SearchResult> SearchAPI(string query)
         {
             string[] path = query.ToLower().Split('/');
             List<SearchResult> resultList = new List<SearchResult>(25);

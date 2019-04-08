@@ -46,8 +46,8 @@ namespace MAL_UWP_Nightmare
         public List<SearchResult> searchAPI(string query)
         {
             List<SearchResult> search = new List<SearchResult>(50);
-            foreach (SearchResult s in offline.searchAPI(query)) { search.Add(s); }
-            foreach (SearchResult s in jikan.searchAPI(query)) { search.Add(s); }
+            foreach (SearchResult s in offline.SearchAPI(query)) { search.Add(s); }
+            foreach (SearchResult s in jikan.SearchAPI(query)) { if(!search.Contains(s))search.Add(s); }
             return search;
         }
     }

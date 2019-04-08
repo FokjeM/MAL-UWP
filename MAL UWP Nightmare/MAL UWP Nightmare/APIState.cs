@@ -159,6 +159,8 @@ namespace MAL_UWP_Nightmare
             return true;
         }
 
-        public abstract List<SearchResult> searchAPI(string query);
+        public abstract List<SearchResult> SearchAPI(string query);
+
+        public abstract List<SearchResult> GetSeasonals();
     }
 }

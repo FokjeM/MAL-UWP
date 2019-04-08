@@ -27,7 +27,7 @@ namespace MAL_UWP_Nightmare
 
         public override void SetContent(JObject json)
         {
-            if (json.First.Value<string>().ToLower().Contains("error"))
+            if (json.First.ToObject<string>().ToLower().Contains("error"))
             {
                 SetErrorContent(json.First.Value<string>());
                 return;

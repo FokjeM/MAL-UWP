@@ -29,7 +29,7 @@ namespace MAL_UWP_Nightmare
             throw new NotImplementedException();
         }
 
-        public override List<SearchResult> searchAPI(string query)
+        public override List<SearchResult> SearchAPI(string query)
         {
             throw new NotImplementedException();
         }

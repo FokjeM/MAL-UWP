@@ -44,10 +44,10 @@ namespace MAL_UWP_Nightmare
         {
             JikanAPIState state = new JikanAPIState();
             AnimePage a = new AnimePage();
-            a.SetContent(state.requestAPI("anime/5081").Result);
+            a.SetContent(state.requestAPI("manga/15").Result);
             System.Diagnostics.Debug.WriteLine(Frame);
             Window.Current.Content = new AnimeInfoPage(a);
-            //this.Frame.Navigate(typeof(AnimeInfoPage), a);
+            //Frame.Navigate(typeof(AnimeInfoPage), a);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
