@@ -40,14 +40,13 @@ namespace MAL_UWP_Nightmare
         public SearchPage ProduceSearchPage(string query, IObserver observer)
         {
             SearchPage search = (SearchPage)pages.Search(observer, query);
-            new Task(() =>
+            /*new Task(() =>
             {
                 foreach (SearchResult s in search.Results)
                 {
-                    Task.Delay(1000);
                     s.addPage(search.NotifyObserver(s));
                 }
-            }).Start();
+            }).Start();*/
             return search;
         }
     }
