@@ -54,7 +54,10 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if(text.Length > 2)
             {
-
+                JikanAPIState state = new JikanAPIState();
+                SearchPage s = new SearchPage();
+                List<SearchResult> results = state.SearchAPI("anime/" + text);
+                Window.Current.Content = new SearchResultsPage(results);
             }
             else
             {
@@ -64,13 +67,26 @@ namespace MAL_UWP_Nightmare
                 dialog.CancelCommandIndex = 1;
                 await dialog.ShowAsync();
             }
-
-            Frame.Navigate(typeof(SearchResultsPage), null);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) //Manga
+        private async void Button_Click_1(object sender, RoutedEventArgs e) //Manga
         {
-
+            string text = searchInput.Text;
+            if (text.Length > 2)
+            {
+                JikanAPIState state = new JikanAPIState();
+                SearchPage s = new SearchPage();
+                List<SearchResult> results = state.SearchAPI("manga/" + text);
+                Window.Current.Content = new SearchResultsPage(results);
+            }
+            else
+            {
+                var dialog = new MessageDialog("The search query has to be at least 3 characters", "Error");
+                dialog.Commands.Add(new UICommand("Ok"));
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+                await dialog.ShowAsync();
+            }
         }
     }
 }

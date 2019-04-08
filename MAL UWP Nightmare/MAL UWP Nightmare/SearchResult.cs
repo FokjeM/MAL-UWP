@@ -9,8 +9,8 @@ namespace MAL_UWP_Nightmare
     public class SearchResult
     {
         public readonly string type;
-        public readonly string title;
-        public readonly string image;
+        public string title { get; set; }
+        public string image { get; set; }
         public readonly long id;
         private IPage page;
 

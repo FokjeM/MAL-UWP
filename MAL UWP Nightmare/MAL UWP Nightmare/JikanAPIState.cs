@@ -115,7 +115,7 @@ namespace MAL_UWP_Nightmare
             searchReq += "&limit=25";
             JObject result = requestAPI(searchReq).Result;
             List<SearchResult> resultList = new List<SearchResult>(25);
-            foreach(JToken jt in result.GetValue("results").Values())
+            foreach(JToken jt in result.GetValue("results"))
             {
                 string title = jt.Value<string>("title");
                 string image = jt.Value<string>("image_url");
