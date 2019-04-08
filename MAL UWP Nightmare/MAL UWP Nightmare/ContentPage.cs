@@ -194,7 +194,7 @@ namespace MAL_UWP_Nightmare
             _engTitle = (string)json.GetValue("title_english").ToObject("".GetType());
             _running = (bool)json.GetValue("running").ToObject(true.GetType());
             JToken runFrom = json.GetValue("run_from");
-            if (runFrom.Value<object>() == null)
+            if (string.IsNullOrEmpty(runFrom.Value<string>()))
             {
                 _startDate = DateTime.MaxValue;
             }
@@ -203,7 +203,7 @@ namespace MAL_UWP_Nightmare
                 _startDate = runFrom.Value<DateTime>();
             }
             JToken runTo = json.GetValue("run_to");
-            if (runTo.Value<object>() == null)
+            if (string.IsNullOrEmpty(runTo.Value<string>()))
             {
                 _endDate = DateTime.MaxValue;
             }
