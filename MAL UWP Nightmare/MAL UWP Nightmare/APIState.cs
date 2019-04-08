@@ -1,83 +1,246 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using Windows.Web.Http;
+using Windows.Storage;
+using System.Collections.Generic;
 
-namespace MAL_Nightmare_viewer
+namespace MAL_UWP_Nightmare
 {
-    /// <summary>
-    /// Class that supplies the API currently in use.
-    /// Has methods to test both the Jikan and Kitsu APIs and will set both availlable states.
-    /// Regular checks should be done if either or both are offline.
-    /// 
-    /// Instantiating it can take a while as it emmediately tests the resources.
-    /// This'll take a while as this goes at IE speeds...
-    /// </summary>
-    class APIState
+    abstract class APIState
     {
-        public readonly static string MAL_URL = "https://api.jikan.moe/v3/";
-        public readonly static string KITSU_URL = "https://kitsu.io/api/edge/";
-        private readonly string userAgent = "MAL_Nightmares/0.1 (" + new Windows.Security.ExchangeActiveSyncProvisioning.EasClientDeviceInformation().OperatingSystem + "; I; en-us) UWP/8.1";
-
-        private bool jikanAvaillable;
-        private bool kitsuAvaillable;
-        public bool done = false;
-
-        public APIState()
-        {
-            //testJikan();
-            //testKitsu();
-        }
-
         /// <summary>
-        /// Tests the Jikan API to poll MAL.
-        /// Added the anime/1 endpoint to ensure both MAL and the API are up
+        /// The URL for the implemented API
         /// </summary>
-        private async Task<bool> testJikan()
-        {
-            HttpClient request = new HttpClient();
-            Uri api = new Uri(MAL_URL + "anime/1");
-            HttpResponseMessage response = await request.GetAsync(api);
-            jikanAvaillable = response.IsSuccessStatusCode;
-            return response.IsSuccessStatusCode;
-        }
-
+        public readonly string API_URL;
         /// <summary>
-        /// Tests the Kitsu API to poll Kitsu
-        /// Added the anime/1 endpoint because the clean API URL is a 404
-        /// Kitsu does not adhere to the expectation of API/Author info.
+        /// Wether or not the API was availlable the last time it was polled.
         /// </summary>
-        private async Task<bool> testKitsu()
-        {
-            HttpClient request = new HttpClient();
-            Uri api = new Uri(KITSU_URL + "anime/1");
-            HttpResponseMessage response = await request.GetAsync(api);
-            kitsuAvaillable = response.IsSuccessStatusCode;
-            return response.IsSuccessStatusCode;
-        }
-
+        protected bool availlable;
         /// <summary>
-        /// A method to get whatever URL is known to be availlable.
-        /// This method only tests the availlability of Kitsu if Jikan/MAL is down.
+        /// The last time this API was checked for online/ready state.
         /// </summary>
-        /// <returns>The correct endpoint for an API call as URI</returns>
-        public async Task<string> getCurrentURL()
+        protected DateTime lastChecked;
+        /// <summary>
+        /// A list of known IDs for requests. The format is a Key/Value pair,
+        /// built as {type}/{name}: "{MAL ID} : {Kitsu ID}"
+        /// </summary>
+        public static JObject knownIDs;
+        /// <summary>
+        /// Folder for application storage. Will also contain the locally saved files
+        /// </summary>
+        public readonly StorageFolder localPages = ApplicationData.Current.LocalFolder;
+        /// <summary>
+        /// Custom UA Header for web requests
+        /// </summary>
+        protected readonly string userAgent = "MAL_Nightmares/0.1 (" + new Windows.Security.ExchangeActiveSyncProvisioning.EasClientDeviceInformation().OperatingSystem + "; I; en-us) UWP/10";
+
+        public APIState(string url)
         {
-            if (await testJikan())
+            API_URL = url;
+            if (knownIDs == null)
             {
-                return MAL_URL;
-            }
-            else
-            {
-
-                if (await testKitsu())
+                StorageFile idList = ApplicationData.Current.LocalFolder.CreateFileAsync("known_pages.json", CreationCollisionOption.OpenIfExists).AsTask().Result;
+                string jsonFileContents = FileIO.ReadTextAsync(idList).AsTask().Result;
+                if (jsonFileContents.Length > 10)
                 {
-                    return KITSU_URL;
+                    knownIDs = JObject.Parse(jsonFileContents);
                 }
                 else
                 {
-                    return "LocalOnly";
+                    knownIDs = new JObject();
                 }
             }
         }
+
+        /// <summary>
+        /// Test wether or not the API can be reached.
+        /// This method <b>should not</b> call the API if
+        /// it was successful within the last 5 minutes.
+        /// This is to prevent too many requests.
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool TestAPI();
+
+        /// <summary>
+        /// Poll the API for a response. Use this for API calls.
+        /// This should return a <see cref="Newtonsoft.Json.Linq.JObject"/>
+        /// </summary>
+        /// <param name="request">The request to add to the API URL</param>
+        /// <returns>A JSON object from the APIs response</returns>
+        public abstract Task<JObject> RequestAPIAsync(string request);
+
+        /// <summary>
+        /// Poll the API for a response. Use this for API calls.
+        /// This should return a <see cref="Newtonsoft.Json.Linq.JObject"/>
+        /// </summary>
+        /// <param name="request">The request to add to the API URL</param>
+        /// <returns>A JSON object from the APIs response</returns>
+        public abstract JObject RequestAPI(string request);
+
+        /// <summary>
+        /// Poll an API for a search in order to find the ID, this should
+        /// assume an exact query is used and only return a single result.
+        /// </summary>
+        /// <param name="query">The search query in the form of "<code>type/name</code>"</param>
+        /// <returns>The resulting request based on the first search result</returns>
+        public abstract string GetRequestFromSearch(string query);
+
+        /// <summary>
+        /// Poll an API for a search in order to find the ID, this should
+        /// assume an exact query is used and only return a single result.
+        /// </summary>
+        /// <param name="query">The search query in the form of "<code>type/name</code>"</param>
+        /// <returns>The resulting request based on the first search result</returns>
+        public abstract Task<string> GetRequestFromSearchAsync(string query);
+
+        /// <summary>
+        /// A get function for <see cref="API_URL"/>
+        /// </summary>
+        /// <returns>The base URL for the implemented API</returns>
+        public string GetURL()
+        {
+            return this.API_URL;
+        }
+
+        protected abstract long CheckKnownIDs(string query);
+
+        /// <summary>
+        /// Add a new entry to the knownIDs for this information, to make looking it up easier.
+        /// This function checks for the existence of the token and only updates changed fields.
+        /// Starts an asynchronous task to write to a local file.
+        /// </summary>
+        /// <param name="type">Type of data; aninme, manga, character, etc.</param>
+        /// <param name="name">Name of the data; Medaka Box, Akamatsu Ken, etc.</param>
+        /// <param name="idMAL">The MAL id provided by Jikan</param>
+        /// <param name="idKitsu">the Kitsu ID provided by Kitsu</param>
+        /// <returns>True if the info was added and updated, false if the info is already known or the file wasn't written.</returns>
+        protected async Task<bool> AddToKnownIDsAsync(string type, string name, long idMAL, long idKitsu)
+        {
+            string token = string.Format("{0}/{1}", type, name).ToLower();
+            JToken value;
+            if (knownIDs.ContainsKey(token))
+            {
+                string[] container = ((string)knownIDs.GetValue(token).ToObject("".GetType())).Split(new string[] { " : " }, StringSplitOptions.None);
+                if (container[0].Equals(idMAL.ToString()) && container[1].Equals(idKitsu.ToString()))
+                {
+                    return false;
+                }
+                if (idMAL > 0L && !container[0].Equals(idMAL.ToString()))
+                {
+                    container[0] = idMAL.ToString();
+                }
+                else
+                {
+                    container[0] = "0";
+                }
+                if (idKitsu > 0L && !container[1].Equals(idKitsu.ToString()))
+                {
+                    container[1] = idKitsu.ToString();
+                }
+                else
+                {
+                    container[1] = "0";
+                }
+                string val = string.Concat(container[0], " : ", container[1]);
+                value = JToken.FromObject(val);
+            }
+            else
+            {
+                string malVal;
+                string kitVal;
+                if (idMAL.Equals(0L))
+                {
+                    malVal = "0";
+                } else
+                {
+                    malVal = idMAL.ToString();
+                }
+                if (idKitsu.Equals(0L))
+                {
+                    kitVal = "0";
+                } else
+                {
+                    kitVal = idKitsu.ToString();
+                }
+                value = JToken.FromObject(string.Concat(malVal, " : ", kitVal).ToLower());
+            }
+            knownIDs.Add(token, value);
+            try
+            {
+                await FileIO.WriteTextAsync(await localPages.GetFileAsync("known_pages.json"), knownIDs.ToString());
+            } catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        protected bool AddToKnownIDs(string type, string name, long idMAL, long idKitsu)
+        {
+            string token = string.Format("{0}/{1}", type, name).ToLower();
+            JToken value;
+            if (knownIDs.ContainsKey(token))
+            {
+                string[] container = ((string)knownIDs.GetValue(token).ToObject("".GetType())).Split(new string[] { " : " }, StringSplitOptions.None);
+                if (container[0].Equals(idMAL.ToString()) && container[1].Equals(idKitsu.ToString()))
+                {
+                    return false;
+                }
+                if (idMAL > 0L && !container[0].Equals(idMAL.ToString()))
+                {
+                    container[0] = idMAL.ToString();
+                }
+                else
+                {
+                    container[0] = "0";
+                }
+                if (idKitsu > 0L && !container[1].Equals(idKitsu.ToString()))
+                {
+                    container[1] = idKitsu.ToString();
+                }
+                else
+                {
+                    container[1] = "0";
+                }
+                string val = string.Concat(container[0], " : ", container[1]);
+                value = JToken.FromObject(val);
+            }
+            else
+            {
+                string malVal;
+                string kitVal;
+                if (idMAL.Equals(0L))
+                {
+                    malVal = "0";
+                }
+                else
+                {
+                    malVal = idMAL.ToString();
+                }
+                if (idKitsu.Equals(0L))
+                {
+                    kitVal = "0";
+                }
+                else
+                {
+                    kitVal = idKitsu.ToString();
+                }
+                value = JToken.FromObject(string.Concat(malVal, " : ", kitVal).ToLower());
+            }
+            knownIDs.Add(token, value);
+            try
+            {
+                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Wait();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public abstract List<SearchResult> SearchAPI(string query);
+
+        public abstract JObject GetSeasonals();
     }
 }

@@ -1,0 +1,33 @@
+Home page
+	Anime List (Link/Button?)
+	Manga List (Link/Button?)
+	Search Field with selection Anime/Manga
+	Season Anime thumbs
+	Schedule List for tor next X days
+Menu
+	Anime
+		Anime List
+		Seasonal Anime
+		Anime Schedules
+		Top Anime
+		Genres
+	Manga
+		Manga List
+		Seasonal Manga
+		Manga schedules
+		Top Manga
+		Genres
+	Characters
+		Main
+		Side
+	People
+		Voice Actors
+		Writers
+		Producers
+		Etc.
+	Magazines
+
+Anime/Manga pages:
+	Title
+	Screens/Thumbs/Examples/etc
+	Text
