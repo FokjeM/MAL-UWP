@@ -8,7 +8,7 @@ namespace MAL_UWP_Nightmare
     public class MangaPage : ContentPage
     {
         private List<string> _authors;
-        public List<string> Authors
+        public List<string> authors
         {
             get
             {
@@ -44,7 +44,7 @@ namespace MAL_UWP_Nightmare
             JToken auths = json.GetValue("authors");
             foreach (JToken jt in auths.Children())
             {
-                Authors.Add(jt["name"].Value<string>());
+                authors.Add(jt["name"].Value<string>());
             }
         }
     }

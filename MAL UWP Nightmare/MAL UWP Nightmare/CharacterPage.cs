@@ -13,7 +13,7 @@ namespace MAL_UWP_Nightmare
     /// 
     /// Not to mention that Kitsu still hasn't implemented this information.
     /// </summary>
-    public class CharacterPage : IPage
+    class CharacterPage : IPage
     {
         private long id;
         private string url;

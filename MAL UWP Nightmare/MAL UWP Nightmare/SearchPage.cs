@@ -10,21 +10,14 @@ namespace MAL_UWP_Nightmare
     public class SearchPage : IPage
     {
         private List<SearchResult> _results;
-        public List<SearchResult> Results
+        public List<SearchResult> results
         {
             get
             {
                 return _results;
             }
         }
-
         private IObserver observer;
-
-        public SearchPage(IObserver o)
-        {
-            observer = o;
-        }
-
         public bool IsLocal()
         {
             return false;
@@ -50,14 +43,9 @@ namespace MAL_UWP_Nightmare
         /// Just not in a kind manner.
         /// </summary>
         /// <param name="res"></param>
-        public IPage NotifyObserver(SearchResult res)
+        private void notifyObserver(SearchResult res)
         {
-            return observer.NotifyMe(res);
-        }
-
-        public void selectResult(SearchResult res)
-        {
-            NotifyObserver(res);
+            observer.NotifyMe(res);
         }
 
         /// <summary>

@@ -20,8 +20,7 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class HomePage : Page
     {
-        public Dictionary<string,string> SeasonalAnime { get; set; }
-        Main main = new Main();
+        public Dictionary<string,string> seasonalAnime { get; set; } //To do: Replace Value type string with BitmapImage.
 
         public HomePage()
         {
@@ -30,7 +29,7 @@ namespace MAL_UWP_Nightmare
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            SeasonalAnime = LoadSeasonalViewData();
+            seasonalAnime = LoadSeasonalViewData();
             DataContext = this;
         }
 
@@ -42,8 +41,12 @@ namespace MAL_UWP_Nightmare
             return seasonalList;
         }
 
-        private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
+        private void seasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            JikanAPIState state = new JikanAPIState();
+            MangaPage a = new MangaPage();
+            a.SetContent(state.requestAPI("manga/1").Result);
+            Window.Current.Content = new MangaInfoPage(a);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) //Anime

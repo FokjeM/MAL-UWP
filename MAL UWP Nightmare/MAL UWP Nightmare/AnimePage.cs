@@ -9,7 +9,7 @@ namespace MAL_UWP_Nightmare
     public class AnimePage : ContentPage
     {
         private string _premiereSeason;
-        public string PremiereSeason
+        public string premiereSeason
         {
             get
             {
@@ -17,7 +17,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         private string _broadcast;
-        public string Broadcast
+        public string broadcast
         {
             get
             {
@@ -25,7 +25,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         private List<string> _producers;
-        public List<string> Producers
+        public List<string> producers
         {
             get
             {
@@ -33,7 +33,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         private List<string> _licensors;
-        public List<string> Licensors
+        public List<string> licensors
         {
             get
             {
@@ -41,7 +41,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         private List<string> _studios;
-        public List<string> Studios
+        public List<string> studios
         {
             get
             {
@@ -49,7 +49,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         private List<string> _openings;
-        public List<string> Openings
+        public List<string> openings
         {
             get
             {
@@ -57,7 +57,7 @@ namespace MAL_UWP_Nightmare
             }
         }
         private List<string> _endings;
-        public List<string> Endings
+        public List<string> endings
         {
             get
             {
