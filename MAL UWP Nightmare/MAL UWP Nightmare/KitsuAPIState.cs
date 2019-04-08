@@ -19,27 +19,17 @@ namespace MAL_UWP_Nightmare
             lastChecked = DateTime.UtcNow;
         }
 
-        public override string GetRequestFromSearch(string query)
+        public override Task<string> getRequestFromSearch(string query)
         {
             throw new NotImplementedException();
         }
 
-        public override Task<string> GetRequestFromSearchAsync(string query)
+        public override List<SearchResult> GetSeasonals()
         {
             throw new NotImplementedException();
         }
 
-        public override JObject GetSeasonals()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override JObject RequestAPI(string request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task<JObject> RequestAPIAsync(string request)
+        public override Task<JObject> requestAPI(string request)
         {
             throw new NotImplementedException();
         }
@@ -49,7 +39,7 @@ namespace MAL_UWP_Nightmare
             throw new NotImplementedException();
         }
 
-        public override bool TestAPI()
+        public override bool testAPI()
         {
             throw new NotImplementedException();
         }

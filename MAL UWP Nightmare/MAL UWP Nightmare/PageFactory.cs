@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
 {
-    public class PageFactory
+    class PageFactory
     {
         private readonly APIMachine source;
 
@@ -17,11 +16,9 @@ namespace MAL_UWP_Nightmare
         }
         
 
-        public IPage Home(IObserver o)
+        public IPage Home()
         {
-            HomePageBackend home = new HomePageBackend(o);
-            home.SetContent(source.GetSeasonals());
-            return home;
+            throw new NotImplementedException();
         }
 
         public IPage Content(string type, long id)
@@ -37,40 +34,13 @@ namespace MAL_UWP_Nightmare
             {
                 return null;
             }
-            page.SetContent(source.RequestAPI(type + id.ToString()));
+            page.SetContent(source.requestAPI(type + id.ToString()));
             return page;
         }
 
-        public async Task<IPage> ContentAsync(string type, long id)
+        public IPage Search(string query)
         {
-            Task<JObject> res = source.RequestAPIAsync(type + id.ToString());
-            ContentPage page;
-            if (type.ToLower().Equals("anime"))
-            {
-                page = new AnimePage();
-            }
-            else if (type.ToLower().Equals("manga"))
-            {
-                page = new MangaPage();
-            }
-            else
-            {
-                return null;
-            }
-            page.SetContent(await res);
-            return page;
-        }
-
-        public IPage Search(IObserver o)
-        {
-            SearchPage s = new SearchPage(o);
-            return s;
-        }
-
-        public IPage Search(IObserver o, string query)
-        {
-            SearchPage s = new SearchPage(o);
-            s.SetResults(source.SearchAPI(query));
+            SearchPage s = new SearchPage();
             return s;
         }
 

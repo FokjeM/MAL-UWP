@@ -19,7 +19,7 @@
             <StackPanel Grid.Column="1" Width="auto" Margin="0,30,0,0">
                 <TextBlock Foreground="White" Margin="0,0,0,15" FontSize="18" FontWeight="Bold">Search Results</TextBlock>
 
-                <ListView Margin="0,0,0,5" x:Name="searchResultsView" ItemsSource="{Binding results}" ItemClick="SearchResultsView_ItemClick" IsItemClickEnabled="True">
+                <ListView Margin="0,0,0,5" x:Name="searchResultsView" ItemsSource="{Binding results}" ItemClick="searchResultsView_ItemClick" IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>

@@ -2,7 +2,7 @@
 
 namespace MAL_UWP_Nightmare
 {
-    public class PersonPage : IPage
+    class PersonPage : IPage
     {
         public bool IsLocal()
         {
