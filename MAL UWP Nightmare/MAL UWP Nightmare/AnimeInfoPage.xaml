@@ -16,14 +16,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Width="auto" Margin="0,30,0,0">
-                <TextBlock TextWrapping="WrapWholeWords" Width="auto" Margin="0,0,0,15" Height="auto" FontSize="22" FontWeight="Bold">Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?</TextBlock>
+                <TextBlock TextWrapping="WrapWholeWords" Width="auto" Margin="0,0,0,15" Height="auto" FontSize="22" FontWeight="Bold" Text="{Binding title}"/>
                 <Grid Width="auto" Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="0,0,0,5" MaxWidth="245" HorizontalAlignment="Left">
-                        <Image Margin="0,0,20,5" Width="225" Height="326" Source="https://cdn.myanimelist.net/images/anime/1857/94908.jpg?s=ff1349992ecce2dc5b5b1ab3d4bf6846" VerticalAlignment="Top"/>
+                        <Image Margin="0,0,20,5" Width="225" Height="326" Source="{Binding image}" VerticalAlignment="Top"/>
 
                         <StackPanel Padding="0,0,20,0" MaxWidth="245" HorizontalAlignment="Left">
                             <TextBlock Margin="0,0,0,5" FontWeight="Bold">Type</TextBlock>

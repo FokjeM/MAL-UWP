@@ -5,9 +5,16 @@ using Windows.Storage;
 
 namespace MAL_UWP_Nightmare
 {
-    class MangaPage : ContentPage
+    public class MangaPage : ContentPage
     {
-        private List<string> authors;
+        private List<string> _authors;
+        public List<string> authors
+        {
+            get
+            {
+                return _authors;
+            }
+        }
 
         public override bool SavePage()
         {
@@ -27,13 +34,13 @@ namespace MAL_UWP_Nightmare
 
         public override void SetContent(JObject json)
         {
-            if (json.First.Value<string>().ToLower().Contains("error"))
+            if (json.First.ToObject<string>().ToLower().Contains("error"))
             {
                 SetErrorContent(json.First.Value<string>());
                 return;
             }
             base.SetContent(json);
-            authors = new List<string>();
+            _authors = new List<string>();
             JToken auths = json.GetValue("authors");
             foreach (JToken jt in auths.Children())
             {
