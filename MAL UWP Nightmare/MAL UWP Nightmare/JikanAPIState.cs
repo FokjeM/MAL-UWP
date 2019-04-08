@@ -36,6 +36,11 @@ namespace MAL_UWP_Nightmare
             return reqParts[0] + "/" + result.GetValue("results").First.First.ToObject("".GetType());
         }
 
+        public override List<SearchResult> GetSeasonals()
+        {
+            throw new NotImplementedException();
+        }
+
         public override async Task<JObject> requestAPI(string request)
         {
             HttpClient req = new HttpClient();

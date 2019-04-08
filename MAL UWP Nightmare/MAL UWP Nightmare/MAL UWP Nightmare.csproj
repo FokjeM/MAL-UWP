@@ -109,6 +109,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="CharacterPage.cs" />
+    <Compile Include="HomePageBackend.cs" />
+    <Compile Include="IObserver.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="PageFactory.cs" />
     <Compile Include="Related.cs" />
     <Compile Include="SearchPage.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="SearchResultsPage.xaml.cs">
       <DependentUpon>SearchResultsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ThreadingStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

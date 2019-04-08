@@ -45,6 +45,11 @@ namespace MAL_UWP_Nightmare
             }
         }
 
+        public override List<SearchResult> GetSeasonals()
+        {
+            return new List<SearchResult>();
+        }
+
         public override async Task<JObject> requestAPI(string request)
         {
             string[] path = request.Split('/');

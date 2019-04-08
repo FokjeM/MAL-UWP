@@ -17,7 +17,7 @@ namespace MAL_UWP_Nightmare
                 return _results;
             }
         }
-        private object _observer; //To do: Change object to type Main.
+        private IObserver observer;
         public bool IsLocal()
         {
             return false;
@@ -45,7 +45,7 @@ namespace MAL_UWP_Nightmare
         /// <param name="res"></param>
         private void notifyObserver(SearchResult res)
         {
-            observer.notifyMe(res);
+            observer.NotifyMe(res);
         }
 
         /// <summary>

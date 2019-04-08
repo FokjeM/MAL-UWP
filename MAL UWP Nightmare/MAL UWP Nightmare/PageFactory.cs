@@ -41,7 +41,7 @@ namespace MAL_UWP_Nightmare
         public IPage Search(string query)
         {
             SearchPage s = new SearchPage();
-
+            return s;
         }
 
         /// <summary>
