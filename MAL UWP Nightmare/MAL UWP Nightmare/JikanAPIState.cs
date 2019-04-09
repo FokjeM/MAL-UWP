@@ -59,7 +59,7 @@ namespace MAL_UWP_Nightmare
         }
 
         /// <summary>
-        /// Made possible by the wonderful source
+        /// Season determination made possible by the wonderful source
         /// http://imaginekitty.com/599/finding-the-current-season-using-c/
         /// </summary>
         /// <returns></returns>
@@ -77,56 +77,8 @@ namespace MAL_UWP_Nightmare
             Uri api = new Uri(GetURL() + request);
             HttpResponseMessage response = req.GetAsync(api).Result;
             JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-            if (result.ContainsKey("title"))
-            {
-                JObject ret = new JObject
-                {
-                    { "title", result.GetValue("title") },
-                    { "id", result.GetValue("mal_id") },
-                    { "url", JToken.FromObject(api.ToString()) },
-                    { "title_japanese", result.GetValue("title_japanese") },
-                    { "title_english", result.GetValue("title_english") },
-                    { "synopsis", result.GetValue("synopsis") },
-                    { "background", result.GetValue("background") },
-                    { "image", result.GetValue("image_url") },
-                    { "title_synonyms", result.GetValue("title_synonyms") },
-                    { "status", result.GetValue("status") },
-                    { "type", result.GetValue("type") }
-                };
-                JToken gens = result.GetValue("genres");
-                List<string> genres = new List<string>();
-                foreach (JToken jt in gens.Children())
-                {
-                    genres.Add(jt["name"].Value<string>());
-                }
-                ret.Add("genres", JToken.FromObject(genres));
-                //The API differentiates between airing and publishing for anime and mange. We don't.
-                if (request.Contains("anime"))
-                {
-                    //add anime-specific parts
-                    ret.Add("running", result.GetValue("airing"));
-                    ret.Add("run_from", result.GetValue("aired")["from"]);
-                    ret.Add("run_to", result.GetValue("aired")["to"]);
-                    ret.Add("premiered", result.GetValue("premiered"));
-                    ret.Add("broadcast", result.GetValue("broadcast"));
-                    ret.Add("producers", result.GetValue("producers"));
-                    ret.Add("licensors", result.GetValue("licensors"));
-                    ret.Add("studios", result.GetValue("studios"));
-                    ret.Add("opening_themes", result.GetValue("opening_themes"));
-                    ret.Add("ending_themes", result.GetValue("ending_themes"));
-                }
-                else if (request.Contains("manga"))
-                {
-                    //add manga-specific parts
-                    ret.Add("running", result.GetValue("publishing"));
-                    ret.Add("run_from", result.GetValue("published")["from"]);
-                    ret.Add("run_to", result.GetValue("published")["to"]);
-                    ret.Add("authors", result.GetValue("authors"));
-                }
-                result = ret;
-                var added = AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
-            }
-            return result;
+            AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+            return ParseResponse(result, api, request.Split('/')[0]);
         }
 
         public override async Task<JObject> RequestAPIAsync(string request)
@@ -136,23 +88,29 @@ namespace MAL_UWP_Nightmare
             Uri api = new Uri(GetURL() + request);
             HttpResponseMessage response = await req.GetAsync(api);
             JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-            if (result.ContainsKey("title"))
+            AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+            return ParseResponse(result, api, request.Split('/')[0]);
+        }
+
+        private JObject ParseResponse(JObject response, Uri api, string type)
+        {
+            if (response.ContainsKey("title"))
             {
                 JObject ret = new JObject
                 {
-                    { "title", result.GetValue("title") },
-                    { "id", result.GetValue("mal_id") },
+                    { "title", response.GetValue("title") },
+                    { "id", response.GetValue("mal_id") },
                     { "url", JToken.FromObject(api.ToString()) },
-                    { "title_japanese", result.GetValue("title_japanese") },
-                    { "title_english", result.GetValue("title_english") },
-                    { "synopsis", result.GetValue("synopsis") },
-                    { "background", result.GetValue("background") },
-                    { "image", result.GetValue("image_url") },
-                    { "title_synonyms", result.GetValue("title_synonyms") },
-                    { "status", result.GetValue("status") },
-                    { "type", result.GetValue("type") }
+                    { "title_japanese", response.GetValue("title_japanese") },
+                    { "title_english", response.GetValue("title_english") },
+                    { "synopsis", response.GetValue("synopsis") },
+                    { "background", response.GetValue("background") },
+                    { "image", response.GetValue("image_url") },
+                    { "title_synonyms", response.GetValue("title_synonyms") },
+                    { "status", response.GetValue("status") },
+                    { "type", response.GetValue("type") }
                 };
-                JToken gens = result.GetValue("genres");
+                JToken gens = response.GetValue("genres");
                 List<string> genres = new List<string>();
                 foreach (JToken jt in gens.Children())
                 {
@@ -160,31 +118,33 @@ namespace MAL_UWP_Nightmare
                 }
                 ret.Add("genres", JToken.FromObject(genres));
                 //The API differentiates between airing and publishing for anime and mange. We don't.
-                if (request.Contains("anime"))
+                if (type.Equals("anime"))
                 {
                     //add anime-specific parts
-                    ret.Add("running", result.GetValue("airing"));
-                    ret.Add("run_from", result.GetValue("aired")["from"]);
-                    ret.Add("run_to", result.GetValue("aired")["to"]);
-                    ret.Add("premiered", result.GetValue("premiered"));
-                    ret.Add("broadcast", result.GetValue("broadcast"));
-                    ret.Add("producers", result.GetValue("producers"));
-                    ret.Add("licensors", result.GetValue("licensors"));
-                    ret.Add("studios", result.GetValue("studios"));
-                    ret.Add("opening_themes", result.GetValue("opening_themes"));
-                    ret.Add("ending_themes", result.GetValue("ending_themes"));
-                } else if (request.Contains("manga"))
+                    ret.Add("running", response.GetValue("airing"));
+                    ret.Add("run_from", response.GetValue("aired")["from"]);
+                    ret.Add("run_to", response.GetValue("aired")["to"]);
+                    ret.Add("premiered", response.GetValue("premiered"));
+                    ret.Add("broadcast", response.GetValue("broadcast"));
+                    ret.Add("producers", response.GetValue("producers"));
+                    ret.Add("licensors", response.GetValue("licensors"));
+                    ret.Add("studios", response.GetValue("studios"));
+                    ret.Add("opening_themes", response.GetValue("opening_themes"));
+                    ret.Add("ending_themes", response.GetValue("ending_themes"));
+                }
+                else if (type.Equals("manga"))
                 {
                     //add manga-specific parts
-                    ret.Add("running", result.GetValue("publishing"));
-                    ret.Add("run_from", result.GetValue("published")["from"]);
-                    ret.Add("run_to", result.GetValue("published")["to"]);
-                    ret.Add("authors", result.GetValue("authors"));
+                    ret.Add("running", response.GetValue("publishing"));
+                    ret.Add("run_from", response.GetValue("published")["from"]);
+                    ret.Add("run_to", response.GetValue("published")["to"]);
+                    ret.Add("authors", response.GetValue("authors"));
                 }
-                result = ret;
-            await AddToKnownIDsAsync(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+                return ret;
+            } else
+            {
+                return response;
             }
-            return result;
         }
 
         public override List<SearchResult> SearchAPI(string query)

@@ -36,6 +36,7 @@ namespace MAL_UWP_Nightmare
                 }
                 if(folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
                 {
+                    return query;
                 }
                 return null;
             }
@@ -61,6 +62,7 @@ namespace MAL_UWP_Nightmare
                 }
                 if (await folder.TryGetItemAsync(path[1] + ".json") != null)
                 {
+                    return query;
                 }
                 return null;
             }
@@ -149,7 +151,7 @@ namespace MAL_UWP_Nightmare
         /// Implemented out of necessity, but IDs are not stored for offline use.
         /// </summary>
         /// <param name="query">A string suitable to build a search query</param>
-        /// <returns>0. Always.</returns>
+        /// <returns>0. Always. IDs are irrelevant for locally saved pages</returns>
         protected override long CheckKnownIDs(string query)
         {
             return 0L;
