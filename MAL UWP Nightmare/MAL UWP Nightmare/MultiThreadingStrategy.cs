@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Threading;
 using System.Collections.Generic;
 
 namespace MAL_UWP_Nightmare
@@ -13,47 +12,34 @@ namespace MAL_UWP_Nightmare
             pages = p;
         }
 
-        public List<SearchResult> getSeasonals()
+        public List<SearchResult> GetSeasonals(HomePageBackend home)
         {
-            return ((HomePageBackend)pages.Home(new SplashScreen())).seasonals;
+            return home.Seasonals;
         }
 
-        public CharacterPage ProduceCharacterPage(string request, long id)
+        public IPage ProduceCharacterPage(string request, long id)
         {
-            return (CharacterPage)pages.Character();
+            return pages.Character();
         }
 
-        public ContentPage ProduceContentPage(string type, long id)
+        public async Task<IPage> ProduceContentPage(string type, long id)
         {
-            return ProduceContentPageAsync(type, id).Result;
+            return await pages.ContentAsync(type, id);
         }
 
-        public async Task<ContentPage> ProduceContentPageAsync(string type, long id)
+        public IPage ProduceHomePage(IObserver observer)
         {
-            return (ContentPage)await pages.ContentAsync(type, id);
+            return pages.Home(observer);
         }
 
-        public HomePageBackend ProduceHomePage(IObserver observer)
+        public IPage ProducePersonPage(string request, long id)
         {
-            return (HomePageBackend)pages.Home(observer);
+            return pages.Person();
         }
 
-        public PersonPage ProducePersonPage(string request, long id)
+        public async Task<IPage> ProduceSearchPage(string query, IObserver observer)
         {
-            return (PersonPage)pages.Person();
-        }
-
-        public SearchPage ProduceSearchPage(string query, IObserver observer)
-        {
-            SearchPage search = (SearchPage)pages.Search(observer, query);
-            /*new Task(() =>
-            {
-                foreach (SearchResult s in search.Results)
-                {
-                    s.addPage(search.NotifyObserver(s));
-                }
-            }).Start();*/
-            return search;
+            return await pages.SearchAsync(observer, query);
         }
     }
 }

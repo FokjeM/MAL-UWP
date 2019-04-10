@@ -1,5 +1,10 @@
 ﻿namespace MAL_UWP_Nightmare
 {
+    /// <summary>
+    /// Dropped due to the massive data consumption and amount of
+    /// requests to realize; 
+    /// This violates the 2/second limit of Jikan or other API limits.
+    /// </summary>
     public class Related
     {
         public readonly long id;

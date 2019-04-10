@@ -14,14 +14,16 @@ namespace MAL_UWP_Nightmare
     /// </summary>
     public class HomePageBackend : IPage
     {
-        public List<SearchResult> seasonals;
+        private List<SearchResult> _seasonals;
+        public List<SearchResult> Seasonals
+        {
+            get
+            {
+                return _seasonals;
+            }
+        }
         private IObserver observer;
         public string ErrorText { get; private set; }
-
-        public List<SearchResult> GetSeasonals()
-        {
-            return seasonals;
-        }
 
         public HomePageBackend(IObserver o)
         {
@@ -51,7 +53,7 @@ namespace MAL_UWP_Nightmare
                 SearchResult res = new SearchResult(type, title, image, id);
                 resultList.Add(res);
             }
-            seasonals = resultList;
+            _seasonals = resultList;
         }
 
         public void SetErrorContent(string errorMessage)
