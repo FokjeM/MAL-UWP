@@ -13,6 +13,10 @@ namespace MAL_UWP_Nightmare
         private IObserver observer;
         public string ErrorText { get; private set; }
 
+        public List<SearchResult> GetSeasonals()
+        {
+            return seasonals;
+        }
 
         public HomePageBackend(IObserver o)
         {
