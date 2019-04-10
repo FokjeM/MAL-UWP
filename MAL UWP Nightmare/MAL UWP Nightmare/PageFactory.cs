@@ -44,7 +44,9 @@ namespace MAL_UWP_Nightmare
         public async Task<IPage> ContentAsync(string type, long id)
         {
             Task<JObject> res = source.RequestAPIAsync(type + id.ToString());
-            ContentPage page;
+            //Start the fetch while preparing the actual page
+            res.Start();
+            IPage page;
             if (type.ToLower().Equals("anime"))
             {
                 page = new AnimePage();
@@ -71,6 +73,13 @@ namespace MAL_UWP_Nightmare
         {
             SearchPage s = new SearchPage(o);
             s.SetResults(source.SearchAPI(query));
+            return s;
+        }
+
+        public async Task<IPage> SearchAsync(IObserver o, string query)
+        {
+            SearchPage s = new SearchPage(o);
+            s.SetResults(await source.SearchAPIAsync(query));
             return s;
         }
 
