@@ -61,6 +61,7 @@ namespace MAL_UWP_Nightmare
         /// <summary>
         /// Season determination made possible by the wonderful source
         /// http://imaginekitty.com/599/finding-the-current-season-using-c/
+        /// Slightly edited because we don't need a CSS file.
         /// </summary>
         /// <returns></returns>
         public override JObject GetSeasonals()
@@ -76,6 +77,11 @@ namespace MAL_UWP_Nightmare
             req.DefaultRequestHeaders.Add("User-Agent", userAgent);
             Uri api = new Uri(GetURL() + request);
             HttpResponseMessage response = req.GetAsync(api).Result;
+            //We did not achieve success. Abort mission!
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
             JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
             AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
             return ParseResponse(result, api, request.Split('/')[0]);
@@ -87,6 +93,11 @@ namespace MAL_UWP_Nightmare
             req.DefaultRequestHeaders.Add("User-Agent", userAgent);
             Uri api = new Uri(GetURL() + request);
             HttpResponseMessage response = await req.GetAsync(api);
+            //We did not achieve success. Abort mission!
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
             JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
             AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
             return ParseResponse(result, api, request.Split('/')[0]);
@@ -174,6 +185,33 @@ namespace MAL_UWP_Nightmare
             return resultList;
         }
 
+        public async override Task<List<SearchResult>> SearchAPIAsync(string query)
+        {
+            string[] reqParts = query.Split('/');
+            string searchReq = "search/" + reqParts[0] + "?q=";
+            for (int i = 1; i < reqParts.Length; i++)
+            {
+                if (i > 1)
+                {
+                    searchReq += Uri.EscapeDataString("/");
+                }
+                searchReq += Uri.EscapeDataString(reqParts[i]);
+            }
+            searchReq += "&limit=25";
+            Task<JObject> result = RequestAPIAsync(searchReq);
+            List<SearchResult> resultList = new List<SearchResult>(25);
+            foreach (JToken jt in (await result).GetValue("results"))
+            {
+                string title = jt.Value<string>("title");
+                string image = jt.Value<string>("image_url");
+                string type = jt.Value<string>("type");
+                long id = jt.Value<long>("mal_id");
+                SearchResult res = new SearchResult(type, title, image, id);
+                resultList.Add(res);
+            }
+            return resultList;
+        }
+
         /// <summary>
         /// Tests the Jikan API if it can be reached.
         /// </summary>
@@ -181,10 +219,10 @@ namespace MAL_UWP_Nightmare
         /// within the last 5 minutes of calling this function.</returns>
         public override bool TestAPI()
         {
-            if (lastChecked.AddMinutes(5).CompareTo(DateTime.UtcNow) < 0 || !availlable)
+            if (lastChecked.AddMinutes(5).CompareTo(DateTime.UtcNow) < 0)
             {
                 JObject response = RequestAPI("anime/5081");
-                if (!response.ContainsKey("error"))
+                if (response != null && !response.ContainsKey("error"))
                 {
                     availlable = true;
                 }

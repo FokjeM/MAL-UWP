@@ -13,6 +13,10 @@ namespace MAL_UWP_Nightmare
         {
             availlable = false;
             lastChecked = DateTime.UtcNow;
+            Task<StorageFolder> f = localPages.CreateFolderAsync("test", CreationCollisionOption.OpenIfExists).AsTask();
+            f.RunSynchronously();
+            JObject test = new JObject();
+            f.Result.CreateFileAsync("file.json", CreationCollisionOption.OpenIfExists).AsTask().RunSynchronously();
         }
 
         /// <summary>
@@ -33,10 +37,6 @@ namespace MAL_UWP_Nightmare
                     {
                         return string.Concat(query.ToLower(), ".json");
                     }
-                }
-                if(folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
-                {
-                    return query;
                 }
                 return null;
             }
@@ -132,9 +132,37 @@ namespace MAL_UWP_Nightmare
             return resultList;
         }
 
+        public async override Task<List<SearchResult>> SearchAPIAsync(string query)
+        {
+            string[] path = query.ToLower().Split('/');
+            List<SearchResult> resultList = new List<SearchResult>(25);
+            try
+            {
+                StorageFolder folder = await localPages.GetFolderAsync(path[0]);
+                var fileList = await folder.GetFilesAsync();
+                foreach (StorageFile s in fileList)
+                {
+                    if (s.Name.ToLower().Contains(path[1]))
+                    {
+                        JObject file = JObject.Parse(await FileIO.ReadTextAsync(s));
+                        long id = long.Parse((string)file.GetValue("mal_id").ToObject("".GetType()));
+                        string title = (string)file.GetValue("title").ToObject("".GetType());
+                        string image = (string)file.GetValue("image").ToObject("".GetType());
+                        SearchResult res = new SearchResult(path[0], title, image, id);
+                        resultList.Add(res);
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return resultList;
+        }
+
         public override bool TestAPI()
         {
-           JObject response = RequestAPI("anime/Bakemonogatari");
+           JObject response = RequestAPI("test/file");
             if (response != null)
             {
                 availlable = true;
