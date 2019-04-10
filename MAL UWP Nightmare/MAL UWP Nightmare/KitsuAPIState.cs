@@ -9,7 +9,7 @@ namespace MAL_UWP_Nightmare
 {
     /// <summary>
     /// This is the KitsuAPIState class. Created as part of the application,
-    /// but not yet implemented. Don't use this!
+    /// but not yet implemented due to a heavy lack in features. Don't use this!
     /// </summary>
     class KitsuAPIState : APIState
     {
@@ -45,6 +45,11 @@ namespace MAL_UWP_Nightmare
         }
 
         public override List<SearchResult> SearchAPI(string query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<List<SearchResult>> SearchAPIAsync(string query)
         {
             throw new NotImplementedException();
         }

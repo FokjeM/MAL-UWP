@@ -184,6 +184,7 @@ namespace MAL_UWP_Nightmare
         }
 
         public abstract bool SavePage();
+        public abstract Task<bool> SavePageAsync();
 
         public virtual void SetContent(JObject json)
         {

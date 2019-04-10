@@ -98,11 +98,19 @@ namespace MAL_UWP_Nightmare
             {
                 return null;
             }
-            JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
             AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
             return ParseResponse(result, api, request.Split('/')[0]);
         }
 
+        /// <summary>
+        /// Private method to parse an API response.
+        /// Seperated into a method as these are NOT different between sync and async.
+        /// </summary>
+        /// <param name="response">The APIs JSON response</param>
+        /// <param name="api">The requested URL, used in building the result object</param>
+        /// <param name="type">The type requested, used in building the result object</param>
+        /// <returns>A JSON object in the format expected by the IPage implementation</returns>
         private JObject ParseResponse(JObject response, Uri api, string type)
         {
             if (response.ContainsKey("title"))
@@ -158,6 +166,12 @@ namespace MAL_UWP_Nightmare
             }
         }
 
+        /// <summary>
+        /// Search the API and get the info needed to request the actual page.
+        /// This will break if MAL errors out and Jikan doesn't and it returns a JSON Error object.
+        /// </summary>
+        /// <param name="query">The search query. "{type}/{text to search for}"</param>
+        /// <returns></returns>
         public override List<SearchResult> SearchAPI(string query)
         {
             string[] reqParts = query.Split('/');

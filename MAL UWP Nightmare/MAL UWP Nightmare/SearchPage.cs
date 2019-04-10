@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
@@ -25,26 +22,6 @@ namespace MAL_UWP_Nightmare
             observer = o;
         }
 
-        public bool IsLocal()
-        {
-            return false;
-        }
-
-        public bool SavePage()
-        {
-            return false;
-        }
-
-        public void SetContent(JObject json)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetErrorContent(string errorMessage)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Kindly ask main to load the requested page.
         /// Just not in a kind manner.
@@ -55,7 +32,7 @@ namespace MAL_UWP_Nightmare
             return observer.NotifyMe(res);
         }
 
-        public void selectResult(SearchResult res)
+        public void SelectResult(SearchResult res)
         {
             NotifyObserver(res);
         }
@@ -67,6 +44,51 @@ namespace MAL_UWP_Nightmare
         public void SetResults(List<SearchResult> results)
         {
             _results = results;
+        }
+
+        /// <summary>
+        /// Result is given as a more useful object for this class.
+        /// </summary>
+        /// <param name="json"></param>
+        public void SetContent(JObject json)
+        {
+            return;
+        }
+
+        /// <summary>
+        /// Savepages cannot be saved.
+        /// </summary>
+        /// <returns>False, always.</returns>
+        public bool SavePage()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// <see cref="SavePage()"/>
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> SavePageAsync()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// <see cref="SavePage()"/>
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLocal()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Doesn't do anything; 
+        /// </summary>
+        /// <param name="errorMessage"></param>
+        public void SetErrorContent(string errorMessage)
+        {
+            return;
         }
     }
 }
