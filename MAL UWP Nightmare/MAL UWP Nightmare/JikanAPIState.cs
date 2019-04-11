@@ -11,7 +11,7 @@ namespace MAL_UWP_Nightmare
         public JikanAPIState() : base("https://api.jikan.moe/v3/")
         {
             availlable = false;
-            lastChecked = DateTime.UtcNow;
+            lastChecked = DateTime.UtcNow.Subtract(new TimeSpan(0, 6, 0));
         }
 
         public override string GetRequestFromSearch(string query)
@@ -80,10 +80,15 @@ namespace MAL_UWP_Nightmare
             //We did not achieve success. Abort mission!
             if (!response.IsSuccessStatusCode)
             {
+                System.Diagnostics.Debug.WriteLine("rip");
                 return null;
             }
             JObject result = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            if (result.ContainsKey("title"))
+            {
             AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+
+            }
             return ParseResponse(result, api, request.Split('/')[0]);
         }
 

@@ -20,8 +20,9 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class HomePage : Page
     {
-        public Dictionary<string,string> SeasonalAnime { get; set; }
+        public List<SearchResult> SeasonalAnime { get; set; }
         Main main = new Main();
+        private JikanAPIState jikan;
 
         public HomePage()
         {
@@ -32,21 +33,25 @@ namespace MAL_UWP_Nightmare
         {
             SeasonalAnime = LoadSeasonalViewData();
             DataContext = this;
+            jikan = new JikanAPIState();
         }
 
-        private Dictionary<string,string> LoadSeasonalViewData() //To do: Add parameter List<IPage> and fill Dictionary according to the List.
+        private List<SearchResult> LoadSeasonalViewData() //To do: Add parameter List<IPage> and fill Dictionary according to the List.
         {
-            Dictionary<string,string> seasonalList = new Dictionary<string, string>();
+            List<SearchResult> seasonalList = new List<SearchResult>();
             foreach(SearchResult s in main.getSeasonals())
             {
-                seasonalList.Add(s.title, s.image);
+                seasonalList.Add(s);
             }
+
             return seasonalList;
         }
 
         private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            
+            SearchResult item = e.ClickedItem as SearchResult;
+            IPage page = main.ProducePage("anime", item.id);
+            Window.Current.Content = new AnimeInfoPage(page as AnimePage);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) //Anime
@@ -54,9 +59,8 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if(text.Length > 2)
             {
-                JikanAPIState state = new JikanAPIState();
                 SearchPage s = new SearchPage(main);
-                List<SearchResult> results = state.SearchAPI("anime/" + text);
+                List<SearchResult> results = jikan.SearchAPI("anime/" + text);
                 Window.Current.Content = new SearchResultsPage(results);
             }
             else

@@ -41,7 +41,6 @@ namespace MAL_UWP_Nightmare
         {
             Task<JObject> res = source.RequestAPIAsync(type + id.ToString());
             //Start the fetch while preparing the actual page
-            res.Start();
             IPage page;
             if (type.ToLower().Equals("anime"))
             {

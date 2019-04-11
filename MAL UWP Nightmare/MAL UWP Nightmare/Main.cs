@@ -54,13 +54,6 @@ namespace MAL_UWP_Nightmare
                 case "manhwa":
                 case "manhua":
                     Task<IPage> mangaPage = CurrentStrategy.ProduceContentPage("manga/", id);
-                    if(CurrentStrategy.Equals(MultiThreaded))
-                    {
-                        mangaPage.Start();
-                    } else
-                    {
-                        mangaPage.RunSynchronously();
-                    }
                     return mangaPage.Result;
                 case "anime":
                 case "tv":
@@ -69,14 +62,6 @@ namespace MAL_UWP_Nightmare
                 case "special":
                 case "ona":
                     Task<IPage> animePage = CurrentStrategy.ProduceContentPage("anime/", id);
-                    if (CurrentStrategy.Equals(MultiThreaded))
-                    {
-                        animePage.Start();
-                    }
-                    else
-                    {
-                        animePage.RunSynchronously();
-                    }
                     return animePage.Result;
                 case "person":
                     //This is sync anyways
@@ -86,14 +71,6 @@ namespace MAL_UWP_Nightmare
                     return CurrentStrategy.ProduceCharacterPage("character/", id);
                 default:
                     Task<IPage> searchPage = CurrentStrategy.ProduceSearchPage(req + "/" + id.ToString(), this);
-                    if (CurrentStrategy.Equals(MultiThreaded))
-                    {
-                        searchPage.Start();
-                    }
-                    else
-                    {
-                        searchPage.RunSynchronously();
-                    }
                     return searchPage.Result;
             }
         }

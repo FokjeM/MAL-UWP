@@ -14,9 +14,8 @@ namespace MAL_UWP_Nightmare
             availlable = false;
             lastChecked = DateTime.UtcNow;
             Task<StorageFolder> f = localPages.CreateFolderAsync("test", CreationCollisionOption.OpenIfExists).AsTask();
-            f.RunSynchronously();
             JObject test = new JObject();
-            f.Result.CreateFileAsync("file.json", CreationCollisionOption.OpenIfExists).AsTask().RunSynchronously();
+            f.Result.CreateFileAsync("file.json", CreationCollisionOption.OpenIfExists).AsTask();
         }
 
         /// <summary>
