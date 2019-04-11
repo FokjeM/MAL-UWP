@@ -11,7 +11,7 @@ namespace MAL_UWP_Nightmare
         public JikanAPIState() : base("https://api.jikan.moe/v3/")
         {
             availlable = false;
-            lastChecked = DateTime.UtcNow.Subtract(new TimeSpan(0, 6, 0));
+            lastChecked = DateTime.UtcNow.Subtract(new TimeSpan(1, 0, 0));
         }
 
         public override string GetRequestFromSearch(string query)
@@ -97,12 +97,13 @@ namespace MAL_UWP_Nightmare
             HttpClient req = new HttpClient();
             req.DefaultRequestHeaders.Add("User-Agent", userAgent);
             Uri api = new Uri(GetURL() + request);
-            HttpResponseMessage response = await req.GetAsync(api);
+            HttpResponseMessage response = req.GetAsync(api).Result;
             //We did not achieve success. Abort mission!
-            if (!response.IsSuccessStatusCode)
+            /*if (!response.IsSuccessStatusCode)
             {
+                System.Diagnostics.Debug.WriteLine("Ripperino at Jikan");
                 return null;
-            }
+            }*/
             JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
             AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
             return ParseResponse(result, api, request.Split('/')[0]);
@@ -257,6 +258,9 @@ namespace MAL_UWP_Nightmare
         protected override long CheckKnownIDs(string query)
         {
             string[] q = query.Split('/');
+            if(long.TryParse(q[1], out long r)){
+                return r;
+            }
             try
             {
                 string tempRes = knownIDs.GetValue(string.Format("{0}/{1}", q[0], q[1]).ToLower()).ToObject("".GetType()).ToString().Split((new string[] { " : " }), StringSplitOptions.RemoveEmptyEntries)[0];

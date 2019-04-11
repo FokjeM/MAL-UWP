@@ -33,7 +33,6 @@ namespace MAL_UWP_Nightmare
         {
             SeasonalAnime = LoadSeasonalViewData();
             DataContext = this;
-            jikan = new JikanAPIState();
         }
 
         private List<SearchResult> LoadSeasonalViewData() //To do: Add parameter List<IPage> and fill Dictionary according to the List.
@@ -78,9 +77,8 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if (text.Length > 2)
             {
-                JikanAPIState state = new JikanAPIState();
                 SearchPage s = new SearchPage(main);
-                List<SearchResult> results = state.SearchAPI("manga/" + text);
+                List<SearchResult> results = (main.ProduceSearchPage("manga/" + text) as SearchPage).Results;
                 Window.Current.Content = new SearchResultsPage(results);
             }
             else

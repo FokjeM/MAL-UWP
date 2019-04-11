@@ -23,19 +23,21 @@ namespace MAL_UWP_Nightmare
 
         public JObject RequestAPI(string request)
         {
-            if(!offline.TestAPI())
-            {
-                string offlineSearchResult = offline.GetRequestFromSearch(request);
-                if (!string.IsNullOrEmpty(offlineSearchResult))
-                {
-                    return offline.RequestAPI(offlineSearchResult);
-                }
-            } else if (jikan.TestAPI())
+            if (jikan.TestAPI())
             {
                 string jikanSearchResult = jikan.GetRequestFromSearch(request);
                 if (!string.IsNullOrEmpty(jikanSearchResult))
                 {
                     return jikan.RequestAPI(jikanSearchResult);
+                }
+            }
+            //offline check if Jikan is unavaillable
+            if(offline.TestAPI())
+            {
+                string offlineSearchResult = offline.GetRequestFromSearch(request);
+                if (!string.IsNullOrEmpty(offlineSearchResult))
+                {
+                    return offline.RequestAPI(offlineSearchResult);
                 }
             }
             return null;
@@ -48,16 +50,7 @@ namespace MAL_UWP_Nightmare
         /// <returns></returns>
         public async Task<JObject> RequestAPIAsync(string request)
         {
-            if (!offline.TestAPI())
-            {
-                string offlineSearchResult = await offline.GetRequestFromSearchAsync(request);
-                if (!string.IsNullOrEmpty(offlineSearchResult))
-                {
-                    return await offline.RequestAPIAsync(offlineSearchResult);
-                }
-            }
-            //Grabs Jikan when nothing is found offline
-            else if (jikan.TestAPI())
+            if (jikan.TestAPI())
             {
                 string jikanSearchResult = await jikan.GetRequestFromSearchAsync(request);
                 if (!string.IsNullOrEmpty(jikanSearchResult))
@@ -65,6 +58,16 @@ namespace MAL_UWP_Nightmare
                     return await jikan.RequestAPIAsync(jikanSearchResult);
                 }
             }
+            //offline check if Jikan is unavaillable
+            if (offline.TestAPI())
+            {
+                string offlineSearchResult = await offline.GetRequestFromSearchAsync(request);
+                if (!string.IsNullOrEmpty(offlineSearchResult))
+                {
+                    return await offline.RequestAPIAsync(offlineSearchResult);
+                }
+            }
+            
             return null;
         }
 
