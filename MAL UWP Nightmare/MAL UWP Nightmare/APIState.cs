@@ -169,7 +169,7 @@ namespace MAL_UWP_Nightmare
             knownIDs.Add(token, value);
             try
             {
-                await FileIO.WriteTextAsync(await file, knownIDs.ToString());
+                await FileIO.WriteTextAsync(file.AsTask().Result, knownIDs.ToString());
             } catch
             {
                 return false;

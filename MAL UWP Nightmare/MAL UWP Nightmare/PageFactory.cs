@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
@@ -23,10 +24,10 @@ namespace MAL_UWP_Nightmare
         public IPage Content(string type, long id)
         {
             ContentPage page;
-            if(type.ToLower().Equals("anime"))
+            if(type.ToLower().Equals("anime/"))
             {
                 page = new AnimePage();
-            } else if(type.ToLower().Equals("manga"))
+            } else if(type.ToLower().Equals("manga/"))
             {
                 page = new MangaPage();
             } else
@@ -54,7 +55,7 @@ namespace MAL_UWP_Nightmare
             {
                 return null;
             }
-            page.SetContent(await res);
+            page.SetContent(res.Result);
             return page;
         }
 
@@ -74,7 +75,8 @@ namespace MAL_UWP_Nightmare
         public async Task<IPage> SearchAsync(IObserver o, string query)
         {
             SearchPage s = new SearchPage(o);
-            s.SetResults(await source.SearchAPIAsync(query));
+            List<SearchResult> res = await source.SearchAPIAsync(query);
+            s.SetResults(res);
             return s;
         }
 

@@ -22,7 +22,6 @@ namespace MAL_UWP_Nightmare
     {
         public List<SearchResult> SeasonalAnime { get; set; }
         Main main = new Main();
-        private JikanAPIState jikan;
 
         public HomePage()
         {
@@ -58,9 +57,7 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if(text.Length > 2)
             {
-                SearchPage s = new SearchPage(main);
-                List<SearchResult> results = jikan.SearchAPI("anime/" + text);
-                Window.Current.Content = new SearchResultsPage(results);
+                Window.Current.Content = new SearchResultsPage((main.ProduceSearchPage("anime/" + text) as SearchPage).Results, main);
             }
             else
             {
@@ -77,9 +74,7 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if (text.Length > 2)
             {
-                SearchPage s = new SearchPage(main);
-                List<SearchResult> results = (main.ProduceSearchPage("manga/" + text) as SearchPage).Results;
-                Window.Current.Content = new SearchResultsPage(results);
+                Window.Current.Content = new SearchResultsPage((main.ProduceSearchPage("manga/" + text) as SearchPage).Results, main);
             }
             else
             {

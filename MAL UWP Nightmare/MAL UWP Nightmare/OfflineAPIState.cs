@@ -61,7 +61,7 @@ namespace MAL_UWP_Nightmare
                         return string.Concat(query.ToLower(), ".json");
                     }
                 }
-                if (await folder.TryGetItemAsync(path[1] + ".json") != null)
+                if (folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
                 {
                     return query;
                 }
@@ -98,7 +98,7 @@ namespace MAL_UWP_Nightmare
             try
             {
                 StorageFolder folder = await localPages.GetFolderAsync(path[0]);
-                return JObject.Parse(await FileIO.ReadTextAsync(await folder.GetFileAsync(path[1] + ".json")));
+                return JObject.Parse(FileIO.ReadTextAsync(folder.GetFileAsync(path[1] + ".json").AsTask().Result).AsTask().Result);
             }
             catch
             {
@@ -145,7 +145,7 @@ namespace MAL_UWP_Nightmare
                 {
                     if (s.Name.ToLower().Contains(path[1]))
                     {
-                        JObject file = JObject.Parse(await FileIO.ReadTextAsync(s));
+                        JObject file = JObject.Parse(FileIO.ReadTextAsync(s).AsTask().Result);
                         long id = long.Parse((string)file.GetValue("mal_id").ToObject("".GetType()));
                         string title = (string)file.GetValue("title").ToObject("".GetType());
                         string image = (string)file.GetValue("image").ToObject("".GetType());

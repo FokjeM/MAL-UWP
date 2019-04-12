@@ -99,13 +99,17 @@ namespace MAL_UWP_Nightmare
             Uri api = new Uri(GetURL() + request);
             HttpResponseMessage response = req.GetAsync(api).Result;
             //We did not achieve success. Abort mission!
-            /*if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine("Ripperino at Jikan");
                 return null;
-            }*/
+            }
             JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
-            AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+            if (result.ContainsKey("title"))
+            {
+                AddToKnownIDs(request.Split('/')[0], result.GetValue("title").ToString(), long.Parse(request.Split('/')[1]), 0L);
+
+            }
             return ParseResponse(result, api, request.Split('/')[0]);
         }
 
@@ -207,6 +211,10 @@ namespace MAL_UWP_Nightmare
 
         public async override Task<List<SearchResult>> SearchAPIAsync(string query)
         {
+            if (!TestAPI())
+            {
+                return null;
+            }
             string[] reqParts = query.Split('/');
             string searchReq = "search/" + reqParts[0] + "?q=";
             for (int i = 1; i < reqParts.Length; i++)
@@ -218,9 +226,9 @@ namespace MAL_UWP_Nightmare
                 searchReq += Uri.EscapeDataString(reqParts[i]);
             }
             searchReq += "&limit=25";
-            Task<JObject> result = RequestAPIAsync(searchReq);
+            JObject result = await RequestAPIAsync(searchReq);
             List<SearchResult> resultList = new List<SearchResult>(25);
-            foreach (JToken jt in (await result).GetValue("results"))
+            foreach (JToken jt in result.GetValue("results"))
             {
                 string title = jt.Value<string>("title");
                 string image = jt.Value<string>("image_url");

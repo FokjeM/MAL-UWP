@@ -77,7 +77,8 @@ namespace MAL_UWP_Nightmare
 
         public IPage ProduceSearchPage(string query)
         {
-            search = (SearchPage)CurrentStrategy.ProduceSearchPage(query, this).Result;
+            Task<IPage> searcher = CurrentStrategy.ProduceSearchPage(query, this);
+            search = (SearchPage)searcher.Result;
             return search;
         }
 

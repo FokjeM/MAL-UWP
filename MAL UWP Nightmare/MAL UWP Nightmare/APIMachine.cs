@@ -112,27 +112,30 @@ namespace MAL_UWP_Nightmare
         {
             bool jikanAvaillable = jikan.TestAPI();
             //Prevent errors and problems for when Jikan turns out to be useless. Quick and gorgeous
-            Task<List<SearchResult>> jikanSearch = new Task<List<SearchResult>>(() => { return new List<SearchResult>(); });
-            if (jikanAvaillable)
-            {
-                jikanSearch = jikan.SearchAPIAsync(query);
-            }
+            List<SearchResult> jikanSearch = await jikan.SearchAPIAsync(query);
             List<SearchResult> search = new List<SearchResult>(50);
             if (offline.TestAPI())
             {
-                foreach (SearchResult s in await offline.SearchAPIAsync(query))
+                List<SearchResult> offlineRes = await offline.SearchAPIAsync(query);
+                if (offlineRes != null)
                 {
-                    search.Add(s);
+                    foreach (SearchResult s in offlineRes)
+                    {
+                        search.Add(s);
+                    }
                 }
             }
             if (jikanAvaillable)
             {
-                foreach (SearchResult s in await jikanSearch)
+                if (jikanSearch != null)
                 {
-                    //Try to prevent duplicate results, this breaks if instances of JObject are never or always equal.
-                    if (!search.Contains(s))
+                    foreach (SearchResult s in jikanSearch)
                     {
-                        search.Add(s);
+                        //Try to prevent duplicate results, this breaks if instances of JObject are never or always equal.
+                        if (!search.Contains(s))
+                        {
+                            search.Add(s);
+                        }
                     }
                 }
             }

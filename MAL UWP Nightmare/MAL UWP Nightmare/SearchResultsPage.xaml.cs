@@ -18,8 +18,10 @@ namespace MAL_UWP_Nightmare
     public sealed partial class SearchResultsPage : Page
     {
         public List<SearchResult> results { get; set; }
-        public SearchResultsPage(List<SearchResult> sr)
+        private Main main;
+        public SearchResultsPage(List<SearchResult> sr, Main m)
         {
+            this.main = m;
             this.InitializeComponent();
             this.results = sr;
         }
@@ -31,7 +33,15 @@ namespace MAL_UWP_Nightmare
 
         private void SearchResultsView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            
+            SearchResult item = e.ClickedItem as SearchResult;
+            IPage page = main.ProducePage(item.type, item.id);
+            if(page.GetType().Name.Equals("MangaPage"))
+            {
+                Window.Current.Content = new MangaInfoPage(page as MangaPage);
+            } else
+            {
+                Window.Current.Content = new AnimeInfoPage(page as AnimePage);
+            }
         }
     }
 }
