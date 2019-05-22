@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -19,6 +20,7 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class AnimeInfoPage : Page
     {
+        Main m;
         private AnimePage anime;
         public string synopsis { get; set; }
         public string background { get; set; }
@@ -42,9 +44,10 @@ namespace MAL_UWP_Nightmare
         public string image { get; set; }
         public string title { get; set; }
 
-        public AnimeInfoPage(AnimePage anime)
+        public AnimeInfoPage(AnimePage anime, Main main)
         {
             this.anime = anime;
+            m = main;
             this.InitializeComponent();
         }
 
@@ -106,6 +109,21 @@ namespace MAL_UWP_Nightmare
             broadcast = anime.Broadcast != null ? anime.Broadcast : "Unavailable";
             premiered = anime.PremiereSeason != null ? anime.PremiereSeason : "Unavailable";
             image = anime.MainImage;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            IPage prev = m.Previous();
+            if(prev is SearchPage)
+            {
+                SearchPage s = prev as SearchPage;
+                Window.Current.Content = new SearchResultsPage(s.Results, m);
+            }
+            else
+            {
+                Window.Current.Content = new HomePage();
+            }
+            
         }
     }
 }

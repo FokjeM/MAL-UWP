@@ -13,7 +13,7 @@ namespace MAL_UWP_Nightmare
         private IPage currentPage;
         private IPage lastPage;
         private PageFactory pages;
-        private SearchPage search;
+        public SearchPage search;
 
         public Main()
         {
@@ -24,22 +24,16 @@ namespace MAL_UWP_Nightmare
             CurrentStrategy = MultiThreaded;
             splash = new SplashScreen();
             currentPage = home;
-
+            lastPage = home;
             home = (HomePageBackend)pages.Home(splash);
             search = (SearchPage)pages.Search(this);
-        }
-
-        public HomePageBackend ReturnHome()
-        {
-            lastPage = currentPage;
-            currentPage = home;
-            return home;
         }
 
         public IPage Previous()
         {
             IPage newLast = currentPage;
             currentPage = lastPage;
+            lastPage = newLast;
             return currentPage;
         }
 
@@ -61,6 +55,8 @@ namespace MAL_UWP_Nightmare
 
         public IPage ProducePage(string req, long id)
         {
+            lastPage = search;
+            Previous();
             switch (req.ToLower())
             {
                 case "manga":
@@ -93,6 +89,7 @@ namespace MAL_UWP_Nightmare
 
         public IPage ProduceSearchPage(string query)
         {
+            lastPage = home;
             Task<IPage> searcher = CurrentStrategy.ProduceSearchPage(query, this);
             search = (SearchPage)searcher.Result;
             return search;

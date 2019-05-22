@@ -40,11 +40,16 @@ namespace MAL_UWP_Nightmare
             IPage page = await t;
             if(page.GetType().Name.Equals("MangaPage"))
             {
-                Window.Current.Content = new MangaInfoPage(page as MangaPage);
+                Window.Current.Content = new MangaInfoPage(page as MangaPage, main);
             } else
             {
-                Window.Current.Content = new AnimeInfoPage(page as AnimePage);
+                Window.Current.Content = new AnimeInfoPage(page as AnimePage, main);
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Window.Current.Content = new HomePage(main);
         }
     }
 }

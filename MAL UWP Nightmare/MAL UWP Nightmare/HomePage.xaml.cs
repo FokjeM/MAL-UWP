@@ -22,10 +22,17 @@ namespace MAL_UWP_Nightmare
     public sealed partial class HomePage : Page
     {
         public List<SearchResult> SeasonalAnime { get; set; }
-        Main main = new Main();
+        Main main;
 
         public HomePage()
         {
+            main = new Main();
+            this.InitializeComponent();
+        }
+
+        public HomePage(Main m)
+        {
+            main = m;
             this.InitializeComponent();
         }
 
@@ -46,14 +53,13 @@ namespace MAL_UWP_Nightmare
             return seasonalList;
         }
 
-        private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
             SearchResult item = e.ClickedItem as SearchResult;
             Task<IPage> t = new Task<IPage>(() => { return main.ProducePage(item.type, item.id); });
             t.Start();
-            t.Wait();
-            IPage page = t.Result;
-            Window.Current.Content = new AnimeInfoPage(page as AnimePage);
+            IPage page = await t;
+            Window.Current.Content = new AnimeInfoPage(page as AnimePage, main);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) //Anime
