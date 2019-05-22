@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.Web.Http;
 
 namespace MAL_UWP_Nightmare
 {
@@ -25,27 +23,52 @@ namespace MAL_UWP_Nightmare
 
         public JObject RequestAPI(string request)
         {
-            string offlineSearchResult = offline.GetRequestFromSearch(request);
-            if (string.IsNullOrEmpty(offlineSearchResult))
+            if (jikan.TestAPI())
             {
-                return jikan.RequestAPI(jikan.GetRequestFromSearch(request));
-            } else
-            {
-                return offline.RequestAPI(offlineSearchResult);
+                string jikanSearchResult = jikan.GetRequestFromSearch(request);
+                if (!string.IsNullOrEmpty(jikanSearchResult))
+                {
+                    return jikan.RequestAPI(jikanSearchResult);
+                }
             }
+            //offline check if Jikan is unavaillable
+            if(offline.TestAPI())
+            {
+                string offlineSearchResult = offline.GetRequestFromSearch(request);
+                if (!string.IsNullOrEmpty(offlineSearchResult))
+                {
+                    return offline.RequestAPI(offlineSearchResult);
+                }
+            }
+            return null;
         }
 
+        /// <summary>
+        /// Prefers offline resources due to request constraints
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<JObject> RequestAPIAsync(string request)
         {
-            return await jikan.RequestAPIAsync(await jikan.GetRequestFromSearchAsync(request));
-        }
-
-        public bool[] CheckAPIs()
-        {
-            bool[] res = new bool[2];
-            res[0] = jikan.TestAPI();
-            res[1] = offline.TestAPI();
-            return res;
+            if (jikan.TestAPI())
+            {
+                string jikanSearchResult = await jikan.GetRequestFromSearchAsync(request);
+                if (!string.IsNullOrEmpty(jikanSearchResult))
+                {
+                    return await jikan.RequestAPIAsync(jikanSearchResult);
+                }
+            }
+            //offline check if Jikan is unavaillable
+            if (offline.TestAPI())
+            {
+                string offlineSearchResult = await offline.GetRequestFromSearchAsync(request);
+                if (!string.IsNullOrEmpty(offlineSearchResult))
+                {
+                    return await offline.RequestAPIAsync(offlineSearchResult);
+                }
+            }
+            
+            return null;
         }
 
         public JObject GetSeasonals()
@@ -60,8 +83,62 @@ namespace MAL_UWP_Nightmare
         public List<SearchResult> SearchAPI(string query)
         {
             List<SearchResult> search = new List<SearchResult>(50);
-            foreach (SearchResult s in offline.SearchAPI(query)) { search.Add(s); }
-            foreach (SearchResult s in jikan.SearchAPI(query)) { if(!search.Contains(s))search.Add(s); }
+            if (offline.TestAPI())
+            {
+                foreach (SearchResult s in offline.SearchAPI(query))
+                {
+                    search.Add(s);
+                }
+            }
+            if (jikan.TestAPI())
+            {
+                foreach (SearchResult s in jikan.SearchAPI(query)) {
+                    //Try to prevent duplicate results, this breaks if instances of JObject are never or always equal.
+                    if (!search.Contains(s))
+                    {
+                        search.Add(s);
+                    }
+                }
+            }
+            return search;
+        }
+
+        /// <summary>
+        /// Searches both sources, grabs all local results while waiting for Jikan to respond and be parsed
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public async Task<List<SearchResult>> SearchAPIAsync(string query)
+        {
+            bool jikanAvaillable = jikan.TestAPI();
+            //Prevent errors and problems for when Jikan turns out to be useless. Quick and gorgeous
+            List<SearchResult> jikanSearch = await jikan.SearchAPIAsync(query);
+            List<SearchResult> search = new List<SearchResult>(50);
+            if (offline.TestAPI())
+            {
+                List<SearchResult> offlineRes = await offline.SearchAPIAsync(query);
+                if (offlineRes != null)
+                {
+                    foreach (SearchResult s in offlineRes)
+                    {
+                        search.Add(s);
+                    }
+                }
+            }
+            if (jikanAvaillable)
+            {
+                if (jikanSearch != null)
+                {
+                    foreach (SearchResult s in jikanSearch)
+                    {
+                        //Try to prevent duplicate results, this breaks if instances of JObject are never or always equal.
+                        if (!search.Contains(s))
+                        {
+                            search.Add(s);
+                        }
+                    }
+                }
+            }
             return search;
         }
     }

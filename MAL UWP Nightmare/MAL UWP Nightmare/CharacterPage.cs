@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Windows.Storage;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace MAL_UWP_Nightmare
 {
@@ -15,31 +15,135 @@ namespace MAL_UWP_Nightmare
     /// </summary>
     public class CharacterPage : IPage
     {
-        private long id;
-        private string url;
-        private string name;
-        private string kanjiName;
-        private List<string> nicknames;
-        private string about;
-        private string mainImage;
-        private List<AnimePage> anime;
-        private List<MangaPage> manga;
-        private Dictionary<PersonPage, string> voiceActors;
+        private long _id;
+        public long Id
+        {
+            get
+            {
+                return _id;
+            }
+        }
+        private string _url;
+        public string Url
+        {
+            get
+            {
+                return _url;
+            }
+        }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+        }
+        private string _kanjiName;
+        public string KanjiName
+        {
+            get
+            {
+                return _kanjiName;
+            }
+        }
+        private List<string> _nicknames;
+        public List<string> Nicknames
+        {
+            get
+            {
+                return _nicknames;
+            }
+        }
+        private string _about;
+        public string About
+        { 
+            get
+            {
+                return _about;
+            }
+        }
+        private string _mainImage;
+        public string MainImage
+        {
+            get
+            {
+                return _mainImage;
+            }
+        }
+        private List<AnimePage> _anime;
+        public List<AnimePage> Anime
+        {
+            get
+            {
+                return _anime;
+            }
+        }
+        private List<MangaPage> _manga;
+        public List<MangaPage> Manga
+        {
+            get
+            {
+                return _manga;
+            }
+        }
         private JObject origin;
 
         public bool IsLocal()
         {
-            return !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+            return !_url.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
         public bool SavePage()
         {
-            StorageFolder folder = ApplicationData.Current.LocalFolder.CreateFolderAsync("character", CreationCollisionOption.OpenIfExists).AsTask().Result;
-            StorageFile file = folder.CreateFileAsync(name.ToString() + ".json", CreationCollisionOption.OpenIfExists).AsTask().Result;
+            StorageFolder folder;
+            StorageFile file;
+            Task<StorageFolder> folderTask = ApplicationData.Current.LocalFolder.CreateFolderAsync("character", CreationCollisionOption.OpenIfExists).AsTask();
+            folderTask.RunSynchronously();
+            folder = folderTask.Result;
             try
             {
-                FileIO.WriteTextAsync(file, origin.ToString()).AsTask().Wait();
-            } catch
+                Task<StorageFile> fileTask = folder.CreateFileAsync(_name.ToString() + ".json", CreationCollisionOption.FailIfExists).AsTask();
+                fileTask.RunSynchronously();
+                file = fileTask.Result;
+            }
+            catch
+            {
+                Task<StorageFile> fileTask = folder.GetFileAsync(_name.ToString() + ".json").AsTask();
+                fileTask.RunSynchronously();
+                file = fileTask.Result;
+            }
+            try
+            {
+                FileIO.WriteTextAsync(file, origin.ToString()).AsTask().RunSynchronously();
+                _url = file.Path;
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> SavePageAsync()
+        {
+            StorageFolder folder;
+            StorageFile file;
+            folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("characters", CreationCollisionOption.OpenIfExists);
+            try
+            {
+                file = await folder.CreateFileAsync(_name.ToString() + ".json", CreationCollisionOption.FailIfExists);
+            }
+            catch
+            {
+                file = await folder.GetFileAsync(_name.ToString() + ".json");
+            }
+            try
+            {
+                await FileIO.WriteTextAsync(file, origin.ToString());
+                _url = file.Path;
+            }
+            catch
             {
                 return false;
             }
@@ -53,22 +157,21 @@ namespace MAL_UWP_Nightmare
                 SetErrorContent(json.First.Value<string>());
                 return;
             }
-            id = long.Parse((string)json.GetValue("mal_id").ToObject("".GetType()));
-            url = (string)json.GetValue("url").ToObject("".GetType());
-            name = (string)json.GetValue("name").ToObject("".GetType());
-            kanjiName = (string)json.GetValue("name_kanji").ToObject("".GetType());
-            nicknames = new List<string>((string[])json.GetValue("nicknames").ToObject(new string[] {  }.GetType()));
-            about = (string)json.GetValue("about").ToObject("".GetType());
-            mainImage = (string)json.GetValue("image").ToObject("".GetType());
-            anime = new List<AnimePage>((AnimePage[])json.GetValue("anime").ToObject(new AnimePage[] { }.GetType()));
-            manga = new List<MangaPage>((MangaPage[])json.GetValue("manga").ToObject(new MangaPage[] { }.GetType()));
-            voiceActors = (Dictionary<PersonPage, string>)json.GetValue("voice_actors").ToObject(new Dictionary<PersonPage, string>().GetType());
+            _id = long.Parse((string)json.GetValue("mal_id").ToObject("".GetType()));
+            _url = (string)json.GetValue("url").ToObject("".GetType());
+            _name = (string)json.GetValue("name").ToObject("".GetType());
+            _kanjiName = (string)json.GetValue("name_kanji").ToObject("".GetType());
+            _nicknames = new List<string>((string[])json.GetValue("nicknames").ToObject(new string[] {  }.GetType()));
+            _about = (string)json.GetValue("about").ToObject("".GetType());
+            _mainImage = (string)json.GetValue("image").ToObject("".GetType());
+            _anime = new List<AnimePage>((AnimePage[])json.GetValue("anime").ToObject(new AnimePage[] { }.GetType()));
+            _manga = new List<MangaPage>((MangaPage[])json.GetValue("manga").ToObject(new MangaPage[] { }.GetType()));
             origin = json;
         }
 
         public void SetErrorContent(string errorMessage)
         {
-            name = errorMessage;
+            _about = errorMessage;
         }
     }
 }

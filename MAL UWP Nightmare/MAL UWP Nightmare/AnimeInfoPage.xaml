@@ -16,6 +16,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Width="auto" Margin="0,30,0,0">
+                <Grid Width="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Back" Margin="0,0,0,15" Click="Button_Click"/>
+                    <Button Grid.Column="1" Content="Home" Margin="0,0,0,15" Click="Button_Click_1"/>
+                </Grid>
                 <TextBlock TextWrapping="WrapWholeWords" Width="auto" Margin="0,0,0,15" Height="auto" FontSize="22" FontWeight="Bold" Text="{Binding title}"/>
                 <Grid Width="auto" Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>

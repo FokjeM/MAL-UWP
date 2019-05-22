@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -17,9 +18,11 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class SearchResultsPage : Page
     {
-        public List<SearchResult> results { get; set; } //To do: Replace Value type string with BitmapImage.
-        public SearchResultsPage(List<SearchResult> sr)
+        public List<SearchResult> results { get; set; }
+        private Main main;
+        public SearchResultsPage(List<SearchResult> sr, Main m)
         {
+            this.main = m;
             this.InitializeComponent();
             this.results = sr;
         }
@@ -29,20 +32,24 @@ namespace MAL_UWP_Nightmare
             DataContext = this;
         }
 
-        private Dictionary<string, string> LoadSearchedViewData(List<SearchResult> sr) //To do: Add parameter List<IPage> and fill Dictionary according to the List.
+        private async void SearchResultsView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Dictionary<string, string> searchedList = new Dictionary<string, string>();
-            searchedList.Add("Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki Desu ka?", "https://cdn.myanimelist.net/images/anime/1857/94908.jpg?s=ff1349992ecce2dc5b5b1ab3d4bf6846"); //To do: Remove test data.
-            foreach(SearchResult s in sr)
+            SearchResult item = e.ClickedItem as SearchResult;
+            Task<IPage> t = new Task<IPage>(() => { return main.ProducePage(item.type, item.id); });
+            t.Start();
+            IPage page = await t;
+            if(page.GetType().Name.Equals("MangaPage"))
             {
-                searchedList.Add(s.title, s.image);
+                Window.Current.Content = new MangaInfoPage(page as MangaPage, main);
+            } else
+            {
+                Window.Current.Content = new AnimeInfoPage(page as AnimePage, main);
             }
-            return searchedList;
         }
 
-        private void SearchResultsView_ItemClick(object sender, ItemClickEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+            Window.Current.Content = new HomePage(main);
         }
     }
 }

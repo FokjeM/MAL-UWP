@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace MAL_UWP_Nightmare
 {
@@ -10,6 +11,11 @@ namespace MAL_UWP_Nightmare
         }
 
         public bool SavePage()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> SavePageAsync()
         {
             throw new System.NotImplementedException();
         }

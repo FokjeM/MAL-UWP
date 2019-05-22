@@ -32,7 +32,7 @@
 
                 <TextBlock Margin="0,0,0,5" FontSize="18" FontWeight="Bold">Seasonal Anime</TextBlock>
 
-                <ListView Margin="0,0,0,5" x:Name="seasonalView" ItemsSource="{Binding SeasonalAnime}" ItemClick="SeasonalView_ItemClick">
+                <ListView Margin="0,0,0,5" x:Name="seasonalView" ItemsSource="{Binding SeasonalAnime}" ItemClick="SeasonalView_ItemClick" IsItemClickEnabled="True">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -41,8 +41,8 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Image Margin="0,0,10,0" Grid.Column="0" Width="112.5" Height="163.5" Source="{Binding Value}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Key}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Margin="0,0,10,0" Grid.Column="0" Width="112.5" Height="163.5" Source="{Binding image}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding title}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

@@ -1,18 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace MAL_UWP_Nightmare
 {
+    /// <summary>
+    /// Doesn't really use much of the IPage interface anymore as front-end
+    /// and backend now live in seperate subsystems. Using the Facade pattern,
+    /// we managed to decouple it and pass along an IPage instead of using a
+    /// lot of overly complicated code.
+    /// 
+    /// Keeping the IPage for simplicity though.
+    /// </summary>
     public class HomePageBackend : IPage
     {
-        public List<SearchResult> seasonals;
+        private List<SearchResult> _seasonals;
+        public List<SearchResult> Seasonals
+        {
+            get
+            {
+                return _seasonals;
+            }
+        }
         private IObserver observer;
         public string ErrorText { get; private set; }
-
 
         public HomePageBackend(IObserver o)
         {
@@ -42,7 +53,7 @@ namespace MAL_UWP_Nightmare
                 SearchResult res = new SearchResult(type, title, image, id);
                 resultList.Add(res);
             }
-            seasonals = resultList;
+            _seasonals = resultList;
         }
 
         public void SetErrorContent(string errorMessage)
@@ -53,6 +64,11 @@ namespace MAL_UWP_Nightmare
         private void NotifyObserver()
         {
             observer.NotifyMe(this);
+        }
+
+        public async Task<bool> SavePageAsync()
+        {
+            return false;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace MAL_UWP_Nightmare
     /// </summary>
     public sealed partial class MangaInfoPage : Page
     {
+        Main m;
         public MangaPage manga;
         public string synopsis { get; set; }
         public string background { get; set; }
@@ -39,10 +40,11 @@ namespace MAL_UWP_Nightmare
         public string image { get; set; }
         public string title { get; set; }
 
-        public MangaInfoPage(MangaPage manga)
+        public MangaInfoPage(MangaPage manga, Main main)
         {
             this.InitializeComponent();
             this.manga = manga;
+            m = main;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -131,6 +133,25 @@ namespace MAL_UWP_Nightmare
             List<string> authorsList = new List<string>();
             authorsList.Add("Jyura");
             authors = ConvertListToString(authorsList, false);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            IPage prev = m.Previous();
+            if (prev is SearchPage)
+            {
+                SearchPage s = prev as SearchPage;
+                Window.Current.Content = new SearchResultsPage(s.Results, m);
+            }
+            else
+            {
+                Window.Current.Content = new HomePage();
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Window.Current.Content = new HomePage(m);
         }
     }
 }

@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using System.Collections.Generic;
+using Windows.Foundation;
 
 namespace MAL_UWP_Nightmare
 {
@@ -99,7 +100,7 @@ namespace MAL_UWP_Nightmare
         /// <returns>The base URL for the implemented API</returns>
         public string GetURL()
         {
-            return this.API_URL;
+            return API_URL;
         }
 
         protected abstract long CheckKnownIDs(string query);
@@ -116,6 +117,7 @@ namespace MAL_UWP_Nightmare
         /// <returns>True if the info was added and updated, false if the info is already known or the file wasn't written.</returns>
         protected async Task<bool> AddToKnownIDsAsync(string type, string name, long idMAL, long idKitsu)
         {
+            IAsyncOperation<StorageFile> file = localPages.GetFileAsync("known_pages.json");
             string token = string.Format("{0}/{1}", type, name).ToLower();
             JToken value;
             if (knownIDs.ContainsKey(token))
@@ -167,7 +169,7 @@ namespace MAL_UWP_Nightmare
             knownIDs.Add(token, value);
             try
             {
-                await FileIO.WriteTextAsync(await localPages.GetFileAsync("known_pages.json"), knownIDs.ToString());
+                await FileIO.WriteTextAsync(file.AsTask().Result, knownIDs.ToString());
             } catch
             {
                 return false;
@@ -230,7 +232,10 @@ namespace MAL_UWP_Nightmare
             knownIDs.Add(token, value);
             try
             {
-                FileIO.WriteTextAsync(localPages.GetFileAsync("known_pages.json").AsTask().Result, knownIDs.ToString()).AsTask().Wait();
+                Task<StorageFile> loadFile = localPages.GetFileAsync("known_pages.json").AsTask();
+                loadFile.RunSynchronously();
+                StorageFile file = loadFile.Result;
+                FileIO.WriteTextAsync(file, knownIDs.ToString()).AsTask().RunSynchronously();
             }
             catch
             {
@@ -240,6 +245,8 @@ namespace MAL_UWP_Nightmare
         }
 
         public abstract List<SearchResult> SearchAPI(string query);
+
+        public abstract Task<List<SearchResult>> SearchAPIAsync(string query);
 
         public abstract JObject GetSeasonals();
     }

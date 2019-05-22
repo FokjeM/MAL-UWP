@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
 {
@@ -11,34 +12,34 @@ namespace MAL_UWP_Nightmare
             pages = p;
         }
 
-        public List<SearchResult> getSeasonals()
+        public List<SearchResult> GetSeasonals(HomePageBackend home)
         {
-            return ((HomePageBackend)pages.Home(new SplashScreen())).seasonals;
+            return home.Seasonals;
         }
 
-        public CharacterPage ProduceCharacterPage(string request, long id)
+        public IPage ProduceCharacterPage(string request, long id)
         {
-            return (CharacterPage)pages.Character();
+            return pages.Character();
         }
 
-        public ContentPage ProduceContentPage(string type, long id)
+        public Task<IPage> ProduceContentPage(string type, long id)
         {
-            return (ContentPage)pages.Content(type, id);
+            return new Task<IPage>(() => pages.Content(type, id));
         }
 
-        public HomePageBackend ProduceHomePage(IObserver observer)
+        public IPage ProduceHomePage(IObserver observer)
         {
-            return (HomePageBackend)pages.Home(observer);
+            return pages.Home(observer);
         }
 
-        public PersonPage ProducePersonPage(string request, long id)
+        public IPage ProducePersonPage(string request, long id)
         {
-            return (PersonPage)pages.Person();
+            return pages.Person();
         }
 
-        public SearchPage ProduceSearchPage(string query, IObserver observer)
+        public Task<IPage> ProduceSearchPage(string query, IObserver observer)
         {
-            return (SearchPage)pages.Search(observer, query);
+            return new Task<IPage>(() => pages.Search(observer, query));
         }
     }
 }

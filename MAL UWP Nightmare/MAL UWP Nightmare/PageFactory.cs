@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
@@ -27,10 +24,10 @@ namespace MAL_UWP_Nightmare
         public IPage Content(string type, long id)
         {
             ContentPage page;
-            if(type.ToLower().Equals("anime"))
+            if(type.ToLower().Equals("anime/"))
             {
                 page = new AnimePage();
-            } else if(type.ToLower().Equals("manga"))
+            } else if(type.ToLower().Equals("manga/"))
             {
                 page = new MangaPage();
             } else
@@ -44,12 +41,13 @@ namespace MAL_UWP_Nightmare
         public async Task<IPage> ContentAsync(string type, long id)
         {
             Task<JObject> res = source.RequestAPIAsync(type + id.ToString());
-            ContentPage page;
-            if (type.ToLower().Equals("anime"))
+            //Start the fetch while preparing the actual page
+            IPage page;
+            if (type.ToLower().Equals("anime/"))
             {
                 page = new AnimePage();
             }
-            else if (type.ToLower().Equals("manga"))
+            else if (type.ToLower().Equals("manga/"))
             {
                 page = new MangaPage();
             }
@@ -57,7 +55,7 @@ namespace MAL_UWP_Nightmare
             {
                 return null;
             }
-            page.SetContent(await res);
+            page.SetContent(res.Result);
             return page;
         }
 
@@ -71,6 +69,14 @@ namespace MAL_UWP_Nightmare
         {
             SearchPage s = new SearchPage(o);
             s.SetResults(source.SearchAPI(query));
+            return s;
+        }
+
+        public async Task<IPage> SearchAsync(IObserver o, string query)
+        {
+            SearchPage s = new SearchPage(o);
+            List<SearchResult> res = await source.SearchAPIAsync(query);
+            s.SetResults(res);
             return s;
         }
 

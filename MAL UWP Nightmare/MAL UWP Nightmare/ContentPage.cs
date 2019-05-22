@@ -22,10 +22,6 @@ namespace MAL_UWP_Nightmare
             }
         }
         /// <summary>
-        /// List to link all of the CharacterPages. Has to be set by the factory.
-        /// </summary>
-        private Dictionary<CharacterPage, string> characters;
-        /// <summary>
         /// A List to hold all of the alternative titles. Has to be set by the factory.
         /// </summary>
         protected List<string> _altTitles;
@@ -184,6 +180,7 @@ namespace MAL_UWP_Nightmare
         }
 
         public abstract bool SavePage();
+        public abstract Task<bool> SavePageAsync();
 
         public virtual void SetContent(JObject json)
         {

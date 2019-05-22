@@ -24,6 +24,13 @@ namespace MAL_UWP_Nightmare
         /// <returns>true if it succesfully writes to a file. False if everything breaks</returns>
         bool SavePage();
         /// <summary>
+        /// Save this page locally, in the same format that it gets loaded in.
+        /// That allows for REALLY easy parsing.
+        /// Set the url to the local filepath when calling this.
+        /// </summary>
+        /// <returns>true if it succesfully writes to a file. False if everything breaks</returns>
+        Task<bool> SavePageAsync();
+        /// <summary>
         /// Check if this page is saved locally.
         /// Might need a reload if <see cref="SavePage()"/> was implemented incorrectly.
         /// </summary>

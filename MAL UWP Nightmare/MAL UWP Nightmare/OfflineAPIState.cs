@@ -13,6 +13,11 @@ namespace MAL_UWP_Nightmare
         {
             availlable = false;
             lastChecked = DateTime.UtcNow;
+            Task<StorageFolder> f = localPages.CreateFolderAsync("test", CreationCollisionOption.OpenIfExists).AsTask();
+            JObject test = new JObject();
+            test.Add("test", new JValue("test"));
+            FileIO.WriteTextAsync(f.Result.CreateFileAsync("file.json", CreationCollisionOption.OpenIfExists).AsTask().Result, test.ToString()).AsTask().Wait();
+            
         }
 
         /// <summary>
@@ -33,9 +38,6 @@ namespace MAL_UWP_Nightmare
                     {
                         return string.Concat(query.ToLower(), ".json");
                     }
-                }
-                if(folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
-                {
                 }
                 return null;
             }
@@ -59,8 +61,9 @@ namespace MAL_UWP_Nightmare
                         return string.Concat(query.ToLower(), ".json");
                     }
                 }
-                if (await folder.TryGetItemAsync(path[1] + ".json") != null)
+                if (folder.TryGetItemAsync(path[1] + ".json").AsTask().Result != null)
                 {
+                    return query;
                 }
                 return null;
             }
@@ -95,7 +98,7 @@ namespace MAL_UWP_Nightmare
             try
             {
                 StorageFolder folder = await localPages.GetFolderAsync(path[0]);
-                return JObject.Parse(await FileIO.ReadTextAsync(await folder.GetFileAsync(path[1] + ".json")));
+                return JObject.Parse(FileIO.ReadTextAsync(folder.GetFileAsync(path[1] + ".json").AsTask().Result).AsTask().Result);
             }
             catch
             {
@@ -130,9 +133,37 @@ namespace MAL_UWP_Nightmare
             return resultList;
         }
 
+        public async override Task<List<SearchResult>> SearchAPIAsync(string query)
+        {
+            string[] path = query.ToLower().Split('/');
+            List<SearchResult> resultList = new List<SearchResult>(25);
+            try
+            {
+                StorageFolder folder = await localPages.GetFolderAsync(path[0]);
+                var fileList = await folder.GetFilesAsync();
+                foreach (StorageFile s in fileList)
+                {
+                    if (s.Name.ToLower().Contains(path[1]))
+                    {
+                        JObject file = JObject.Parse(FileIO.ReadTextAsync(s).AsTask().Result);
+                        long id = long.Parse((string)file.GetValue("mal_id").ToObject("".GetType()));
+                        string title = (string)file.GetValue("title").ToObject("".GetType());
+                        string image = (string)file.GetValue("image").ToObject("".GetType());
+                        SearchResult res = new SearchResult(path[0], title, image, id);
+                        resultList.Add(res);
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return resultList;
+        }
+
         public override bool TestAPI()
         {
-           JObject response = RequestAPI("anime/Bakemonogatari");
+           JObject response = RequestAPI("test/file");
             if (response != null)
             {
                 availlable = true;
@@ -149,7 +180,7 @@ namespace MAL_UWP_Nightmare
         /// Implemented out of necessity, but IDs are not stored for offline use.
         /// </summary>
         /// <param name="query">A string suitable to build a search query</param>
-        /// <returns>0. Always.</returns>
+        /// <returns>0. Always. IDs are irrelevant for locally saved pages</returns>
         protected override long CheckKnownIDs(string query)
         {
             return 0L;

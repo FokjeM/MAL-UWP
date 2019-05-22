@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MAL_UWP_Nightmare
 {
@@ -10,8 +11,9 @@ namespace MAL_UWP_Nightmare
         private SplashScreen splash;
         private HomePageBackend home;
         private IPage currentPage;
+        private IPage lastPage;
         private PageFactory pages;
-        private SearchPage search;
+        public SearchPage search;
 
         public Main()
         {
@@ -22,8 +24,17 @@ namespace MAL_UWP_Nightmare
             CurrentStrategy = MultiThreaded;
             splash = new SplashScreen();
             currentPage = home;
+            lastPage = search;
             home = (HomePageBackend)pages.Home(splash);
             search = (SearchPage)pages.Search(this);
+        }
+
+        public IPage Previous()
+        {
+            IPage newLast = currentPage;
+            currentPage = lastPage;
+            lastPage = newLast;
+            return currentPage;
         }
 
         public void SwitchThreadingStrategy()
@@ -39,10 +50,10 @@ namespace MAL_UWP_Nightmare
 
         public IPage NotifyMe(SearchResult res)
         {
-            return producePage(res.type, res.id);
+            return ProducePage(res.type, res.id);
         }
 
-        public IPage producePage(string req, long id)
+        public IPage ProducePage(string req, long id)
         {
             switch (req.ToLower())
             {
@@ -52,31 +63,39 @@ namespace MAL_UWP_Nightmare
                 case "doujin":
                 case "manhwa":
                 case "manhua":
-                    return CurrentStrategy.ProduceContentPage("manga/", id);
+                    Task<IPage> mangaPage = CurrentStrategy.ProduceContentPage("manga/", id);
+                    return mangaPage.Result;
                 case "anime":
                 case "tv":
                 case "ova":
                 case "movie":
                 case "special":
                 case "ona":
-                    return CurrentStrategy.ProduceContentPage("anime/", id);
+                    Task<IPage> animePage = CurrentStrategy.ProduceContentPage("anime/", id);
+                    return animePage.Result;
                 case "person":
+                    //This is sync anyways
                     return CurrentStrategy.ProducePersonPage("person/", id);
                 case "character":
+                    //This is sync anyways
                     return CurrentStrategy.ProduceCharacterPage("character/", id);
                 default:
-                    return CurrentStrategy.ProduceSearchPage(req + "/" + id.ToString(), this);
+                    Task<IPage> searchPage = CurrentStrategy.ProduceSearchPage(req + "/" + id.ToString(), this);
+                    return searchPage.Result;
             }
         }
 
         public IPage ProduceSearchPage(string query)
         {
-            return CurrentStrategy.ProduceSearchPage(query, this);
+            lastPage = home;
+            Task<IPage> searcher = CurrentStrategy.ProduceSearchPage(query, this);
+            search = (SearchPage)searcher.Result;
+            return search;
         }
 
         public List<SearchResult> getSeasonals()
         {
-            return CurrentStrategy.getSeasonals();
+            return CurrentStrategy.GetSeasonals(home);
         }
 
         public void NotifyMe(IPage p)

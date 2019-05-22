@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -20,11 +21,18 @@ namespace MAL_UWP_Nightmare
 {
     public sealed partial class HomePage : Page
     {
-        public Dictionary<string,string> SeasonalAnime { get; set; }
-        Main main = new Main();
+        public List<SearchResult> SeasonalAnime { get; set; }
+        Main main;
 
         public HomePage()
         {
+            main = new Main();
+            this.InitializeComponent();
+        }
+
+        public HomePage(Main m)
+        {
+            main = m;
             this.InitializeComponent();
         }
 
@@ -34,19 +42,24 @@ namespace MAL_UWP_Nightmare
             DataContext = this;
         }
 
-        private Dictionary<string,string> LoadSeasonalViewData() //To do: Add parameter List<IPage> and fill Dictionary according to the List.
+        private List<SearchResult> LoadSeasonalViewData() //To do: Add parameter List<IPage> and fill Dictionary according to the List.
         {
-            Dictionary<string,string> seasonalList = new Dictionary<string, string>();
+            List<SearchResult> seasonalList = new List<SearchResult>();
             foreach(SearchResult s in main.getSeasonals())
             {
-                seasonalList.Add(s.title, s.image);
+                seasonalList.Add(s);
             }
+
             return seasonalList;
         }
 
-        private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            
+            SearchResult item = e.ClickedItem as SearchResult;
+            Task<IPage> t = new Task<IPage>(() => { return main.ProducePage(item.type, item.id); });
+            t.Start();
+            IPage page = await t;
+            Window.Current.Content = new AnimeInfoPage(page as AnimePage, main);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) //Anime
@@ -54,10 +67,9 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if(text.Length > 2)
             {
-                JikanAPIState state = new JikanAPIState();
-                SearchPage s = new SearchPage(main);
-                List<SearchResult> results = state.SearchAPI("anime/" + text);
-                Window.Current.Content = new SearchResultsPage(results);
+                Task<SearchPage> t = new Task<SearchPage>(() => { return (SearchPage)main.ProduceSearchPage("anime/" + text); });
+                t.Start();
+                Window.Current.Content = new SearchResultsPage((await t).Results, main);
             }
             else
             {
@@ -74,10 +86,9 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if (text.Length > 2)
             {
-                JikanAPIState state = new JikanAPIState();
-                SearchPage s = new SearchPage(main);
-                List<SearchResult> results = state.SearchAPI("manga/" + text);
-                Window.Current.Content = new SearchResultsPage(results);
+                Task<SearchPage> t = new Task<SearchPage>(() => { return (SearchPage)main.ProduceSearchPage("manga/" + text); });
+                t.Start();
+                Window.Current.Content = new SearchResultsPage((await t).Results, main);
             }
             else
             {

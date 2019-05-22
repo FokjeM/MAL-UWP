@@ -2,6 +2,9 @@
 
 namespace MAL_UWP_Nightmare
 {
+    /// <summary>
+    /// Dropped in the new design; Facade pattern obsoletes this IObserver.
+    /// </summary>
     class SplashScreen : IObserver
     {
         HomePageBackend home;
