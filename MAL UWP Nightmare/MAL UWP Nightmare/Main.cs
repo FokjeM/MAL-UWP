@@ -11,6 +11,7 @@ namespace MAL_UWP_Nightmare
         private SplashScreen splash;
         private HomePageBackend home;
         private IPage currentPage;
+        private IPage lastPage;
         private PageFactory pages;
         private SearchPage search;
 
@@ -23,8 +24,23 @@ namespace MAL_UWP_Nightmare
             CurrentStrategy = MultiThreaded;
             splash = new SplashScreen();
             currentPage = home;
+
             home = (HomePageBackend)pages.Home(splash);
             search = (SearchPage)pages.Search(this);
+        }
+
+        public HomePageBackend ReturnHome()
+        {
+            lastPage = currentPage;
+            currentPage = home;
+            return home;
+        }
+
+        public IPage Previous()
+        {
+            IPage newLast = currentPage;
+            currentPage = lastPage;
+            return currentPage;
         }
 
         public void SwitchThreadingStrategy()
