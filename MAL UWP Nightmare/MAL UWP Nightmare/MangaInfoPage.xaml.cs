@@ -135,10 +135,12 @@ namespace MAL_UWP_Nightmare
             authors = ConvertListToString(authorsList, false);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            IPage prev = m.Previous();
-            if(prev is SearchPage)
+            Task<IPage> t = new Task<IPage>(() => { return m.Previous(); });
+            t.Start();
+            IPage prev = await t;
+            if (prev is SearchPage)
             {
                 SearchPage s = prev as SearchPage;
                 Window.Current.Content = new SearchResultsPage(s.Results, m);
