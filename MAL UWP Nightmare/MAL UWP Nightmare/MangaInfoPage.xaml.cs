@@ -148,5 +148,10 @@ namespace MAL_UWP_Nightmare
                 Window.Current.Content = new HomePage();
             }
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Window.Current.Content = new HomePage(m);
+        }
     }
 }
