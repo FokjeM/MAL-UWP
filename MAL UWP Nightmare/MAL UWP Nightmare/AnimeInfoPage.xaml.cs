@@ -111,9 +111,11 @@ namespace MAL_UWP_Nightmare
             image = anime.MainImage;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            IPage prev = m.Previous();
+            Task<IPage> t = new Task<IPage>(() => { return m.Previous(); });
+            t.Start();
+            IPage prev = await t;
             if(prev is SearchPage)
             {
                 SearchPage s = prev as SearchPage;
@@ -123,7 +125,6 @@ namespace MAL_UWP_Nightmare
             {
                 Window.Current.Content = new HomePage();
             }
-            
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

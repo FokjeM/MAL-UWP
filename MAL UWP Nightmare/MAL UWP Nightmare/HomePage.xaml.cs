@@ -38,7 +38,7 @@ namespace MAL_UWP_Nightmare
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            SeasonalAnime = LoadSeasonalViewData();
+            new Task(() => { SeasonalAnime = LoadSeasonalViewData(); }).Start();
             DataContext = this;
         }
 
@@ -55,6 +55,7 @@ namespace MAL_UWP_Nightmare
 
         private async void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            main.SeasonalFlip();
             SearchResult item = e.ClickedItem as SearchResult;
             Task<IPage> t = new Task<IPage>(() => { return main.ProducePage(item.type, item.id); });
             t.Start();

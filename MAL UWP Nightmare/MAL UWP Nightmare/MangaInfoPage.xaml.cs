@@ -138,7 +138,7 @@ namespace MAL_UWP_Nightmare
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             IPage prev = m.Previous();
-            if (prev is SearchPage)
+            if(prev is SearchPage)
             {
                 SearchPage s = prev as SearchPage;
                 Window.Current.Content = new SearchResultsPage(s.Results, m);

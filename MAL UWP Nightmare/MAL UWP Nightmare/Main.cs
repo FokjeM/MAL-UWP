@@ -23,10 +23,10 @@ namespace MAL_UWP_Nightmare
             pages = p;
             CurrentStrategy = MultiThreaded;
             splash = new SplashScreen();
-            currentPage = home;
-            lastPage = search;
             home = (HomePageBackend)pages.Home(splash);
             search = (SearchPage)pages.Search(this);
+            currentPage = search;
+            lastPage = home;
         }
 
         public IPage Previous()
@@ -35,6 +35,15 @@ namespace MAL_UWP_Nightmare
             currentPage = lastPage;
             lastPage = newLast;
             return currentPage;
+        }
+
+        public void SeasonalFlip()
+        {
+            if (!currentPage.Equals(home))
+            {
+                currentPage = home;
+                lastPage = search;
+            }
         }
 
         public void SwitchThreadingStrategy()
@@ -55,15 +64,18 @@ namespace MAL_UWP_Nightmare
 
         public IPage ProducePage(string req, long id)
         {
+            //We have to flip the current and last pages unless a searchpage appears
             switch (req.ToLower())
             {
                 case "manga":
                 case "novel":
                 case "oneshot":
+                case "one-shot":
                 case "doujin":
                 case "manhwa":
                 case "manhua":
                     Task<IPage> mangaPage = CurrentStrategy.ProduceContentPage("manga/", id);
+                    Previous();
                     return mangaPage.Result;
                 case "anime":
                 case "tv":
@@ -72,11 +84,14 @@ namespace MAL_UWP_Nightmare
                 case "special":
                 case "ona":
                     Task<IPage> animePage = CurrentStrategy.ProduceContentPage("anime/", id);
+                    Previous();
                     return animePage.Result;
                 case "person":
+                    Previous();
                     //This is sync anyways
                     return CurrentStrategy.ProducePersonPage("person/", id);
                 case "character":
+                    Previous();
                     //This is sync anyways
                     return CurrentStrategy.ProduceCharacterPage("character/", id);
                 default:
@@ -87,8 +102,14 @@ namespace MAL_UWP_Nightmare
 
         public IPage ProduceSearchPage(string query)
         {
-            lastPage = home;
             Task<IPage> searcher = CurrentStrategy.ProduceSearchPage(query, this);
+            if (currentPage.Equals(search))
+            {
+                currentPage = searcher.Result;
+            } else
+            {
+                lastPage = searcher.Result;
+            }
             search = (SearchPage)searcher.Result;
             return search;
         }
