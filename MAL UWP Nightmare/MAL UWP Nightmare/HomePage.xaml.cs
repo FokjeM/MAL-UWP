@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -48,7 +49,10 @@ namespace MAL_UWP_Nightmare
         private void SeasonalView_ItemClick(object sender, ItemClickEventArgs e)
         {
             SearchResult item = e.ClickedItem as SearchResult;
-            IPage page = main.ProducePage("anime", item.id);
+            Task<IPage> t = new Task<IPage>(() => { return main.ProducePage(item.type, item.id); });
+            t.Start();
+            t.Wait();
+            IPage page = t.Result;
             Window.Current.Content = new AnimeInfoPage(page as AnimePage);
         }
 
@@ -57,7 +61,9 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if(text.Length > 2)
             {
-                Window.Current.Content = new SearchResultsPage((main.ProduceSearchPage("anime/" + text) as SearchPage).Results, main);
+                Task<SearchPage> t = new Task<SearchPage>(() => { return (SearchPage)main.ProduceSearchPage("anime/" + text); });
+                t.Start();
+                Window.Current.Content = new SearchResultsPage((await t).Results, main);
             }
             else
             {
@@ -74,7 +80,9 @@ namespace MAL_UWP_Nightmare
             string text = searchInput.Text;
             if (text.Length > 2)
             {
-                Window.Current.Content = new SearchResultsPage((main.ProduceSearchPage("manga/" + text) as SearchPage).Results, main);
+                Task<SearchPage> t = new Task<SearchPage>(() => { return (SearchPage)main.ProduceSearchPage("manga/" + text); });
+                t.Start();
+                Window.Current.Content = new SearchResultsPage((await t).Results, main);
             }
             else
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -31,10 +32,12 @@ namespace MAL_UWP_Nightmare
             DataContext = this;
         }
 
-        private void SearchResultsView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void SearchResultsView_ItemClick(object sender, ItemClickEventArgs e)
         {
             SearchResult item = e.ClickedItem as SearchResult;
-            IPage page = main.ProducePage(item.type, item.id);
+            Task<IPage> t = new Task<IPage>(() => { return main.ProducePage(item.type, item.id); });
+            t.Start();
+            IPage page = await t;
             if(page.GetType().Name.Equals("MangaPage"))
             {
                 Window.Current.Content = new MangaInfoPage(page as MangaPage);
