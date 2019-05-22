@@ -24,7 +24,7 @@ namespace MAL_UWP_Nightmare
             CurrentStrategy = MultiThreaded;
             splash = new SplashScreen();
             currentPage = home;
-            lastPage = home;
+            lastPage = search;
             home = (HomePageBackend)pages.Home(splash);
             search = (SearchPage)pages.Search(this);
         }
@@ -55,8 +55,6 @@ namespace MAL_UWP_Nightmare
 
         public IPage ProducePage(string req, long id)
         {
-            lastPage = search;
-            Previous();
             switch (req.ToLower())
             {
                 case "manga":
